@@ -72,7 +72,7 @@ class HelloWorld < AiAgent::Base
   #       where descriptive text is used to describe
   #       what the tool does.
   def capabilities
-    <<~STRING
+    <<~STRING.chomp
       Create a salutation.  For example "Hello World"
       or "Hi Johnny" using two parameters :greeting and :name
     STRING    
@@ -80,7 +80,7 @@ class HelloWorld < AiAgent::Base
 
   # TODO: Move to Base class
   def default(field)
-    REQUEST_SCHEMA.dig(:properties, field. :examples)&.first
+    REQUEST_SCHEMA.dig(:properties, field, :examples)&.first
   end
 
   def get(field)

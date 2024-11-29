@@ -4,6 +4,8 @@
 echo "Starting registry server..."
 # Assuming the registry server is a separate process, replace with actual command
 # e.g., ruby registry_server.rb &
+# Replace 'registry_server_command' with the actual command to start your registry server
+# Example: ruby registry_server.rb &
 registry_server_command &
 
 # Start the HelloWorld agent
