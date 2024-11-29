@@ -58,11 +58,25 @@ class AiAgent::Base
   ################################################
   private
   
-  def header      = @payload['header']
-  def from_uuid   = header['from_uuid']
-  def to_uuid     = header['to_uuid']
-  def event_uuid  = header['event_uuid']
-  def timestamp   = header['timestamp']
+  def header
+    @payload['header']
+  end
+
+  def from_uuid
+    header['from_uuid']
+  end
+
+  def to_uuid
+    header['to_uuid']
+  end
+
+  def event_uuid
+    header['event_uuid']
+  end
+
+  def timestamp
+    header['timestamp']
+  end
 
 
   def dispatcher
@@ -85,7 +99,7 @@ class AiAgent::Base
     when 'request'
       return unless validate_schema.empty?
       receive_request
-    when 'resposne'
+    when 'response'
       receive_response
     when 'control'
       receive_control

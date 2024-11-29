@@ -39,8 +39,12 @@ class AiAgent::RegistryClient
   def send_request(request)
     response = @http_client.request(request)
     handle_response(response)
+  rescue JSON::ParserError => e
+    logger.error "JSON parsing error: #{e.message}"
+    nil
   rescue StandardError => e
     logger.error "Request error: #{e.message}"
+    nil
   end
 
   def handle_response(response)
