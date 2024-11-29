@@ -1,7 +1,5 @@
 # lib/ai_agent/timestamp.rb
 
-module AiAgent; end
-
 class AiAgent::Timestamp
   attr_reader :ts, :utc
 
