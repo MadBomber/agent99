@@ -64,6 +64,6 @@ class AiAgent::MessageClient
     Bunny.new.tap(&:start)
   rescue Bunny::TCPConnectionFailed, StandardError => e
     logger.error "Failed to connect to AMQP: #{e.message}"
-    raise "AMQP Connection Error: #{e.message}"
+    raise "AMQP Connection Error: #{e.message}. Please check your AMQP server and try again."
   end
 end

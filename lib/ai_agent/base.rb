@@ -32,7 +32,7 @@ class AiAgent::Base
     register
 
     @queue  = message_client.setup(
-                id:       id, # SMELL: not available yer
+                agent_id: id, # SMELL: not available yer
                 types:    MESSAGE_TYPES,
                 logger:   logger,
                 options:  {} # like blocking, non-blocking etc.
@@ -127,7 +127,12 @@ class AiAgent::Base
         :errors
       ]}
 
-      # TODO: tell the sending there was errors?
+      # Inform the sender about the validation errors
+      response = {
+        type: 'error',
+        errors: errors
+      }
+      send_response(response)
     end
   end
 
