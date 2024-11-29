@@ -24,22 +24,13 @@ class AiAgent::Timestamp
 
   class << self
     def utc2ts(now=Time.now.utc)
+      # NOTE: This is faster that bit shifting by the smallest of measures
       now.to_i * 1_000_000 + now.usec
     end
 
     def ts2utc(microseconds)
-      Time.at(microseconds / 1_000_000.0, microseconds % 1_000_000).utc
-    end
-
-
-    # TODO: Would bit shifting be faster?
-    #       Shifting left by 20 (2^20 = 1_000_000)
-    def bs_utc2ts(now=Time.now.utc)
-      (now.to_i << 20) + now.usec 
-    end
-
-    def bs_ts2utc(microseconds)
-      Time.at(microseconds >> 20, microseconds & 0xFFFFF).utc # Masking to get the last 20 bits
+      # NOTE: This is an order of magitude faster than not bit shifting
+      Time.at(microseconds >> 20, microseconds & 0xFFFFF).utc # Masking to get the last 20 bits  
     end
   end
 end

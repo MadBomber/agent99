@@ -1,28 +1,38 @@
-require 'benchmark'
+require 'quick'
+require 'bm_report'
+
+module AiAgent; end
+
 require_relative 'lib/ai_agent/timestamp'
 
-# Number of iterations for the benchmark
-iterations = 1_000_000
+TS  = AiAgent::Timestamp
+now = AiAgent::Timestamp.new
+MS  = now.to_i
+NOW = now.to_utc
 
-# Create a Time object for testing
-time_now = Time.now.utc
 
-Benchmark.bm(20) do |x|
-  x.report("utc2ts:") do
-    iterations.times { AiAgent::Timestamp.utc2ts(time_now) }
-  end
+def bm(how_many=1_000_000)
+  result  = []
+  result << quick(how_many, 'utc2ts')     { TS.utc2ts    }
+  result << quick(how_many, 'bs_utc2ts')  { TS.bs_utc2ts }
+  result << quick(how_many, 'ts2utc')     { TS.ts2utc(MS)     }
+  result <<= quick(how_many, 'bs_ts2utc') { TS.bs_ts2utc(MS)  }
 
-  x.report("ts2utc:") do
-    ts = AiAgent::Timestamp.utc2ts(time_now)
-    iterations.times { AiAgent::Timestamp.ts2utc(ts) }
-  end
+  result
+end 
 
-  x.report("bs_utc2ts:") do
-    iterations.times { AiAgent::Timestamp.bs_utc2ts(time_now) }
-  end
+bm_report bm
 
-  x.report("bs_ts2utc:") do
-    ts = AiAgent::Timestamp.bs_utc2ts(time_now)
-    iterations.times { AiAgent::Timestamp.bs_ts2utc(ts) }
-  end
-end
+
+__END__
+
+┌────────┬─────────┬───────────┬─────────┬───────────┐
+│ Label  │ utc2ts  │ bs_utc2ts │ ts2utc  │ bs_ts2utc │
+├────────┼─────────┼───────────┼─────────┼───────────┤
+│ cstime │ 0.0     │ 0.0       │ 0.0     │ 0.0       │
+│ cutime │ 0.0     │ 0.0       │ 0.0     │ 0.0       │
+│ stime  │ 0.0     │ 1.0e-05   │ 9.0e-05 │ 0.0       │
+│ utime  │ 6.0e-05 │ 6.0e-05   │ 0.00254 │ 0.00013   │
+│ real   │ 6.0e-05 │ 8.0e-05   │ 0.00263 │ 0.00013   │
+│ total  │ 6.0e-05 │ 8.0e-05   │ 0.00263 │ 0.00013   │
+└────────┴─────────┴───────────┴─────────┴───────────┘

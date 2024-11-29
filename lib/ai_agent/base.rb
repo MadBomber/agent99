@@ -59,23 +59,23 @@ class AiAgent::Base
   private
   
   def header
-    @payload['header']
+    @payload[:header]
   end
 
   def from_uuid
-    header['from_uuid']
+    header[:from_uuid]
   end
 
   def to_uuid
-    header['to_uuid']
+    header[:to_uuid]
   end
 
   def event_uuid
-    header['event_uuid']
+    header[:event_uuid]
   end
 
   def timestamp
-    header['timestamp']
+    header[:timestamp]
   end
 
 
