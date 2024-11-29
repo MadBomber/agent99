@@ -1,5 +1,4 @@
-#!/usr/bin/env ruby
-# experiments/agents/ai_agent/base.rb
+# lib/ai_agent/base.rb
 
 require 'logger'
 
@@ -38,30 +37,9 @@ class AiAgent::Base
                 logger:   logger,
                 options:  {} # like blocking, non-blocking etc.
               )
+    dispatcher
   end
 
-
-  # Returns the number of waiting messages
-  def waiting
-    @queue&.count
-  end
-
-  def message?
-    @queue.waiting > 0
-  end
-
-  def message
-    return nil unless message?
-
-    @payload  = @queue.next
-
-    debug_me{[
-      :payload,
-      'payload.class'
-    ]}
-
-    validate_schema.empty?
-  end
 
 
   def register
@@ -85,6 +63,36 @@ class AiAgent::Base
   def to_uuid     = header['to_uuid']
   def event_uuid  = header['event_uuid']
   def timestamp   = header['timestamp']
+
+
+  def dispatcher
+    queue.subscribe do |delivery_info, metadata, message|
+      process(delivery_info, metadata, message)
+    end
+  end
+
+
+  def process(delivery_info, metadata, message)
+    debug_me{[
+      :delivery_info,
+      :metadata,
+      :message
+    ]}
+
+    @payload = JSON.parse(message, symbolize_names: true)
+
+    case type
+    when 'request'
+      return unless validate_schema.empty?
+      receive_request
+    when 'resposne'
+      receive_response
+    when 'control'
+      receive_control
+    else
+      logger.error "Unknown type: #{type}"
+    end
+  end
 
 
   # verify that the @payload object matches
@@ -116,6 +124,10 @@ class AiAgent::Base
 
 
   def receive_response
+    raise NotImplementedError, "#{self.class} must implement a #{__method__} method."
+  end
+
+  def receive_control
     raise NotImplementedError, "#{self.class} must implement a #{__method__} method."
   end
 
