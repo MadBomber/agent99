@@ -4,7 +4,8 @@
 require 'json'
 require 'json_schema'
 require 'securerandom'
-require_relative '../lib/ai_agent'
+require_relative '../lib/ai_agent/registry_client'
+require_relative '../lib/ai_agent/message_client'
 
 class HelloWorldClient < AiAgent::Base
 
