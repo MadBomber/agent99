@@ -1,3 +1,4 @@
+#!/usr/bin/env ruby
 # examples/hello_world.rb
 
 require 'json'
@@ -71,11 +72,13 @@ class HelloWorld < AiAgent::Base
   #       prompt tool (aka function) callback facility
   #       where descriptive text is used to describe
   #       what the tool does.
+  #
+  # TODO: scale this idea back to just keywords
+  #       until the registry program gets more
+  #       stuff added to its discovery process.
+  #
   def capabilities
-    <<~STRING.chomp
-      Create a salutation.  For example "Hello World"
-      or "Hi Johnny" using two parameters :greeting and :name
-    STRING    
+    %w[ greeter hello_world hello-world hello]   
   end
 
   # TODO: Move to Base class
@@ -89,5 +92,5 @@ class HelloWorld < AiAgent::Base
 end
 
 # Example usage
-agent = HelloWorld.new(name: "hello_world")
+agent = HelloWorld.new
 agent.run # Starts listening for messages

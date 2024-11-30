@@ -1,18 +1,12 @@
+#!/usr/bin/env ruby
+# examples/hello_world_client.rb
+
 require 'json'
 require 'json_schema'
-
-require_relative '../lib/ai_agent/registry_client'
-require_relative '../lib/ai_agent/message_client'
+require 'securerandom'
+require_relative '../lib/ai_agent'
 
 class HelloWorldClient < AiAgent::Base
-  def initialize(
-      registry_client:  RegistryClient.new, 
-      message_client:   MessageClient.new,
-      logger:           Logger.new($stdout)
-    )
-    super
-    @name = "hello_world_client"
-  end
 
   def run
     super
@@ -20,21 +14,22 @@ class HelloWorldClient < AiAgent::Base
   end
 
   def send_request
+    # Discover agents that can handle the 'greeting' capability
+    to_uuid = discover_agent('greeting') # Pass the capability we are looking for
+
     request = {
-      type: 'request',
       header: {
+        type: 'request',
         from_uuid: id,
-        to_uuid: 'hello_world', # Assuming the HelloWorld agent is registered with this ID
+        to_uuid: to_uuid, # Use the discovered UUID
         event_uuid: SecureRandom.uuid,
         timestamp: Time.now.to_i
       },
-      greeting: 'Hello',
-      name: 'World'
-    }
-    message_client.channel.default_exchange.publish(
-      request.to_json,
-      routing_key: @queue.name
-    )
+      greeting: 'Hey',
+      name: 'MadBomber'
+    }.to_json
+
+    send_request(request)
     logger.info "Sent request: #{request.inspect}"
   end
 
@@ -45,8 +40,20 @@ class HelloWorldClient < AiAgent::Base
 
   private
 
+  def discover_agent(capability)
+    result = @registry_client.discover(capability: capability)
+
+    if result.empty?
+      logger.error "No agents found for capability: #{capability}"
+      raise "No agents available"
+    end
+
+    # Assuming that the registry returns a hash of { uuid: agent_name }
+    result.keys.first # Return the first UUID found
+  end
+
   def capabilities
-    "Send a greeting request to HelloWorld agent and print the response."
+    'greeter hello_world_client'
   end
 end
 

@@ -6,15 +6,15 @@ echo "Starting registry server..."
 # e.g., ruby registry_server.rb &
 # Replace 'registry_server_command' with the actual command to start your registry server
 # Example: ruby registry_server.rb &
-registry_server_command &
+./registry.rb &
 
 # Start the HelloWorld agent
 echo "Starting HelloWorld agent..."
-ruby examples/hello_world.rb &
+./hello_world.rb &
 
 # Start the HelloWorldClient agent
 echo "Starting HelloWorldClient agent..."
-ruby examples/hello_world_client.rb &
+./hello_world_client.rb &
 
 # Wait for all background processes to finish
 wait
