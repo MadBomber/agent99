@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# ~/experiments/agents/registry.rb
+# examples/registry.rb
 
 require 'sinatra'
 require 'json'
@@ -7,6 +7,9 @@ require 'bunny'
 require 'securerandom'
 
 # In-memory registry to store agent capabilities
+# TODO: change this data store to a sqlite database
+#       maybe with a vector search capability.
+#
 AGENT_REGISTRY = {}
 
 # Health check endpoint
@@ -33,14 +36,20 @@ post '/register' do
 end
 
 # Endpoint to discover agents by capability
+# TODO: This is a simple keyword matcher.  Looking
+# =>    for a semantic match process.
 get '/discover' do
   capability = params['capability']
-  matching_agents = AGENT_REGISTRY.select do |_, agent|
+
+    matching_agents = AGENT_REGISTRY.select do |_, agent|
+
     agent[:capabilities].include?(capability)
   end
 
   content_type :json
-  matching_agents.transform_values { |agent| agent[:name] }.to_json
+  result = matching_agents.transform_values { |agent| agent[:name] }.to_json
+
+  result
 end
 
 # Endpoint for executing an agent's run method

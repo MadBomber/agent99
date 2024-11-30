@@ -1,5 +1,4 @@
-# experiments/agents/hello_world_request.rb
-
+# examples/hello_world_request.rb
 
 require_relative '../lib/ai_agent/header_schema'
 

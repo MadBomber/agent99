@@ -4,39 +4,36 @@
 require 'json'
 require 'json_schema'
 require 'securerandom'
-require_relative '../lib/ai_agent/registry_client'
-require_relative '../lib/ai_agent/message_client'
+require_relative '../lib/ai_agent'
 
 class HelloWorldClient < AiAgent::Base
-
-  def run
-    super
+  def init
     send_request
   end
 
   def send_request
-    # Discover agents that can handle the 'greeting' capability
-    to_uuid = discover_agent('greeting') # Pass the capability we are looking for
+    # Discover agents that can handle the 'greeter' capability
+    to_uuid = discover_agent('greeter') # Pass the capability we are looking for
 
     request = {
       header: {
-        type: 'request',
-        from_uuid: id,
-        to_uuid: to_uuid, # Use the discovered UUID
+        type:       'request',
+        from_uuid:  @id,
+        to_uuid:    to_uuid,
         event_uuid: SecureRandom.uuid,
-        timestamp: Time.now.to_i
+        timestamp:  Time.now.to_i
       },
       greeting: 'Hey',
       name: 'MadBomber'
-    }.to_json
+    }
 
-    send_request(request)
+    @message_client.publish(to_uuid, request)
     logger.info "Sent request: #{request.inspect}"
   end
 
-  def receive_response(response)
-    logger.info "Received response: #{response.inspect}"
-    withdraw
+  def receive_response
+    logger.info "Received response: #{@payload.inspect}"
+    exit(0)
   end
 
   private
@@ -54,10 +51,12 @@ class HelloWorldClient < AiAgent::Base
   end
 
   def capabilities
-    'greeter hello_world_client'
+    ['hello_world_client']
   end
 end
+
 
 # Example usage
 client = HelloWorldClient.new
 client.run
+

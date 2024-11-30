@@ -15,12 +15,13 @@ class AiAgent::MessageClient
     end
   end
 
-  attr_accessor :logger
+  attr_accessor :logger, :channel, :exchange
 
   def initialize(logger: Logger.new($stdout))
     @connection = create_amqp_connection
-    @channel = @connection.create_channel
-    @logger = logger
+    @channel  = @connection.create_channel
+    @exchange = @channel.default_exchange
+    @logger   = logger
   end
 
   def setup(agent_id:, logger:)
@@ -40,12 +41,14 @@ class AiAgent::MessageClient
       request_handler:,
       response_handler:,
       control_handler:
-  )
+    )
     queue.subscribe(block: true) do |delivery_info, properties, body|
-      message = JSON.parse(body)
+      message = JSON.parse(body, symbolize_names: true)
       logger.debug "Received message: #{message.inspect}"
 
-      case message["type"]
+      type = message.dig(:header, :type)
+
+      case type
       when "request"
         request_handler.call(message)
       when "response"
@@ -53,9 +56,41 @@ class AiAgent::MessageClient
       when "control"
         control_handler.call(message)
       else
-        raise NotImplementedError, "Unsupported message type"
+        raise NotImplementedError, "Unsupported message type: #{type}"
       end
     end
+  end
+
+
+  def publish(queue_uuid, payload)
+    begin
+      # Convert the payload to JSON
+      json_payload = JSON.generate(payload)
+
+      # Publish the message
+      exchange.publish(json_payload, routing_key: queue_uuid)
+
+      logger.info "Message published successfully to queue: #{queue_uuid}"
+      
+      # Return a success status
+      { success: true, message: "Message published successfully" }
+    rescue JSON::GeneratorError => e
+      logger.error "Failed to convert payload to JSON: #{e.message}"
+      { success: false, error: "JSON conversion error: #{e.message}" }
+    rescue Bunny::ConnectionClosedError, Bunny::ChannelAlreadyClosed => e
+      logger.error "Failed to publish message: #{e.message}"
+      { success: false, error: "Publishing error: #{e.message}" }
+    rescue StandardError => e
+      logger.error "Unexpected error while publishing message: #{e.message}"
+      { success: false, error: "Unexpected error: #{e.message}" }
+    end
+  end
+
+  def delete_queue(queue_name)
+    @channel.queue(queue_name, passive: true).delete
+    logger.info "Queue #{queue_name} was deleted"
+  rescue Bunny::NotFound
+    logger.warn "Queue #{queue_name} not found"
   end
 
   private

@@ -18,7 +18,7 @@ class AiAgent::RegistryClient
 
   def register(name:, capabilities:)
     request = create_request(:post, "/register", { name: name, capabilities: capabilities })
-    send_request(request)
+    @id = send_request(request)
   end
 
   def withdraw(id)
@@ -27,6 +27,16 @@ class AiAgent::RegistryClient
     request = create_request(:delete, "/withdraw/#{id}")
     send_request(request)
   end
+
+
+  def discover(capability:)
+    encoded_capability = URI.encode_www_form_component(capability)
+    request = create_request(:get, "/discover?capability=#{encoded_capability}")
+    matching_agents = send_request(request)
+
+    matching_agents.is_a?(Hash) ? matching_agents : {}
+  end
+
 
   private
 
@@ -38,6 +48,7 @@ class AiAgent::RegistryClient
 
   def send_request(request)
     response = @http_client.request(request)
+
     handle_response(response)
   rescue JSON::ParserError => e
     logger.error "JSON parsing error: #{e.message}"
@@ -50,12 +61,14 @@ class AiAgent::RegistryClient
   def handle_response(response)
     case response
     when Net::HTTPOK
-      JSON.parse(response.body)["uuid"]
+      JSON.parse(response.body, symbolize_names: true)
+    when Net::HTTPCreated
+      JSON.parse(response.body, symbolize_names: true)[:uuid]
     when Net::HTTPNoContent
       logger.info "Action completed successfully."
       nil
     else
-      logger.error "Error: #{JSON.parse(response.body)['error']}"
+      logger.error "Error: #{JSON.parse(response.body, symbolize_names: true)[:error]}"
       nil
     end
   end
