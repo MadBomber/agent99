@@ -1,16 +1,20 @@
 #!/usr/bin/env ruby
 # examples/registry.rb
 
+require 'debug_me'
+include DebugMe
+
 require 'sinatra'
 require 'json'
 require 'bunny'
 require 'securerandom'
 
 # In-memory registry to store agent capabilities
+# Array(Hash)
 # TODO: change this data store to a sqlite database
 #       maybe with a vector search capability.
 #
-AGENT_REGISTRY = {}
+AGENT_REGISTRY = []
 
 # Health check endpoint
 get '/healthcheck' do
@@ -21,14 +25,14 @@ end
 # Endpoint to register an agent
 post '/register' do
   request.body.rewind
-  agent_info = JSON.parse(request.body.read)
+  agent_info = JSON.parse(request.body.read, symbolize_names: true)
 
-  agent_name = agent_info['name']
-  capabilities = agent_info['capabilities']
+  agent_name = agent_info[:name]
+  capabilities = agent_info[:capabilities]
 
   agent_uuid = SecureRandom.uuid
 
-  AGENT_REGISTRY[agent_uuid] = { name: agent_name, capabilities: capabilities }
+  AGENT_REGISTRY << agent_info.merge({uuid: agent_uuid})
 
   status 201
   content_type :json
@@ -41,46 +45,27 @@ end
 get '/discover' do
   capability = params['capability']
 
-    matching_agents = AGENT_REGISTRY.select do |_, agent|
-
+  matching_agents = AGENT_REGISTRY.select do |agent|
     agent[:capabilities].include?(capability)
   end
 
   content_type :json
-  result = matching_agents.transform_values { |agent| agent[:name] }.to_json
-
-  result
-end
-
-# Endpoint for executing an agent's run method
-post '/run/:uuid' do
-  uuid = params['uuid']
-  request.body.rewind
-  args = JSON.parse(request.body.read)
-
-  agent = AGENT_REGISTRY[uuid]
-  if agent
-    # Simulating agent's processing action
-    result = "Agent #{agent[:name]} processed with args: #{args.inspect}"
-    content_type :json
-    { result: result }.to_json
-  else
-    status 404
-    content_type :json
-    { error: "Agent with UUID #{uuid} not found." }.to_json
-  end
+  matching_agents.to_json 
 end
 
 # Withdraw an agent from the registry
 delete '/withdraw/:uuid' do
-  uuid = params['uuid']
+  uuid      = params['uuid']
+  how_many  = AGENT_REGISTRY.size
 
-  if AGENT_REGISTRY.delete(uuid)
-    status 204 # No Content
-  else
+  AGENT_REGISTRY.delete_if { |agent_info| agent_info[:uuid] == uuid }
+
+  if AGENT_REGISTRY.size == how_many
     status 404 # Not Found
     content_type :json
     { error: "Agent with UUID #{uuid} not found." }.to_json
+  else
+    status 204 # No Content
   end
 end
 

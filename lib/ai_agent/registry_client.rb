@@ -32,9 +32,7 @@ class AiAgent::RegistryClient
   def discover(capability:)
     encoded_capability = URI.encode_www_form_component(capability)
     request = create_request(:get, "/discover?capability=#{encoded_capability}")
-    matching_agents = send_request(request)
-
-    matching_agents.is_a?(Hash) ? matching_agents : {}
+    send_request(request)
   end
 
 

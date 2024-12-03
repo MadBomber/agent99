@@ -62,35 +62,46 @@ class AiAgent::MessageClient
   end
 
 
-  def publish(queue_uuid, payload)
+  def publish(message)
+    queue_name = message.dig(:header, :to_uuid)
+
     begin
-      # Convert the payload to JSON
-      json_payload = JSON.generate(payload)
+      json_payload = JSON.generate(message)
 
-      # Publish the message
-      exchange.publish(json_payload, routing_key: queue_uuid)
+      exchange.publish(json_payload, routing_key: queue_name)
 
-      logger.info "Message published successfully to queue: #{queue_uuid}"
+      logger.info "Message published successfully to queue: #{queue_name}"
       
       # Return a success status
       { success: true, message: "Message published successfully" }
+    
     rescue JSON::GeneratorError => e
       logger.error "Failed to convert payload to JSON: #{e.message}"
       { success: false, error: "JSON conversion error: #{e.message}" }
+    
     rescue Bunny::ConnectionClosedError, Bunny::ChannelAlreadyClosed => e
       logger.error "Failed to publish message: #{e.message}"
       { success: false, error: "Publishing error: #{e.message}" }
+    
     rescue StandardError => e
       logger.error "Unexpected error while publishing message: #{e.message}"
       { success: false, error: "Unexpected error: #{e.message}" }
     end
   end
 
+
   def delete_queue(queue_name)
-    @channel.queue(queue_name, passive: true).delete
-    logger.info "Queue #{queue_name} was deleted"
-  rescue Bunny::NotFound
-    logger.warn "Queue #{queue_name} not found"
+    return logger.warn("Attempted to delete queue with nil name") if queue_name.nil?
+
+    begin
+      queue = @channel.queue(queue_name, passive: true)
+      queue.delete
+      logger.info "Queue #{queue_name} was deleted"
+    rescue Bunny::NotFound
+      logger.warn "Queue #{queue_name} not found"
+    rescue StandardError => e
+      logger.error "Error deleting queue #{queue_name}: #{e.message}"
+    end
   end
 
   private

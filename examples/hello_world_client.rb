@@ -12,43 +12,51 @@ class HelloWorldClient < AiAgent::Base
   end
 
   def send_request
-    # Discover agents that can handle the 'greeter' capability
-    to_uuid = discover_agent('greeter') # Pass the capability we are looking for
+    to_uuid = discover_agent(capability: 'greeter', how_many: 1).first[:uuid]
 
-    request = {
+    request = build_request(
+                to_uuid:,
+                greeting: 'Hey',
+                name:     'MadBomber'
+              )
+
+    result = @message_client.publish(request)
+    logger.info "Sent request: #{request.inspect}; status? #{result.inspect}"
+  end
+
+  def build_request(
+                to_uuid:,
+                greeting: 'Hello',
+                name:     'World'
+              )
+
+    {
       header: {
         type:       'request',
         from_uuid:  @id,
-        to_uuid:    to_uuid,
+        to_uuid:,
         event_uuid: SecureRandom.uuid,
-        timestamp:  Time.now.to_i
+        timestamp:  AiAgent::Timestamp.new.to_i
       },
-      greeting: 'Hey',
-      name: 'MadBomber'
+      greeting:,
+      name:
     }
-
-    @message_client.publish(to_uuid, request)
-    logger.info "Sent request: #{request.inspect}"
   end
 
+
   def receive_response
-    logger.info "Received response: #{@payload.inspect}"
+    logger.info "Received response: #{payload.inspect}"
+    result = payload[:result]
+
+    puts
+    puts `echo "#{result}" | boxes -d info`
+    puts
+
     exit(0)
   end
 
+  #####################################################
   private
-
-  def discover_agent(capability)
-    result = @registry_client.discover(capability: capability)
-
-    if result.empty?
-      logger.error "No agents found for capability: #{capability}"
-      raise "No agents available"
-    end
-
-    # Assuming that the registry returns a hash of { uuid: agent_name }
-    result.keys.first # Return the first UUID found
-  end
 
   def capabilities
     ['hello_world_client']

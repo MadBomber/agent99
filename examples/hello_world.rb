@@ -8,7 +8,9 @@ require_relative '../lib/ai_agent'
 require_relative 'hello_world_request'
 
 class HelloWorld < AiAgent::Base
-  REQUEST_SCHEMA = HelloWorldRequest.schema
+  REQUEST_SCHEMA  = HelloWorldRequest.schema
+  # RESPONSE_SCHEMA = AiAgent::RESPONSE.schema
+  # ERROR_SCHEMA    = AiAgent::ERROR.schema
 
   # The request is in @payload
   def receive_request
@@ -18,6 +20,9 @@ class HelloWorld < AiAgent::Base
   # This method validates the incoming request and returns any errors found
   # or nil if there are no errors.
   # It allows for returning an array of errors.
+  #
+  # TODO: consider a 4th message type of error
+  #
   def validate_request
     responses = []
 
@@ -53,17 +58,22 @@ class HelloWorld < AiAgent::Base
   end
 
   # Returns the response value
+  # All response message have the same schema in that
+  # they have a header (all messages have headers) and
+  # a result element that is a String.  Could it be
+  # a JSON string, sure but then we would need a 
+  # RESPONSE_SCHEMA constant for the class.
   def process
     {
-      event_uuid: event_uuid,
       result: get(:greeting) + ' ' + get(:name)
     }
   end
 
 
+  # As a server type, HelloWorld should never receive
+  # a response message.
   def receive_response(response)
-    # Handle the response here (currently a no-op)
-    nil
+    loger.warn("Unexpected response type message: response.inspect")
   end
 
   private
@@ -79,15 +89,6 @@ class HelloWorld < AiAgent::Base
   #
   def capabilities
     %w[ greeter hello_world hello-world hello]   
-  end
-
-  # TODO: Move to Base class
-  def default(field)
-    REQUEST_SCHEMA.dig(:properties, field, :examples)&.first
-  end
-
-  def get(field)
-    payload[field] || default(field)
   end
 end
 

@@ -10,137 +10,110 @@ require_relative 'message_client'
 
 
 class AiAgent::Base
-  MESSAGE_TYPES = %w[ request response control ]
+  MESSAGE_TYPES = %w[request response control]
 
   attr_reader :id, :capabilities, :name, :payload, :header, :logger, :queue
   attr_accessor :registry_client, :message_client
 
   def initialize(
-      registry_client:  AiAgent::RegistryClient.new, 
-      message_client:   AiAgent::MessageClient.new,
-      logger:           Logger.new($stdout)
-    )
-
-    at_exit do
-      # when an agent has an id then it most likely
-      # has a message queue as well as a regristration
-      # that need to be cleaned up on exit
-      if id
-        self.cleanup
-        self.withdraw
-      end
-    end
-
-    @payload          = nil
-    @name             = self.class.name
-    @capabilities     = capabilities
-    @id               = nil
-    @registry_client  = registry_client
-    @message_client   = message_client
-    @logger           = logger
+    registry_client: AiAgent::RegistryClient.new,
+    message_client: AiAgent::MessageClient.new,
+    logger: Logger.new($stdout)
+  )
+    @payload = nil
+    @name = self.class.name
+    @capabilities = capabilities
+    @id = nil
+    @registry_client = registry_client
+    @message_client = message_client
+    @logger = logger
 
     @registry_client.logger = logger
     register
 
-    @queue  = message_client.setup(
-                agent_id: id,
-                logger:   logger,
-                # options:  {} # like blocking, non-blocking etc.
-              )
+    @queue = message_client.setup(
+      agent_id: id,
+      logger:
+    )
 
-    init if self.respond_to? :init
+    init if respond_to?(:init)
+  
+    setup_signal_handlers
   end
 
-  def run
-    logger.info "Agent #{@name} is waiting for messages"
-    
-    dispatcher
+  def setup_signal_handlers
+    at_exit { fini }
+
+    signals = %w[INT TERM QUIT]
+    signals.each do |signal|
+      Signal.trap(signal) do
+        STDERR.puts "\nReceived #{signal} signal. Initiating graceful shutdown..."
+        exit
+      end
+    end
   end
 
 
+  def run = dispatcher
 
   def register
-    @id = registry_client.register(
-            name:         @name, 
-            capabilities: capabilities
-          )
-    logger.info "Registered Agent #{@name} with ID: #{@id}"
+    @id = registry_client.register(name:, capabilities:)
+    logger.info "Registered Agent #{name} with ID: #{id}"
   rescue StandardError => e
-    logger.error "Error during registration: #{e.message}"
+    handle_error("Error during registration", e)
   end
-
 
   def withdraw
     registry_client.withdraw(@id) if @id
     @id = nil
   end
 
-  ################################################
+
+  def discover_agent(
+      capability:, 
+      how_many:     1, 
+      all:          false
+    )
+    result = @registry_client.discover(capability: capability)
+
+    if result.empty?
+      logger.error "No agents found for capability: #{capability}"
+      raise "No agents available"
+    end
+
+    if all
+      result
+    else
+      result.sample(how_many)
+    end
+  end
+
+
   private
-  
-  def from_uuid
-    header[:from_uuid]
+
+  def fini
+    if id
+      queue_name = id
+      withdraw # side-effect: will set id to nil
+      @message_client&.delete_queue(queue_name)
+    else
+      logger.warn('fini called with a nil id')
+    end
   end
 
-  def to_uuid
-    header[:to_uuid]
-  end
-
-  def event_uuid
-    header[:event_uuid]
-  end
-
-  def timestamp
-    header[:timestamp]
-  end
-
-
-  def return_address
-    return_header = header.dup
-
-    return_header[:to_uuid]   = from_uuid
-    return_header[:from_uuid] = to_uuid
-    return_header[:timestamp] = AiAgent::Timestamp.new.to_i
-    return_header[:type]      = 'response'
-
-    return_header
-  end
-
-
-  def send_response(response)
-    response[:header] = return_address
-    @message_client.publish(from_uuid, response)
-  end
 
   def dispatcher
     message_client.listen_for_messages(
       queue,
-      request_handler:  ->(message) { process_request(message) },
+      request_handler: ->(message) { process_request(message) },
       response_handler: ->(message) { process_response(message) },
-      control_handler:  ->(message) { process_control(message) }
+      control_handler: ->(message) { process_control(message) }
     )
   end
 
-
-  def process(delivery_info, metadata, message)
-    @payload = JSON.parse(message, symbolize_names: true)
-
-    case type
-    when 'request'
-      return unless validate_schema.empty?
-      receive_request
-    when 'response'
-      receive_response
-    when 'control'
-      receive_control
-    else
-      logger.error "Unknown type: #{type}"
-    end
-  end
-
   def process_request(message)
-    @payload  = message
-    @header   = payload[:header]
+    @payload = message
+    @header = payload[:header]
     return unless validate_schema.empty?
     receive_request
   end
@@ -155,56 +128,55 @@ class AiAgent::Base
     receive_control
   end
 
-
-  # verify that the @payload object matches
-  # the agent's request schema
-  #
   def validate_schema
     schema = JsonSchema.parse!(self.class::REQUEST_SCHEMA)
-
-    # Expand $ref nodes if there are any
     schema.expand_references!
-
-    # Use the json_schema gem to validate the request body against the defined schema
     validator = JsonSchema::Validator.new(schema)
     
-    begin
-      validator.validate(@payload)
-      [] # No errors
-    rescue JsonSchema::ValidationError => e
-      errors = e.messages
-      logger.error "#{errors}"
-
-      # Inform the sender about the validation errors
-      response = {
-        type: 'error',
-        errors: errors
-      }
-      send_response(response)
-    end
+    validator.validate(@payload)
+    []
+  rescue JsonSchema::ValidationError => e
+    handle_error("Validation error", e)
+    send_response(type: 'error', errors: e.messages)
+    e.messages
   end
 
-  def cleanup
-    @message_client&.delete_queue(@id)
+  def receive_request = logger.info "Received request: #{payload}"
+
+  def receive_response = logger.info "Received response: #{payload}"
+
+  def receive_control = logger.info "Received control message: #{payload}"
+
+  def capabilities = []
+
+  def get(field) = payload[field] || default(field)
+
+  def default(field) = self.class::REQUEST_SCHEMA.dig(:properties, field, :examples)&.first
+
+  def header      = @payload[:header]
+  def to_uuid     = header[:to_uuid]
+  def from_uuid   = header[:from_uuid]
+  def event_uuid  = header[:event_uuid]
+  def timestamp   = header[:timestamp]
+  def type        = header[:type]
+
+  def handle_error(message, error)
+    logger.error "#{message}: #{error.message}"
+    logger.debug error.backtrace.join("\n")
   end
 
-
-  def receive_request
-    raise NotImplementedError, "#{self.class} must implement a #{__method__} method."
+  def send_response(response)
+    response[:header] = return_address
+    @message_client.publish(response)
   end
 
-
-  def receive_response
-    raise NotImplementedError, "#{self.class} must implement a #{__method__} method."
-  end
-
-  def receive_control
-    raise NotImplementedError, "#{self.class} must implement a #{__method__} method."
-  end
-
-
-  def capabilities
-    raise NotImplementedError, "#{self.class} must implement a #{__method__} method."
+  def return_address
+    header.merge(
+      to_uuid: from_uuid,
+      from_uuid: to_uuid,
+      timestamp: AiAgent::Timestamp.new.to_i,
+      type: 'response'
+    )
   end
 end
 

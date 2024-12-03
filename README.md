@@ -10,6 +10,8 @@ This project serves as a simple playground for testing and experimenting with AI
 
 ## Installation
 
+**NOTE:** This code has not yet been published as a gem.  If you want to try it out you must clone the repo and do a local install from your clone.
+
 To install the gem and add it to your application's Gemfile, run:
 
 ```bash
@@ -39,6 +41,68 @@ The centralized registry is implemented as a Sinatra web application, facilitati
 ### Peer-to-Peer Messaging
 
 Communication between agents is managed through AMQP, using RabbitMQ as the message broker.
+
+## "AMQP?  Dude that is so like last century!"
+
+According to the `cool kids` NATS is where its at.  See https:hats.io
+
+```
+brew install nats-server nats-streaming-server
+gem install nats-pure
+
+require 'nats/client'
+
+nats = NATS.connect("demo.nats.io")
+puts "Connected to #{nats.connected_server}"
+
+# Simple subscriber
+nats.subscribe("foo.>") { |msg, reply, subject| puts "Received on '#{subject}': '#{msg}'" }
+
+# Simple Publisher
+nats.publish('foo.bar.baz', 'Hello World!')
+
+# Unsubscribing
+sub = nats.subscribe('bar') { |msg| puts "Received : '#{msg}'" }
+sub.unsubscribe()
+
+# Requests with a block handles replies asynchronously
+nats.request('help', 'please', max: 5) { |response| puts "Got a response: '#{response}'" }
+
+# Replies
+sub = nats.subscribe('help') do |msg|
+  puts "Received on '#{msg.subject}': '#{msg.data}' with headers: #{msg.header}"
+  msg.respond("I'll help!")
+end
+
+# Request without a block waits for response or timeout
+begin
+  msg = nats.request('help', 'please', timeout: 0.5)
+  puts "Received on '#{msg.subject}': #{msg.data}"
+rescue NATS::Timeout
+  puts "nats: request timed out"
+end
+
+# Request using a message with headers
+begin
+  msg = NATS::Msg.new(subject: "help", headers: {foo: 'bar'})
+  resp = nats.request_msg(msg)
+  puts "Received on '#{resp.subject}': #{resp.data}"
+rescue NATS::Timeout => e
+  puts "nats: request timed out: #{e}"
+end
+
+# Server roundtrip which fails if it does not happen within 500ms
+begin
+  nats.flush(0.5)
+rescue NATS::Timeout
+  puts "nats: flush timeout"
+end
+
+# Closes connection to NATS
+nats.close
+```
+
+Kinda looks like a topic queue organization to me.
 
 ## Usage
 
