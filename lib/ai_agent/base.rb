@@ -6,7 +6,8 @@ require 'json_schema'
 
 require_relative 'timestamp'
 require_relative 'registry_client'
-require_relative 'message_client'
+require_relative 'amqp_message_client'
+require_relative 'nats_message_client'
 
 
 class AiAgent::Base
@@ -26,7 +27,7 @@ class AiAgent::Base
 
   def initialize(
     registry_client: AiAgent::RegistryClient.new,
-    message_client: AiAgent::MessageClient.new,
+    message_client: AiAgent::AmqpMessageClient.new,
     logger: Logger.new($stdout)
   )
     @payload = nil

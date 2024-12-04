@@ -1,11 +1,11 @@
-# lib/ai_agent/message_client.rb
+# lib/ai_agent/amqp_message_client.rb
 
 require 'bunny'
 require 'json'
 require 'json_schema'
 require 'logger'
 
-class AiAgent::MessageClient
+class AiAgent::AmqpMessageClient
   QUEUE_TTL = 60_000 # 60 seconds TTL
   @instance = nil
 
