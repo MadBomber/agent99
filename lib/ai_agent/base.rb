@@ -10,7 +10,16 @@ require_relative 'message_client'
 
 
 class AiAgent::Base
-  MESSAGE_TYPES = %w[request response control]
+  MESSAGE_TYPES     = %w[request response control]
+  
+  CONTROL_HANDLERS  = {
+    'shutdown'      => :handle_shutdown,
+    'pause'         => :handle_pause,
+    'resume'        => :handle_resume,
+    'update_config' => :handle_update_config,
+    'status'        => :handle_status_request
+  }
+
 
   attr_reader :id, :capabilities, :name, :payload, :header, :logger, :queue
   attr_accessor :registry_client, :message_client
@@ -88,8 +97,90 @@ class AiAgent::Base
     end
   end
 
+  def receive_control
+    action = payload[:action]
+    handler = CONTROL_HANDLERS[action]
+    
+    if handler
+      send(handler)
+    else
+      logger.warn "Unknown control action: #{action}"
+    end
 
+  rescue StandardError => e
+    logger.error "Error processing control message: #{e.message}"
+    send_control_response("Error", { error: e.message })
+  end
+
+
+  ###################################################
   private
+
+  def paused? = @paused
+
+
+  def handle_shutdown
+    logger.info "Received shutdown command. Initiating graceful shutdown..."
+    send_control_response("Shutting down")
+    fini
+    exit(0)
+  end
+
+  def handle_pause
+    @paused = true
+    logger.info "Agent paused"
+    send_control_response("Paused")
+  end
+
+  def handle_resume
+    @paused = false
+    logger.info "Agent resumed"
+    send_control_response("Resumed")
+  end
+
+  def handle_update_config
+    new_config = payload[:config]
+    # Implement logic to update the agent's configuration
+    # This is just a placeholder implementation
+    @config = new_config
+    logger.info "Configuration updated: #{@config}"
+    send_control_response("Configuration updated")
+  end
+
+  def handle_status_request
+    status = {
+      id: @id,
+      name: @name,
+      paused: @paused,
+      config: @config,
+      uptime: (Time.now - @start_time).to_i
+    }
+    send_control_response("Status", status)
+  end
+
+  def send_control_response(message, data = nil)
+    response = {
+      header: return_address.merge(type: 'control'),
+      message: message,
+      data: data
+    }
+    @message_client.publish(response)
+  end
+
+  def dispatcher
+    @start_time = Time.now
+    @paused = false
+    @config = {} # Initialize with default config
+
+    message_client.listen_for_messages(
+      queue,
+      request_handler: ->(message) { process_request(message) unless paused? },
+      response_handler: ->(message) { process_response(message) unless paused? },
+      control_handler: ->(message) { process_control(message) }
+    )
+  end
+
+
 
   def fini
     if id
@@ -102,14 +193,6 @@ class AiAgent::Base
   end
 
 
-  def dispatcher
-    message_client.listen_for_messages(
-      queue,
-      request_handler: ->(message) { process_request(message) },
-      response_handler: ->(message) { process_response(message) },
-      control_handler: ->(message) { process_control(message) }
-    )
-  end
 
   def process_request(message)
     @payload = message

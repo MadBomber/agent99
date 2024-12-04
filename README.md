@@ -119,26 +119,27 @@ end
 class MyAgent < AiAgent::Base
   REQUEST_SCHEMA = MyAgentRequest.schema
 
-  def receive_request(request)
-    # Handle incoming requests
-    from_uuit = request.dig('header', 'from_uuid')
-    event_id  = request.dig('header', 'event_id')
+  def receive_request
+    logger.info "Received request from #{from_uuid} with event_uuid: #{event_uuid}"
 
-    logger.info "Received request from #{from_uuid} with event_id: #{event_id}"
-    # TODO: Implement request processing logic
+    my_params = payload.except(:header)
+  
+    result = "The agent's result"
+  
+    response = {
+      header: return_address,
+      result:
+    }
+
+    publish(response)
   end
 
-  def receive_response(response)
-    # Handle responses from other agents
-    from_uuid = response.dig('header', 'from_uuid')
-    event_id  = response.dig('header', 'event_id')
-
-    logger.info "Received response with event_id: #{event_id}"
-    # TODO: Implement response processing logic
+  def receive_response
+    result = payload[:result] # A String that could be JSON
   end
 end
 
-MyAgent.run
+MyAgent.new.run
 ```
 
 ## Contributing
