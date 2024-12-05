@@ -1,10 +1,10 @@
-# lib/ai_agent/nats_message_client.rb
+# lib/agent99/nats_message_client.rb
 
 require 'nats/client'
 require 'json'
 require 'logger'
 
-class AiAgent::NatsMessageClient
+class Agent99::NatsMessageClient
   @instance = nil
 
   class << self

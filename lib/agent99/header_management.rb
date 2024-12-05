@@ -1,6 +1,6 @@
-# lib/ai_agent/header_management.rb
+# lib/agent99/header_management.rb
 
-module AiAgent::HeaderManagement
+module Agent99::HeaderManagement
 
 
   ################################################
@@ -17,7 +17,7 @@ module AiAgent::HeaderManagement
     header.merge(
       to_uuid:    from_uuid,
       from_uuid:  to_uuid,
-      timestamp:  AiAgent::Timestamp.new.to_i,
+      timestamp:  Agent99::Timestamp.new.to_i,
       type:       'response'
     )
   end

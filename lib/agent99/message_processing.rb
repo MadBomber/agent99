@@ -1,6 +1,6 @@
-# lib/ai_agent/message_processing.rb
+# lib/agent99/message_processing.rb
 
-module AiAgent::MessageProcessing
+module Agent99::MessageProcessing
 
 
   # Starts the agent's main loop for processing messages.

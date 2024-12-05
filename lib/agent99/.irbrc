@@ -1,4 +1,4 @@
-module AiAgent
+module Agent99
   # empty namespace
 end
 

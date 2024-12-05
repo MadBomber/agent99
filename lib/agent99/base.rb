@@ -1,4 +1,4 @@
-# lib/ai_agent/base.rb
+# lib/agent99/base.rb
 
 require 'logger'
 require 'json'
@@ -15,7 +15,7 @@ require_relative 'control_actions'
 require_relative 'agent_lifecycle'
 require_relative 'message_processing'
 
-# The AiAgent::Base class serves as the foundation for creating AI agents in a distributed system.
+# The Agent99::Base class serves as the foundation for creating AI agents in a distributed system.
 # It provides core functionality for agent registration, message handling, and communication.
 #
 # This class:
@@ -28,12 +28,12 @@ require_relative 'message_processing'
 # Subclasses should override specific methods like `receive_request`, `receive_response`,
 # and `capabilities` to define custom behavior for different types of agents.
 #
-class AiAgent::Base
-  include AiAgent::HeaderManagement
-  include AiAgent::AgentDiscovery
-  include AiAgent::ControlActions
-  include AiAgent::AgentLifecycle
-  include AiAgent::MessageProcessing
+class Agent99::Base
+  include Agent99::HeaderManagement
+  include Agent99::AgentDiscovery
+  include Agent99::ControlActions
+  include Agent99::AgentLifecycle
+  include Agent99::MessageProcessing
 
   MESSAGE_TYPES = %w[request response control]
   

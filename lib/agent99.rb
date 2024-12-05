@@ -1,13 +1,13 @@
-# ./lib/ai_agent.rb
+# ./lib/agent99.rb
 
 require 'debug_me'
 include DebugMe
 
-module AiAgent; end  # Establish a namespace
+module Agent99; end  # Establish a namespace
 
-require_relative 'ai_agent/base'
+require_relative 'agent99/base'
 
-module AiAgent
+module Agent99
   module Type
     SERVER = :server  # Waits for and responds to requests
     CLIENT = :client  # Only makes requests

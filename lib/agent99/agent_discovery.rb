@@ -1,6 +1,6 @@
-# lib/ai_agent/agent_discovery.rb
+# lib/agent99/agent_discovery.rb
 
-module AiAgent::AgentDiscovery
+module Agent99::AgentDiscovery
 
   # Returns the agent's capabilities (to be overridden by subclasses).
   #

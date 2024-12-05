@@ -4,9 +4,9 @@
 require 'json'
 require 'json_schema'
 require 'securerandom'
-require_relative '../lib/ai_agent'
+require_relative '../lib/agent99'
 
-class HelloWorldClient < AiAgent::Base
+class HelloWorldClient < Agent99::Base
   def init
     send_request
   end
@@ -36,7 +36,7 @@ class HelloWorldClient < AiAgent::Base
         from_uuid:  @id,
         to_uuid:,
         event_uuid: SecureRandom.uuid,
-        timestamp:  AiAgent::Timestamp.new.to_i
+        timestamp:  Agent99::Timestamp.new.to_i
       },
       greeting:,
       name:

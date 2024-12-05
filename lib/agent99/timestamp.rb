@@ -1,6 +1,6 @@
-# lib/ai_agent/timestamp.rb
+# lib/agent99/timestamp.rb
 
-class AiAgent::Timestamp
+class Agent99::Timestamp
   attr_reader :ts, :utc
 
   # regardless of the timezone of "now"

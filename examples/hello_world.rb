@@ -4,13 +4,13 @@
 require 'json'
 require 'json_schema'
 
-require_relative '../lib/ai_agent'
+require_relative '../lib/agent99'
 require_relative 'hello_world_request'
 
-class HelloWorld < AiAgent::Base
+class HelloWorld < Agent99::Base
   REQUEST_SCHEMA  = HelloWorldRequest.schema
-  # RESPONSE_SCHEMA = AiAgent::RESPONSE.schema
-  # ERROR_SCHEMA    = AiAgent::ERROR.schema
+  # RESPONSE_SCHEMA = Agent99::RESPONSE.schema
+  # ERROR_SCHEMA    = Agent99::ERROR.schema
 
   # The request is in @payload
   def receive_request

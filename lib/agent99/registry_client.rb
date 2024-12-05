@@ -1,10 +1,10 @@
-# experiments/agents/ai_agent/registry_client.rb
+# experiments/agents/agent99/registry_client.rb
 
 require 'json'
 require 'net/http'
 require 'uri'
 
-class AiAgent::RegistryClient
+class Agent99::RegistryClient
   attr_accessor :logger
 
   def initialize(

@@ -1,7 +1,7 @@
-# lib/ai_agent/control_actions.rb
+# lib/agent99/control_actions.rb
 
 
-module AiAgent::ControlActions
+module Agent99::ControlActions
 
 
   ################################################

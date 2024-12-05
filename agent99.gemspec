@@ -1,23 +1,23 @@
 # frozen_string_literal: true
 
-require_relative "lib/ai_agent/version"
+require_relative "lib/agent99/version"
 
 Gem::Specification.new do |spec|
-  spec.name     = "ai_agent"
-  spec.version  = AiAgent::VERSION
+  spec.name     = "agent99"
+  spec.version  = Agent99::VERSION
   spec.authors  = ["Dewayne VanHoozer"]
   spec.email    = ["dvanhoozer@gmail.com"]
 
   spec.summary      = "An intelligent agent framework for Ruby"
   spec.description  = <<~TEXT
-    `ai_agent` is a Ruby gem designed to facilitate the creation and management 
-    of intelligent agents, providing a straightforward interface for tasks such 
+    `agent99` is a Ruby gem designed to facilitate the creation and management 
+    of smart agents, providing a straightforward interface for tasks such 
     as natural language processing, context handling, and conversing with various AI 
     models. It allows developers to smoothly integrate and utilize AI capabilities 
     within Ruby applications while ensuring flexibility and ease of customization.
   TEXT
 
-  spec.homepage     = "https://github.com/MadBomber/ai_agemt"
+  spec.homepage     = "https://github.com/MadBomber/agent99"
   spec.license      = "MIT"
 
   spec.required_ruby_version = ">= 3.3.0"
@@ -27,8 +27,8 @@ Gem::Specification.new do |spec|
 
   # Populate metadata with appropriate URLs
   spec.metadata["homepage_uri"]     = spec.homepage
-  spec.metadata["source_code_uri"]  = "https://github.com/MadBomber/ai_agent"
-  spec.metadata["changelog_uri"]    = "https://github.com/MadBomber/ai_agent/blob/main/CHANGELOG.md"
+  spec.metadata["source_code_uri"]  = "https://github.com/MadBomber/agent99"
+  spec.metadata["changelog_uri"]    = "https://github.com/MadBomber/agent99/blob/main/CHANGELOG.md"
 
   # Specify which files should be added to the gem when it is released.
   gemspec = File.basename(__FILE__)

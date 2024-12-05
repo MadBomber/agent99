@@ -1,8 +1,8 @@
-# AiAgent Framework
+# Agent99 Framework (AFW)
 
 **Under Development**  Initial release has no AI components - its just a generic client-server / request-response micro-services system using a peer-to-peer messaging broker and a centralized agent registry.
 
-AiAgent is a Ruby-based framework for building and managing AI agents in a distributed system. It provides a robust foundation for creating intelligent agents that can communicate, discover each other, and perform various tasks.
+Agent99 is a Ruby-based framework for building and managing AI agents in a distributed system. It provides a robust foundation for creating intelligent agents that can communicate, discover each other, and perform various tasks.
 
 ## Features
 
@@ -19,7 +19,7 @@ AiAgent is a Ruby-based framework for building and managing AI agents in a distr
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'ai_agent'
+gem 'agent99'
 ```
 
 And then execute:
@@ -31,7 +31,7 @@ $ bundle install
 Or install it yourself as:
 
 ```
-$ gem install ai_agent
+$ gem install agent99
 ```
 
 ## Usage
@@ -39,11 +39,11 @@ $ gem install ai_agent
 Here's a basic example of how to create an AI agent:
 
 ```ruby
-require 'ai_agent'
+require 'agent99'
 
 class MyAgentRequest < SimpleJsonSchemaBuilder::Base
   object do
-    object :header, schema: AiAgent::HeaderSchema
+    object :header, schema: Agent99::HeaderSchema
 
     # Define your agents parameters ....
     string :greeting, required: false,  examples: ["Hello"]
@@ -51,7 +51,7 @@ class MyAgentRequest < SimpleJsonSchemaBuilder::Base
   end
 end
 
-class MyAgent < AiAgent::Base
+class MyAgent < Agent99::Base
   REQUEST_SCHEMA  = MyAgentRequest.schema
 
   def capabilities
@@ -85,7 +85,7 @@ The framework can be configured through environment variables:
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/MadBomber/ai_agent.
+Bug reports and pull requests are welcome on GitHub at https://github.com/MadBomber/agent99.
 
 ## Short-term Roadmap
 

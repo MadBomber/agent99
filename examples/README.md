@@ -1,19 +1,19 @@
-# AiAgent Framework Examples
+# Agent99 Framework Examples
 
 - TODO
     - Review and edit
     - Add instructions for brew install rabbitmq nats-server boxes
     - review example agents to see code can be tightened
 
-This folder contains example implementations using the AiAgent framework. The framework provides a foundation for building AI agents that can communicate with each other through a message-based system.
+This folder contains example implementations using the Agent99 framework. The framework provides a foundation for building AI agents that can communicate with each other through a message-based system.
 
 ## Files
 
 ### 1. hello_world.rb
 
-This file demonstrates a basic AI agent implementation using the AiAgent framework.
+This file demonstrates a basic AI agent implementation using the Agent99 framework.
 
-- Class: `HelloWorld < AiAgent::Base`
+- Class: `HelloWorld < Agent99::Base`
 - Functionality: Responds to "hello world" requests
 - Key methods:
   - `receive_request`: Handles incoming requests
@@ -24,7 +24,7 @@ This file demonstrates a basic AI agent implementation using the AiAgent framewo
 
 This file shows how to create a client that interacts with the HelloWorld agent.
 
-- Class: `HelloWorldClient < AiAgent::Base`
+- Class: `HelloWorldClient < Agent99::Base`
 - Functionality: Sends a request to a HelloWorld agent and processes the response
 - Key methods:
   - `init`: Initiates the request sending process
@@ -75,5 +75,5 @@ This file implements a simple registry service for AI agents using Sinatra.
 ## Notes
 
 - The framework uses modern Ruby 3.3 syntax, especially for hashes and method signatures with named parameters.
-- The examples demonstrate basic usage of the AiAgent framework, including request/response handling, validation, and agent discovery.
+- The examples demonstrate basic usage of the Agent99 framework, including request/response handling, validation, and agent discovery.
 - The registry service uses an in-memory store (AGENT_REGISTRY) for simplicity, but it's recommended to use a more robust solution like SQLite for production use.

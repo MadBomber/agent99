@@ -1,15 +1,15 @@
-# lib/ai_agent/agent_lifecycle.rb
+# lib/agent99/agent_lifecycle.rb
 
-module AiAgent::AgentLifecycle
+module Agent99::AgentLifecycle
 
   # Initializes a new AI agent with the given configuration.
   #
-  # @param registry_client [AiAgent::RegistryClient] The client for agent registration
-  # @param message_client [AiAgent::AmqpMessageClient] The client for message handling
+  # @param registry_client [Agent99::RegistryClient] The client for agent registration
+  # @param message_client [Agent99::AmqpMessageClient] The client for message handling
   # @param logger [Logger] The logger instance for the agent
   #
-  def initialize(registry_client: AiAgent::RegistryClient.new,
-                 message_client: AiAgent::AmqpMessageClient.new,
+  def initialize(registry_client: Agent99::RegistryClient.new,
+                 message_client: Agent99::AmqpMessageClient.new,
                  logger: Logger.new($stdout))
     @payload = nil
     @name = self.class.name
