@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
   spec.authors  = ["Dewayne VanHoozer"]
   spec.email    = ["dvanhoozer@gmail.com"]
 
-  spec.summary      = "An intelligent agent library for Ruby"
+  spec.summary      = "An intelligent agent framework for Ruby"
   spec.description  = <<~TEXT
     `ai_agent` is a Ruby gem designed to facilitate the creation and management 
     of intelligent agents, providing a straightforward interface for tasks such 
