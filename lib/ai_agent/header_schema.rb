@@ -1,6 +1,7 @@
 # experiments/agents/header_schema.rb
 
 require 'simple_json_schema_builder'
+
 require_relative 'timestamp'
 
 class AiAgent::HeaderSchema < SimpleJsonSchemaBuilder::Base

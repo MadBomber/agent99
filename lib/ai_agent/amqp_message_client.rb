@@ -104,8 +104,10 @@ class AiAgent::AmqpMessageClient
     end
   end
 
-  private
 
+  ################################################
+  private
+  
   def create_amqp_connection
     Bunny.new.tap(&:start)
   rescue Bunny::TCPConnectionFailed, StandardError => e

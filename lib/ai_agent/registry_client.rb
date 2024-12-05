@@ -35,7 +35,7 @@ class AiAgent::RegistryClient
     send_request(request)
   end
 
-
+  ################################################
   private
 
   def create_request(method, path, body = nil)

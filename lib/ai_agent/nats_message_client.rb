@@ -87,8 +87,10 @@ class AiAgent::NatsMessageClient
     logger.info "NATS doesn't require explicit queue deletion. Subject #{queue_name} will be automatically cleaned up."
   end
 
-  private
 
+  ################################################
+  private
+  
   def create_nats_connection
     NATS.connect
   rescue NATS::IO::ConnectError => e
