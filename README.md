@@ -4,6 +4,48 @@
 
 Agent99 is a Ruby-based framework for building and managing AI agents in a distributed system. It provides a robust foundation for creating intelligent agents that can communicate, discover each other, and perform various tasks.
 
+## Hype!
+
+🌟 **Introducing Agent99**: Your Friendly Ruby Sidekick for Building Intelligent Software Agents! 🌟
+
+Do you ever miss the charm and wit of Barbara Feldon's iconic character from *Get Smart*? Just as Agent 99 was always ready to tackle mischief and save the day, **Agent99** is here to help you create your very own software agents that can communicate, collaborate, and conquer tasks in a smart and efficient way!
+
+### Why Choose Agent99?
+
+🔍 **Independent Agents, Unified Communication**: Say goodbye to complex service orchestration! Agent99 empowers you to build micro-services that communicate seamlessly through a robust peer-to-peer messaging network. Each agent operates independently while working together like a well-oiled machine!
+
+🤖 **Smart Automation for the Modern Age**: In the era of AI, why settle for less? With Agent99, you can develop software agents that respond intelligently to incoming requests—just like a secret agent reacting to their next mission! Deploy your own digital spies to gather data, complete tasks, and more.
+
+📦 **Quick Setup & Easy Integration**: Just like Agent 99’s quick thinking, our library is designed for rapid development. Get up and running in no time, whether you’re building a small project or an enterprise-level solution!
+
+
+### Features that Make Agent99 a Must-Have:
+
+- 🌐 **Peer-to-Peer Messaging**: Ensure that your agents can communicate effortlessly, just like Agent 99 and Max.
+- 🚀 **Agile Development**: Design and deploy agents at lightning speed, giving you the freedom to innovate.
+- 🔒 **Secure Communication**: Built with security in mind, because even our agents deserve to keep their secrets safe.
+- 📊 **Scalability**: Expand your network of agents as your needs grow—no mission is too big!
+
+### Get Smart! Join the Revolution!
+
+Whether you’re a seasoned Ruby developer or just getting started, Agent99 provides the tools you need to build your very own quirky, intelligent agents. Just like Agent 99, your agents will be clever, adaptable, and ready to tackle any challenge!
+
+### How to Get Started:
+
+1. **Install**: Simply add Agent99 to your Gemfile and run `bundle install`.
+2. **Create an Agent**: Use our simple API to define and deploy your first agent.
+3. **Watch Them Work**: Sit back and relax as your agents spring into action, communicating with one another to accomplish tasks that would impress even the chief of CONTROL!
+
+### Spread the Word!
+
+**Join the Agent99 community** on GitHub and share your experiences, tips, and feedback. Let’s build a world of smart agents together! And remember, just like Agent 99 always had Max’s back, we’ve got yours during your development journey.
+
+🕵️‍♂️ **Become an Agent!** Dive into the world of Agent99 today: [GitHub Repository](#) 📖
+
+**Agent99** – Because when it comes to building software agents, it's all about being smart!
+
+... end of the Hype; now back to normal.
+
 ## Features
 
 - Agent Lifecycle Management: Easy setup and teardown of agents
