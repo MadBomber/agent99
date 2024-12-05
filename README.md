@@ -1,157 +1,99 @@
-# AiAgent
+# AiAgent Framework
 
-**Under development. Looking for collaborators.**
+**Under Development**  Initial release has no AI components - its just a generic client-server / request-response micro-services system using a peer-to-peer messaging broker and a centralized agent registry.
 
-`AiAgent` implements an agent framework for AI workflows. It posits the availability of a centralized registry where agents can announce their capabilities, making it easier to discover agents that perform specific tasks. The registry supports three main processes: **register**, **discover**, and **withdraw**, with a potential fourth process—**control**—to manage all registered agents collectively.
+AiAgent is a Ruby-based framework for building and managing AI agents in a distributed system. It provides a robust foundation for creating intelligent agents that can communicate, discover each other, and perform various tasks.
 
-Agents communicate with each other via a peer-to-peer messaging network, leveraging modern message queue systems.
+## Features
 
-This project serves as a simple playground for testing and experimenting with AI agent concepts in Ruby.
+- Agent Lifecycle Management: Easy setup and teardown of agents
+- Message Processing: Handle requests, responses, and control messages
+- Agent Discovery: Find other agents based on capabilities
+- Flexible Communication: Support for both AMQP and NATS messaging systems
+- Registry Integration: Register and discover agents through a central registry
+- Error Handling and Logging: Built-in error management and logging capabilities
+- Control Actions: Pause, resume, update configuration, and request status of agents
 
 ## Installation
 
-**NOTE:** This code has not yet been published as a gem.  If you want to try it out you must clone the repo and do a local install from your clone.
+Add this line to your application's Gemfile:
 
-To install the gem and add it to your application's Gemfile, run:
-
-```bash
-bundle add ai_agent
+```ruby
+gem 'ai_agent'
 ```
 
-If you're not using Bundler to manage dependencies, install the gem manually:
-
-```bash
-gem install ai_agent
-```
-
-## Architecture
-
-The intent is to experiment with Ruby as a reference implementation; however, the API and underlying concepts are designed to support a mixture of programming languages.
-
-This project is inspired by a previous collaboration on the Integrated System Environment (ISE) project, aiming to breathe new life into those old concepts.
-
-### Identification
-
-Each instance of an AiAgent is uniquely identified via a UUID within the registry. This UUID serves both the registry and the peer-to-peer messaging network, establishing channels for communication between agents.
-
-### Registry
-
-The centralized registry is implemented as a Sinatra web application, facilitating agent registration and discovery.
-
-### Peer-to-Peer Messaging
-
-Communication between agents is managed through AMQP, using RabbitMQ as the message broker.
-
-## "AMQP?  Dude that is so like last century!"
-
-According to the `cool kids` NATS is where its at.  See https:hats.io
+And then execute:
 
 ```
-brew install nats-server nats-streaming-server
-gem install nats-pure
-
-require 'nats/client'
-
-nats = NATS.connect("demo.nats.io")
-puts "Connected to #{nats.connected_server}"
-
-# Simple subscriber
-nats.subscribe("foo.>") { |msg, reply, subject| puts "Received on '#{subject}': '#{msg}'" }
-
-# Simple Publisher
-nats.publish('foo.bar.baz', 'Hello World!')
-
-# Unsubscribing
-sub = nats.subscribe('bar') { |msg| puts "Received : '#{msg}'" }
-sub.unsubscribe()
-
-# Requests with a block handles replies asynchronously
-nats.request('help', 'please', max: 5) { |response| puts "Got a response: '#{response}'" }
-
-# Replies
-sub = nats.subscribe('help') do |msg|
-  puts "Received on '#{msg.subject}': '#{msg.data}' with headers: #{msg.header}"
-  msg.respond("I'll help!")
-end
-
-# Request without a block waits for response or timeout
-begin
-  msg = nats.request('help', 'please', timeout: 0.5)
-  puts "Received on '#{msg.subject}': #{msg.data}"
-rescue NATS::Timeout
-  puts "nats: request timed out"
-end
-
-# Request using a message with headers
-begin
-  msg = NATS::Msg.new(subject: "help", headers: {foo: 'bar'})
-  resp = nats.request_msg(msg)
-  puts "Received on '#{resp.subject}': #{resp.data}"
-rescue NATS::Timeout => e
-  puts "nats: request timed out: #{e}"
-end
-
-# Server roundtrip which fails if it does not happen within 500ms
-begin
-  nats.flush(0.5)
-rescue NATS::Timeout
-  puts "nats: flush timeout"
-end
-
-# Closes connection to NATS
-nats.close
+$ bundle install
 ```
 
-Kinda looks like a topic queue organization to me.
+Or install it yourself as:
+
+```
+$ gem install ai_agent
+```
 
 ## Usage
 
-Here’s an example of how to create and run your own agent:
+Here's a basic example of how to create an AI agent:
 
 ```ruby
-class MyAgentRequest < SimpleJsonSchemaBuilder
+require 'ai_agent'
+
+class MyAgentRequest < SimpleJsonSchemaBuilder::Base
   object do
-    object :header, schema: HeaderSchema
-    # Additional request fields can be defined here
+    object :header, schema: AiAgent::HeaderSchema
+
+    # Define your agents parameters ....
+    string :greeting, required: false,  examples: ["Hello"]
+    string :name,     required: true,   examples: ["World"]
   end
 end
 
 class MyAgent < AiAgent::Base
-  REQUEST_SCHEMA = MyAgentRequest.schema
+  REQUEST_SCHEMA  = MyAgentRequest.schema
+
+  def capabilities
+    ['text_processing', 'sentiment_analysis']
+    # TODO: make up mind on keyword or unstructured text
+  end
 
   def receive_request
-    logger.info "Received request from #{from_uuid} with event_uuid: #{event_uuid}"
+    # Handle the validated incoming requests
+    response = { result: "Processed request" }
 
-    my_params = payload.except(:header)
-  
-    result = "The agent's result"
-  
-    response = {
-      header: return_address,
-      result:
-    }
-
-    publish(response)
+    # Not every request needs a response
+    send_response(response)
   end
 
   def receive_response
-    result = payload[:result] # A String that could be JSON
+    # You sent a request to another agent
+    # now handle the response.
   end
 end
 
-MyAgent.new.run
+agent = MyAgent.new
+agent.run
 ```
+
+## Configuration
+
+The framework can be configured through environment variables:
+
+- `REGISTRY_BASE_URL`: URL of the agent registry service (default: 'http://localhost:4567')  See the default registry service in the examples folder.
 
 ## Contributing
 
-All contributions are welcome! To get involved, please clone the repository, make your changes, and submit a pull request.
+Bug reports and pull requests are welcome on GitHub at https://github.com/MadBomber/ai_agent.
 
-Have an idea but lack the time to implement it? Please create an issue, and maybe someone else can help bring it to life.
+## Short-term Roadmap
+
+- In the example registry, replace the Array(Hash) datastore with sqlite3 with a vector table to support discovery using semantic search.
+- Treat the agent like a Tool w/r/t RAG for prompts.
+- Add AgentRequest schema to agent's info in the registry.
+- Add AgentResponse schema to define the `result` element in the response JSON payload
 
 ## License
 
-This gem is open source and available under the terms of the [MIT License](https://opensource.org/licenses/MIT).
-
-## Acknowledgments
-
-This library builds upon foundational concepts in AI and distributed systems. Special thanks to the community and all collaborators who have contributed to this project and the broader field.
+The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
