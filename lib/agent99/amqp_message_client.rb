@@ -6,6 +6,19 @@ require 'json_schema'
 require 'logger'
 
 class Agent99::AmqpMessageClient
+  CONFIG = {
+    host:           "127.0.0.1",
+    port:           5672,
+    ssl:            false,
+    vhost:          "/",
+    user:           "guest",
+    pass:           "guest",
+    heartbeat:      :server, # will use RabbitMQ setting
+    frame_max:      131072,
+    auth_mechanism: "PLAIN"
+  }
+
+
   QUEUE_TTL = 60_000 # 60 seconds TTL
   @instance = nil
 
@@ -17,11 +30,14 @@ class Agent99::AmqpMessageClient
 
   attr_accessor :logger, :channel, :exchange
 
-  def initialize(logger: Logger.new($stdout))
+  def initialize(
+      config: CONFIG,
+      logger: Logger.new($stdout))
+    @config     = config
     @connection = create_amqp_connection
-    @channel  = @connection.create_channel
-    @exchange = @channel.default_exchange
-    @logger   = logger
+    @channel    = @connection.create_channel
+    @exchange   = @channel.default_exchange
+    @logger     = logger
   end
 
   def setup(agent_id:, logger:)
@@ -109,7 +125,7 @@ class Agent99::AmqpMessageClient
   private
   
   def create_amqp_connection
-    Bunny.new.tap(&:start)
+    Bunny.new(@config).tap(&:start)
   rescue Bunny::TCPConnectionFailed, StandardError => e
     logger.error "Failed to connect to AMQP: #{e.message}"
     raise "AMQP Connection Error: #{e.message}. Please check your AMQP server and try again."
