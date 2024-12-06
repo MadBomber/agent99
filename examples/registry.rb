@@ -6,7 +6,6 @@ include DebugMe
 
 require 'sinatra'
 require 'json'
-require 'bunny'
 require 'securerandom'
 
 # In-memory registry to store agent capabilities

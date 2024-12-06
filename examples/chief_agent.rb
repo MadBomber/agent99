@@ -1,12 +1,12 @@
 #!/usr/bin/env ruby
-# examples/hello_world_client.rb
+# examples/chief_agent.rb
 
 require 'json'
 require 'json_schema'
 require 'securerandom'
 require_relative '../lib/agent99'
 
-class HelloWorldClient < Agent99::Base
+class ChiefAgent < Agent99::Base
   def init
     send_request
   end
@@ -59,12 +59,12 @@ class HelloWorldClient < Agent99::Base
   private
 
   def capabilities
-    ['hello_world_client']
+    ['Chief of Control']
   end
 end
 
 
 # Example usage
-client = HelloWorldClient.new
+client = ChiefAgent.new
 client.run
 

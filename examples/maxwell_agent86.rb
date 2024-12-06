@@ -1,14 +1,14 @@
 #!/usr/bin/env ruby
-# examples/hello_world.rb
+# examples/maxwell_agent86.rb
 
 require 'json'
 require 'json_schema'
 
 require_relative '../lib/agent99'
-require_relative 'hello_world_request'
+require_relative 'maxwell_request'
 
-class HelloWorld < Agent99::Base
-  REQUEST_SCHEMA  = HelloWorldRequest.schema
+class MaxwellAgent86 < Agent99::Base
+  REQUEST_SCHEMA  = MaxwellRequest.schema
   # RESPONSE_SCHEMA = Agent99::RESPONSE.schema
   # ERROR_SCHEMA    = Agent99::ERROR.schema
 
@@ -64,9 +64,13 @@ class HelloWorld < Agent99::Base
   # a JSON string, sure but then we would need a 
   # RESPONSE_SCHEMA constant for the class.
   def process
-    {
-      result: get(:greeting) + ' ' + get(:name)
-    }
+    result  = if 50 <= rand(100)
+                get(:greeting) + ' ' + get(:name)
+              else
+                'Missed it by that >< much.'
+              end
+
+    { result: result }
   end
 
 
@@ -93,5 +97,5 @@ class HelloWorld < Agent99::Base
 end
 
 # Example usage
-agent = HelloWorld.new
+agent = MaxwellAgent86.new
 agent.run # Starts listening for messages

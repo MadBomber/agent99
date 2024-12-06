@@ -1,0 +1,22 @@
+digraph agent_interaction {
+    rankdir=LR; // Left to right layout
+
+    // Define nodes for each component
+    node [shape=box];
+    ChiefAgent [label="ChiefAgent"];
+    MaxwellAgent86 [label="MaxwellAgent86"];
+    Registry [label="Registry Service"];
+
+    // Define edges for interactions
+    ChiefAgent -> Registry [label="GET /discover (greeter)"];
+    Registry -> ChiefAgent [label="Agent UUIDs"];
+
+    ChiefAgent -> MaxwellAgent86 [label="Send greet request"];
+    MaxwellAgent86 -> ChiefAgent [label="Response (Hello World)"];
+    
+    MaxwellAgent86 -> Registry [label="POST /register"];
+    Registry -> MaxwellAgent86 [label="ACK (registration)"];
+
+    ChiefAgent -> Registry [label="POST /register"];
+    Registry -> ChiefAgent [label="ACK (registration)"];
+}

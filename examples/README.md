@@ -1,41 +1,36 @@
-# Agent99 Framework Examples
-
-- TODO
-    - Review and edit
-    - Add instructions for brew install rabbitmq nats-server boxes
-    - review example agents to see code can be tightened
+# Agent99 Framework Examples - 86 and the Chief
 
 This folder contains example implementations using the Agent99 framework. The framework provides a foundation for building AI agents that can communicate with each other through a message-based system.
 
 ## Files
 
-### 1. hello_world.rb
+### 1. maxwell_agent86.rb
 
-This file demonstrates a basic AI agent implementation using the Agent99 framework.
+This file demonstrates a basic agent implementation using the Agent99 framework.
 
-- Class: `HelloWorld < Agent99::Base`
+- Class: `MaxwellAgent86 < Agent99::Base`
 - Functionality: Responds to "hello world" requests
 - Key methods:
   - `receive_request`: Handles incoming requests
   - `validate_request`: Validates the request against a schema
   - `process`: Generates the response
 
-### 2. hello_world_client.rb
+### 2. chief_agent.rb
 
-This file shows how to create a client that interacts with the HelloWorld agent.
+This file shows how to create a client that interacts with the MaxwellAgent86 agent.
 
-- Class: `HelloWorldClient < Agent99::Base`
-- Functionality: Sends a request to a HelloWorld agent and processes the response
+- Class: `ChiefAgent < Agent99::Base`
+- Functionality: Sends a request to an agent who can be a greeter and processes the response
 - Key methods:
   - `init`: Initiates the request sending process
   - `send_request`: Builds and sends the request
   - `receive_response`: Handles the response from the HelloWorld agent
 
-### 3. hello_world_request.rb
+### 3. mexwell_request.rb
 
-This file defines the schema for HelloWorld requests using SimpleJsonSchemaBuilder.
+This file defines the schema for MaxwellAgent86 requests using SimpleJsonSchemaBuilder.
 
-- Class: `HelloWorldRequest < SimpleJsonSchemaBuilder::Base`
+- Class: `MaxwellRequest < SimpleJsonSchemaBuilder::Base`
 - Defines the structure of a valid HelloWorld request
 
 ### 4. registry.rb
@@ -52,28 +47,20 @@ This file implements a simple registry service for AI agents using Sinatra.
 
 ## Usage
 
-1. Start the registry service:
-   ```
-   ruby registry.rb
-   ```
+From the examples directory you will need to start three different processes.  You will want to keep them all in the forgound so it would be best to start them in different terminal windows.
 
-2. Run the HelloWorld agent:
-   ```
-   ruby hello_world.rb
-   ```
+Start the sample registry first: `./registry.rb`
 
-3. Run the HelloWorld client:
-   ```
-   ruby hello_world_client.rb
-   ```
+Then start the service agent: `./maxwell_agent86.rb`
+Maxwell will will register itself, get its UUID and setup a message queue to which it will listen for its service requests.
 
-## Dependencies
+Finally start the chief agent in charge: `./chief_agent.rb`
+The Chief also registers itself but no other agent can give the Chief missions.  That's his job.  The chief gets his mission UUID, sets up a message queue to listen for the reports from the field after he sends out his request (aka order)
 
-- Ruby 3.3+
-- Gems: json, json_schema, sinatra, bunny, securerandom
+But first the Chief asks the registry for the UUIDs of all agents who can handle a "greeter" request.  The Chief selects one of those agents and sends the agent a greet request.  The Chief then waits for a response to the request.  When it comes in, the chiefs displays the response and terminates.
 
-## Notes
+Run the chief a few times in a roll.  Some times the agent to whom the Chief issues his requests does not always respond the you would expect.
 
-- The framework uses modern Ruby 3.3 syntax, especially for hashes and method signatures with named parameters.
-- The examples demonstrate basic usage of the Agent99 framework, including request/response handling, validation, and agent discovery.
-- The registry service uses an in-memory store (AGENT_REGISTRY) for simplicity, but it's recommended to use a more robust solution like SQLite for production use.
+![Agent99 Framework Diagram](diagram.png)
+
+
