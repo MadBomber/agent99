@@ -1,21 +1,30 @@
 #!/usr/bin/env ruby
 # examples/maxwell_agent86.rb
 
-require 'json'
-require 'json_schema'
+# There are three types of agents: Server, Client and Hybrid.
+# A Server receives a requests and _may_ send a response.
+# A Client sends a request and _may_ expect a response.
+# A Hybrid _may_ act like a Server or a Client
 
 require_relative '../lib/agent99'
 require_relative 'maxwell_request'
 
 class MaxwellAgent86 < Agent99::Base
   REQUEST_SCHEMA  = MaxwellRequest.schema
+  TYPE            = :server
+
   # RESPONSE_SCHEMA = Agent99::RESPONSE.schema
   # ERROR_SCHEMA    = Agent99::ERROR.schema
+
+
+  #######################################
+  private
 
   # The request is in @payload
   def receive_request
     send_response( validate_request || process )
   end
+
 
   # This method validates the incoming request and returns any errors found
   # or nil if there are no errors.
@@ -44,6 +53,7 @@ class MaxwellAgent86 < Agent99::Base
       }
     end
 
+
     # Validate the incoming request body against the schema
     validation_errors = validate_schema
     unless validation_errors.empty?
@@ -56,6 +66,7 @@ class MaxwellAgent86 < Agent99::Base
 
     responses.empty? ? nil : responses
   end
+
 
   # Returns the response value
   # All response message have the same schema in that
@@ -80,16 +91,21 @@ class MaxwellAgent86 < Agent99::Base
     loger.warn("Unexpected response type message: response.inspect")
   end
 
-  private
 
-  # NOTE: what I'm thinking about here is similar to the
-  #       prompt tool (aka function) callback facility
-  #       where descriptive text is used to describe
-  #       what the tool does.
+  # Phase One Implementation is to do a search
+  # using the String#include? and the Array#include?
+  # methods.  If you want discrete word-based selection
+  # then use an Array of Strings to define the different
+  # things this agent can do.
   #
-  # TODO: scale this idea back to just keywords
-  #       until the registry program gets more
-  #       stuff added to its discovery process.
+  # If you want to match on sub-strings then define the
+  # the capabilities as a String.
+  #
+  # Subsequent implementations may use a semantic search
+  # to find the agents to use in which case capabilities may
+  # be constrained to be a String.
+  #
+  # For now, lets just go with the Array of Strings.
   #
   def capabilities
     %w[ greeter hello_world hello-world hello]   

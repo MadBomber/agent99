@@ -3,6 +3,10 @@
 require 'debug_me'
 include DebugMe
 
+require 'json'
+require 'json_schema'
+require 'securerandom'
+
 module Agent99; end  # Establish a namespace
 
 require_relative 'agent99/base'
