@@ -41,7 +41,6 @@ Gem::Specification.new do |spec|
 
   spec.require_paths  = ["lib", "examples"]
 
-  spec.add_dependency "ai_client"
   spec.add_dependency "bunny"
   spec.add_dependency "nats-pure"
   spec.add_dependency "simple_json_schema_builder"

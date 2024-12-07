@@ -35,6 +35,12 @@ class Agent99::RegistryClient
     send_request(request)
   end
 
+
+  def fetch_all_agents
+    request = create_request(:get, "/")
+    response = send_request(request)
+  end
+
   ################################################
   private
 
@@ -48,9 +54,11 @@ class Agent99::RegistryClient
     response = @http_client.request(request)
 
     handle_response(response)
+  
   rescue JSON::ParserError => e
     logger.error "JSON parsing error: #{e.message}"
     nil
+  
   rescue StandardError => e
     logger.error "Request error: #{e.message}"
     nil

@@ -78,8 +78,8 @@ module Agent99::MessageProcessing
   # @raise [StandardError] If there's an error processing the control message
   #
   def receive_control
-    action = payload[:action]
-    handler = CONTROL_HANDLERS[action]
+    action  = payload[:action]
+    handler = Agent99::CONTROL_HANDLERS[action]
     
     if handler
       send(handler)

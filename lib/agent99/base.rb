@@ -36,14 +36,6 @@ class Agent99::Base
   include Agent99::MessageProcessing
 
   MESSAGE_TYPES = %w[request response control]
-  
-  CONTROL_HANDLERS = {
-    'shutdown' => :handle_shutdown,
-    'pause' => :handle_pause,
-    'resume' => :handle_resume,
-    'update_config' => :handle_update_config,
-    'status' => :handle_status_request
-  }
 
   attr_reader :id, :capabilities, :name, :payload, :header, :logger, :queue
   attr_accessor :registry_client, :message_client
