@@ -44,6 +44,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "bunny"
   spec.add_dependency "nats-pure"
   spec.add_dependency "simple_json_schema_builder"
+  spec.add_dependency "sinatra"
 
   spec.add_development_dependency "amazing_print"
   spec.add_development_dependency "debug_me"
