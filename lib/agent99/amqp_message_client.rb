@@ -43,6 +43,8 @@ class Agent99::AmqpMessageClient
   def setup(agent_id:, logger:)
     queue = create_queue(agent_id)
     
+    logger.info "Created queue for agent_id: #{agent_id}"
+
     # Returning the queue to be used in the Base class
     queue
   end
@@ -82,26 +84,39 @@ class Agent99::AmqpMessageClient
     queue_name = message.dig(:header, :to_uuid)
 
     begin
+      # FIXME: message.to_json
       json_payload = JSON.generate(message)
 
       exchange.publish(json_payload, routing_key: queue_name)
 
-      logger.info "Message published successfully to queue: #{queue_name}"
+      logger.info "#{message.dig(:header,:type).to_s.upcase} message published successfully to queue: #{queue_name}"
       
       # Return a success status
-      { success: true, message: "Message published successfully" }
+      { 
+        success: true, 
+        message: "Message published successfully" 
+      }
     
     rescue JSON::GeneratorError => e
       logger.error "Failed to convert payload to JSON: #{e.message}"
-      { success: false, error: "JSON conversion error: #{e.message}" }
+      { 
+        success: false, 
+        error: "JSON conversion error: #{e.message}" 
+      }
     
     rescue Bunny::ConnectionClosedError, Bunny::ChannelAlreadyClosed => e
       logger.error "Failed to publish message: #{e.message}"
-      { success: false, error: "Publishing error: #{e.message}" }
+      { 
+        success: false, 
+        error: "Publishing error: #{e.message}" 
+      }
     
     rescue StandardError => e
       logger.error "Unexpected error while publishing message: #{e.message}"
-      { success: false, error: "Unexpected error: #{e.message}" }
+      { 
+        success:  false, 
+        error:    "Unexpected error: #{e.message}" 
+      }
     end
   end
 

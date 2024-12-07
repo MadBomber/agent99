@@ -48,9 +48,21 @@ module Agent99::AgentLifecycle
   end
 
 
+  # Performs cleanup operations when the agent is shutting down.
+  #
+  def fini
+    if id
+      queue_name = id
+      withdraw
+      @message_client&.delete_queue(queue_name)
+    else
+      logger.warn('fini called with a nil id')
+    end
+  end
+
   ################################################
   private
-
+  
   # Checks if the agent is currently paused.
   #
   # @return [Boolean] True if the agent is paused, false otherwise
@@ -69,19 +81,6 @@ module Agent99::AgentLifecycle
         STDERR.puts "\nReceived #{signal} signal. Initiating graceful shutdown..."
         exit
       end
-    end
-  end
-
-
-  # Performs cleanup operations when the agent is shutting down.
-  #
-  def fini
-    if id
-      queue_name = id
-      withdraw
-      @message_client&.delete_queue(queue_name)
-    else
-      logger.warn('fini called with a nil id')
     end
   end
 end

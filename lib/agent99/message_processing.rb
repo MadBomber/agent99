@@ -16,14 +16,15 @@ module Agent99::MessageProcessing
   #
   def dispatcher
     @start_time = Time.now
-    @paused = false
-    @config = {}
+    @paused     = false
+    @config     = {}
+
 
     message_client.listen_for_messages(
       queue,
-      request_handler: ->(message) { process_request(message) unless paused? },
+      request_handler:  ->(message) { process_request(message) unless paused? },
       response_handler: ->(message) { process_response(message) unless paused? },
-      control_handler: ->(message) { process_control(message) }
+      control_handler:  ->(message) { process_control(message) }
     )
   end
 
@@ -33,8 +34,8 @@ module Agent99::MessageProcessing
   # @param message [Hash] The incoming message
   #
   def process_request(message)
-    @payload = message
-    @header = payload[:header]
+    @payload  = message
+    @header   = payload[:header]
     return unless validate_schema.empty?
     receive_request
   end
@@ -54,9 +55,12 @@ module Agent99::MessageProcessing
   #
   def process_control(message)
     @payload = message
-    receive_control
+    if payload[:action] == 'response'
+      receive_response
+    else
+      receive_control
+    end
   end
-
 
 
   # Handles incoming request messages (to be overridden by subclasses).
@@ -78,6 +82,7 @@ module Agent99::MessageProcessing
   # @raise [StandardError] If there's an error processing the control message
   #
   def receive_control
+
     action  = payload[:action]
     handler = Agent99::CONTROL_HANDLERS[action]
     
@@ -89,7 +94,7 @@ module Agent99::MessageProcessing
   
   rescue StandardError => e
     logger.error "Error processing control message: #{e.message}"
-    send_control_response("Error", { error: e.message })
+    send_control_response({ error: e.message })
   end
 
 
@@ -108,14 +113,15 @@ module Agent99::MessageProcessing
   # @param message [String] The response message
   # @param data [Hash, nil] Additional data to include in the response
   #
-  def send_control_response(message, data = nil)
+  def send_control_response(data)
     response = {
       header: return_address.merge(type: 'control'),
-      message: message,
+      action: 'response',
       data: data
     }
     @message_client.publish(response)
   end
+
 
   # Validates the incoming message against the defined schema.
   #
@@ -135,6 +141,7 @@ module Agent99::MessageProcessing
     e.messages
   end
 
+
   # Retrieves a field from the payload or returns a default value.
   #
   # @param field [Symbol] The field to retrieve
@@ -143,6 +150,7 @@ module Agent99::MessageProcessing
   def get(field)
     payload[field] || default(field)
   end
+
 
   # Returns the default value for a field from the schema.
   #

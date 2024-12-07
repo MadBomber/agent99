@@ -4,7 +4,7 @@ module Agent99::HeaderManagement
 
 
   ################################################
-  private
+  # private
   
   def header      = @payload[:header]
   def to_uuid     = header[:to_uuid]
@@ -14,9 +14,11 @@ module Agent99::HeaderManagement
   def type        = header[:type]
 
   def return_address
-    header.merge(
-      to_uuid:    from_uuid,
-      from_uuid:  to_uuid,
+    return_address = payload[:header].dup
+
+    return_address.merge(
+      to_uuid:    return_address[:from_uuid],
+      from_uuid:  return_address[:to_uuid],
       timestamp:  Agent99::Timestamp.new.to_i,
       type:       'response'
     )

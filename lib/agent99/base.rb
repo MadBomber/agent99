@@ -48,6 +48,12 @@ class Agent99::Base
     logger.error "#{message}: #{error.message}"
     logger.debug error.backtrace.join("\n")
   end
+
+
+  # the final rescue block
+  rescue StandardError => e
+    handle_error("Unhandled error in Agent99::Base", e)
+    exit(2)
 end
 
 

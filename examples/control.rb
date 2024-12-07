@@ -4,10 +4,13 @@
 require_relative '../lib/agent99'
 
 class Control < Agent99::Base
-  TYPE          = :hybrid
+  TYPE = :hybrid
+
+  attr_accessor :statuses
 
   def init
     @agents = @registry_client.fetch_all_agents
+    @statuses = {}
   end
 
 
@@ -48,65 +51,86 @@ class Control < Agent99::Base
     send_control_message(message: 'stop')
   end
 
-
   def get_all_status
-    statuses = {}
+    @statuses.clear  # Reset statuses before new request
+    
     @agents.each do |agent|
-      response = @message_client.publish(
+      @message_client.publish(
         header: {
-          to_uuid: agent[:uuid],
-          from_uuid: @id,
+          to_uuid:    agent[:uuid],
+          from_uuid:  @id,
           event_uuid: SecureRandom.uuid,
-          type: 'control',
-          timestamp: Agent99::Timestamp.new.to_i
+          type:       'control',
+          timestamp:  Agent99::Timestamp.new.to_i
         },
         action: 'status'
       )
-
-      debug_me{[
-        :response
-      ]}
-
-      statuses[agent[:name]] = response[:payload] if response[:success]
     end
 
-    statuses
+    # Wait for responses (with timeout)
+    sleep 2  # Give agents time to respond
+    @statuses
   end
+
+  def receive_response
+    if payload[:action] == 'response' && payload[:data][:type] == 'status'
+      agent_name = payload[:header][:from_uuid]
+      @statuses[agent_name] = payload[:data]
+      logger.info "Received status from #{agent_name}: #{payload[:data]}"
+    elsif payload[:action] == 'status' && payload[:header][:from_uuid] == @id
+      # Handle our own status request
+      handle_status_request
+    end
+  end
+
+
 end
 
 
 if __FILE__ == $PROGRAM_NAME
   control = Control.new
+  
+  # Start the message processing in a separate thread
+  dispatcher_thread = Thread.new do
+    control.run
+  end
 
-  puts "1. Pause all agents"
-  puts "2. Resume all agents"
-  puts "3. Stop all agents"
-  puts "4. Get all agents status"
-  puts "5. Exit"
+  # UI thread
+  begin
+    loop do
+      puts "\n1. Pause all agents"
+      puts "2. Resume all agents"
+      puts "3. Stop all agents"
+      puts "4. Get all agents status"
+      puts "5. Exit"
+      print "\nEnter your choice: "
+      
+      choice = gets.chomp.to_i
 
-  loop do
-    print "Enter your choice: "
-    choice = gets.chomp.to_i
-
-    case choice
-    when 1
-      control.pause_all
-    when 2
-      control.resume_all
-    when 3
-      control.stop_all
-    when 4
-      statuses = control.get_all_status
-      debug_me{[
-        :statuses
-      ]}
-      puts JSON.pretty_generate(statuses)
-    when 5
-      puts "Exiting..."
-      break
-    else
-      puts "Invalid choice. Please try again."
+      case choice
+      when 1
+        control.pause_all
+      when 2
+        control.resume_all
+      when 3
+        control.stop_all
+      when 4
+        statuses = control.get_all_status
+        sleep 2 # Give time for responses to arrive
+        puts JSON.pretty_generate(control.statuses)
+      when 5
+        puts "Exiting..."
+        Thread.exit
+        break
+      else
+        puts "Invalid choice. Please try again."
+      end
     end
+  rescue Interrupt
+    puts "\nShutting down..."
+  ensure
+    dispatcher_thread.exit
+    control.fini
   end
 end
 
