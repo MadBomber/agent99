@@ -1,19 +1,77 @@
-# Agent99 Framework
+# Agent99 Framework Architecture
 
-## Architecture Overview
+## High-Level Architecture Overview
 
-Agent99 is a Ruby-based framework designed specifically for building and managing software agents in a distributed system environment. The architecture leverages a service-oriented approach, where agents are able to register themselves, discover other agents, and communicate directly through a peer-to-peer messaging system. This document outlines the key components of the Agent99 framework and provides guidance for both new developers and experienced users looking to integrate with the framework.
-### Overall System Architecture
+Agent99 is a Ruby-based framework designed for building and managing software agents in a distributed system environment. The architecture follows a service-oriented approach with three main components:
 
-In Agent99, the architecture can be viewed as a microservices-oriented structure where each agent acts as a distinct service. Agents interact with each other via direct messaging facilitated by the selected messaging system, while registration and discovery processes are managed through the central registry service. This architecture promotes scalability, allowing multiple agents to work independently and collaboratively, executing tasks efficiently across the network.
+1. **Agents**: Independent services that can register, discover, and communicate with each other
+2. **Registry Service**: Central registration and discovery system
+3. **Message Broker**: Communication backbone (supports AMQP or NATS)
 
-### Communication Workflow
+### System Components Diagram
 
-1. **Registration**:
-   - When a new agent is created, it registers itself with the central registry. Upon successful registration, it receives a unique UUID through which it can communicate with other agents.
+![High Level Architecture](diagrams/high_level_architecture.png)
 
-2. **Service Discovery**:
-   - Agents can query the central registry to find other agents that provide specific services. This ensures that tasks can be delegated to suitable peers based on their capabilities.
+The diagram above (generated from `diagrams/high_level_architecture.dot`) illustrates the key components and their interactions:
 
-3. **Direct Messaging**:
-   - Using the MessageClient, agents can send and receive messages directly to each other, utilizing the configured messaging backend for reliable communication.
+- **Agents**: Come in three types:
+   - Client Agents: Only make requests
+   - Server Agents: Only respond to requests
+   - Hybrid Agents: Both make and respond to requests
+
+- **Registry Service**: 
+   - Maintains agent registrations
+   - Handles capability-based discovery
+   - Issues unique UUIDs to agents
+
+- **Message Broker**:
+   - Supports both AMQP and NATS protocols
+   - Handles message routing between agents
+   - Provides reliable message delivery
+
+### Communication Patterns
+
+1. **Registration Flow**:
+      - New agent instantiated
+      - Agent registers with Registry Service
+      - Receives unique UUID for identification
+      - Sets up message queue/topic
+
+2. **Discovery Flow**:
+      - Agent queries Registry for specific capabilities
+      - Registry returns matching agent information
+      - Requesting agent caches discovery results
+
+3. **Messaging Flow**:
+      - Agent creates message with recipient UUID
+      - Message routed through Message Broker
+      - Recipient processes message based on type:
+         - Requests: Handled by receive_request
+         - Responses: Handled by receive_response
+         - Control: Handled by control handlers
+
+### Message Types
+
+The framework supports three primary message types:
+
+1. **Request Messages**: 
+      - Used to request services from other agents
+      - Must include capability requirements
+      - Can contain arbitrary payload data
+
+2. **Response Messages**:
+      - Sent in reply to requests
+      - Include original request reference
+      - Contain result data or error information
+
+3. **Control Messages**:
+      - System-level communication
+      - Handle agent lifecycle events
+      - Support configuration updates
+
+## Implementation Details
+
+For detailed implementation information, see:
+- [API Reference](api_reference.md) for method specifications
+- [Agent Lifecycle](agent_lifecycle.md) for lifecycle management
+- [Agent Discovery](agent_discovery.md) for discovery mechanisms
