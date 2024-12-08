@@ -8,8 +8,11 @@ require 'sinatra'
 require 'json'
 require 'securerandom'
 
-# In-memory registry to store agent capabilities
-# Array(Hash)
+# In-memory registry to store agent Array(Hash)
+#
+# Agent capabilities are save as lower case.  The 
+# discovery process also compares content as lower case.
+#
 # TODO: change this data store to a sqlite database
 #       maybe with a vector search capability.
 #
@@ -25,11 +28,10 @@ end
 post '/register' do
   request.body.rewind
   agent_info = JSON.parse(request.body.read, symbolize_names: true)
-
   agent_name = agent_info[:name]
-  capabilities = agent_info[:capabilities]
-
   agent_uuid = SecureRandom.uuid
+
+  agent_info[:capabilities].map!{|c| c.downcase}
 
   AGENT_REGISTRY << agent_info.merge({uuid: agent_uuid})
 
@@ -42,7 +44,7 @@ end
 # TODO: This is a simple keyword matcher.  Looking
 # =>    for a semantic match process.
 get '/discover' do
-  capability = params['capability']
+  capability = params['capability'].downcase
 
   matching_agents = AGENT_REGISTRY.select do |agent|
     agent[:capabilities].include?(capability)
