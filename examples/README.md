@@ -45,6 +45,16 @@ This file implements a simple registry service for AI agents using Sinatra.
   - DELETE `/withdraw/:uuid`: Withdraws an agent from the registry
   - GET `/`: Lists all registered agents
 
+### 5. control_agent.rb
+
+Example use of control messages.
+
+### 6. kaos_spy.rb
+  - Agent 99 was kinnapped by KAOS and forced to reveal the secrets of Control's centralized registry and communications network.
+  - The KAOS spy raided hacked the registry, stole the records for all of Control's agents in the field and DOX'ed them on social media.
+  - That was not enough for KAOS.  Knowing the secret UUID for each agent, KAOS proceeded to turn off the communication network one queue at a time.
+  - Get Smart -- Get Security
+
 ## Usage
 
 From the examples directory you will need to start three different processes.  You will want to keep them all in the forgound so it would be best to start them in different terminal windows.
