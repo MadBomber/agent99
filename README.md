@@ -55,6 +55,8 @@ Whether you’re a seasoned Ruby developer or just getting started, Agent99 prov
 - Registry Integration: Register and discover agents through a central registry
 - Error Handling and Logging: Built-in error management and logging capabilities
 - Control Actions: Pause, resume, update configuration, and request status of agents
+- Dynamic Agent Loading: Support for runtime loading and deployment of new agents
+- Multi-Agent Processing: Run multiple agents within the same process using thread isolation
 
 ## Installation
 

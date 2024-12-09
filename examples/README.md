@@ -55,6 +55,39 @@ Example use of control messages.
   - That was not enough for KAOS.  Knowing the secret UUID for each agent, KAOS proceeded to turn off the communication network one queue at a time.
   - Get Smart -- Get Security
 
+### 7. agent_watcher.rb
+
+This file implements an agent watcher that dynamically loads and runs new agents.
+
+- Class: `AgentWatcher < Agent99::Base`
+- Functionality: Monitors a specified directory for new Ruby files and loads them as agents
+- Key features:
+  - Watches a configurable directory (default: './agents')
+  - Detects new .rb files added to the watched directory
+  - Dynamically loads new files as Ruby agents
+  - Instantiates and runs each new agent in a separate thread
+  - Handles errors during the loading and running process
+  - Terminates all loaded agents when the watcher is stopped
+- Key methods:
+  - `init`: Sets up the file watcher
+  - `setup_watcher`: Configures the directory listener
+  - `handle_new_agent`: Processes newly detected agent files
+
+### 8. example_agent.rb
+
+This file provides a simple example agent that can be dynamically loaded by the AgentWatcher.
+
+- Class: `ExampleAgent < Agent99::Base`
+- Functionality: Demonstrates a basic agent that can be dynamically loaded
+- Key features:
+  - Defines capabilities as a rubber stamp and yes-man
+  - Responds to all requests with a success status
+- Key methods:
+  - `capabilities`: Defines the agent's capabilities
+  - `receive_request`: Handles incoming requests and sends a response
+
+Note: To use the example_agent.rb, first run the AgentWatcher, then copy example_agent.rb into the 'agents' directory. The AgentWatcher will automatically detect, load, and run the new agent.
+
 ## Usage
 
 From the examples directory you will need to start three different processes.  You will want to keep them all in the forgound so it would be best to start them in different terminal windows.

@@ -1,12 +1,34 @@
+#!/usr/bin/env ruby
 # examples/agent_watcher.rb
+#
+# This file defines an AgentWatcher class that monitors a specified directory
+# for new Ruby files and dynamically loads and runs them as agents.
+
+# When running, the AgentWatcher does the following:
+# 1. Watches the directory specified by AGENT_WATCH_PATH (default: './agents')
+# 2. Detects when new .rb files are added to the watched directory
+# 3. Attempts to load each new file as a Ruby agent
+# 4. If successful, instantiates the agent and runs it in a separate thread
+#
+# When example_agent.rb is copied into the agents directory:
+# 1. The AgentWatcher detects the new file
+# 2. It attempts to load the file and extract the agent class
+# 3. If the class is a subclass of Agent99::Base, it instantiates the agent
+# 4. The new agent is then run in a separate thread
+# 5. Any errors during this process are logged for debugging
+#
+# When AgentWatcher is terminated, it first terminates all of the
+# agents that it has previously loaded and then terminates itself.
+
 
 require 'listen'
+
 require_relative '../lib/agent99'
 
 class AgentWatcher < Agent99::Base
   TYPE = :client
 
-  def capabilities = %w'launch_agents watcher launcher]
+  def capabilities = %w[ launch_agents watcher launcher ]
 
   def init
     @watch_path = ENV.fetch('AGENT_WATCH_PATH', './agents')

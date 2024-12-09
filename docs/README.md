@@ -1,6 +1,6 @@
 # Agent99 Framework Documentation
 
-Welcome to the Agent99 Framework documentation! Below is a table of contents and brief summaries of each markdown file available in this directory.
+Welcome to the Agent99 Framework documentation! Below is a table of contents and brief summaries of each markdown file available in this directory.  Explore each document for more detailed information on the Agent99 Framework and how to effectively utilize it in your projects!
 
 ## Table of Contents
 
@@ -40,20 +40,18 @@ Welcome to the Agent99 Framework documentation! Below is a table of contents and
 12. **[Messaging Systems](messaging_systems.md)**
       - Overview of the messaging protocols supported by Agent99, including AMQP and NATS, and guidance on how to switch between them.
 
-13. **[Performance Considerations](performance_considerations.md)**
+13. **[Advanced Features](advanced_features.md)**
+      - Learn about dynamic agent loading, multi-agent processing, and best practices for running multiple agents within the same process.
+
+14. **[Performance Considerations](performance_considerations.md)**
       - Best practices for ensuring optimal performance within the framework, including optimization techniques and profiling performance.
 
-14. **[Schema Definition](schema_definition.md)**
+15. **[Schema Definition](schema_definition.md)**
       - Detailed instructions on how to define schemas using `SimpleJsonSchemaBuilder`, with examples to guide you through the process.
 
-15. **[Security](security.md)**
+16. **[Security](security.md)**
       - Recommendations on implementing security measures within Agent99, focusing on message encryption and access control.
 
-16. **[Troubleshooting](troubleshooting.md)**
+17. **[Troubleshooting](troubleshooting.md)**
       - Common issues encountered while using Agent99 and suggested steps for debugging, including examining logs and configuration settings.
-
----
-
-Feel free to explore each document for more detailed information on the Agent99 Framework and how to effectively utilize it in your projects!
-
 
