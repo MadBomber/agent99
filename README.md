@@ -1,6 +1,6 @@
 # Agent99 Framework (AFW)
 
-**Under Development**  Initial release has no AI components - its just a generic client-server / request-response micro-services system using a peer-to-peer messaging broker and a centralized agent registry.
+**Under Development**  Initial release has no AI components - its just a generic client-server / request-response micro-services system using a peer-to-peer messaging broker and a centralized agent registry.  To keep up with the version changes review [The Changelog](./CHANGELOG.md) file.
 
 Agent99 is a Ruby-based framework for building and managing AI agents in a distributed system. It provides a robust foundation for creating intelligent agents that can communicate, discover each other, and perform various tasks.
 
