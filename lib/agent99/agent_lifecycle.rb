@@ -11,12 +11,13 @@ module Agent99::AgentLifecycle
   def initialize(registry_client: Agent99::RegistryClient.new,
                  message_client: Agent99::AmqpMessageClient.new,
                  logger: Logger.new($stdout))
-    @payload = nil
-    @name = self.class.name
-    @capabilities = capabilities
-    @id = nil
-    @registry_client = registry_client
-    @message_client = message_client
+    @agents           = {}
+    @payload          = nil
+    @name             = self.class.name
+    @capabilities     = capabilities
+    @id               = nil
+    @registry_client  = registry_client
+    @message_client   = message_client
     @logger = logger
 
     @registry_client.logger = logger

@@ -32,4 +32,8 @@ module Agent99::AgentDiscovery
 
     all ? result : result.sample(how_many)
   end
+
+  def add_agent(agent_info)
+    @agents[agent_info[:uuid]] = agent_info
+  end
 end

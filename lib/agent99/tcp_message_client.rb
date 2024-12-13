@@ -1,31 +1,39 @@
+# lib/agent99/tcp_message_client.rb
+
 require 'socket'
 require 'json'
 require 'logger'
 
 class Agent99::TcpMessageClient
-  def initialize(logger: Logger.new($stdout))
-    @logger = logger
-    @server_socket = nil
+  attr_accessor :agents
+
+  def initialize(
+      agents: {},
+      logger: Logger.new($stdout)
+    )
+    @agents             = agents
+    @logger             = logger
+    @server_socket      = nil
     @client_connections = {}
-    @handlers = {}
-    @running = false
+    @handlers           = {}
+    @running            = false
   end
 
   def listen_for_messages(queue, request_handler:, response_handler:, control_handler:)
     @handlers = {
-      request: request_handler,
+      request:  request_handler,
       response: response_handler,
-      control: control_handler
+      control:  control_handler
     }
     
     start_server(queue[:port])
   end
 
   def publish(message)
-    target = message.dig(:header, :to)
+    target = message.dig(:header, :to_uuid)
     return unless target
 
-    agent_info = discover_agent(target)
+    agent_info = agents(target)
     return unless agent_info
 
     socket = connect_to_agent(agent_info[:ip], agent_info[:port])
@@ -34,9 +42,11 @@ class Agent99::TcpMessageClient
     begin
       socket.puts(message.to_json)
       true
+    
     rescue StandardError => e
       @logger.error("Failed to send message: #{e.message}")
       false
+    
     ensure
       socket.close unless socket.closed?
     end
@@ -52,8 +62,8 @@ class Agent99::TcpMessageClient
   private
 
   def start_server(port)
-    @server_socket = TCPServer.new(port)
-    @running = true
+    @server_socket  = TCPServer.new(port)
+    @running        = true
 
     Thread.new do
       while @running
@@ -76,19 +86,22 @@ class Agent99::TcpMessageClient
 
           parsed_message = JSON.parse(message, symbolize_names: true)
           route_message(parsed_message)
+        
         rescue JSON::ParserError => e
           @logger.error("Invalid JSON received: #{e.message}")
+        
         rescue StandardError => e
           @logger.error("Error handling client: #{e.message}")
           break
         end
       end
+      
       client.close unless client.closed?
     end
   end
 
   def route_message(message)
-    type = message.dig(:header, :type)&.to_sym
+    type    = message.dig(:header, :type)&.to_sym
     handler = @handlers[type]
     
     if handler
@@ -98,14 +111,9 @@ class Agent99::TcpMessageClient
     end
   end
 
-  def discover_agent(agent_name)
-    # This would need to be implemented to work with your registry
-    # to look up the IP/port for the target agent
-    # Return format should be { ip: "1.2.3.4", port: 1234 }
-  end
-
   def connect_to_agent(ip, port)
     TCPSocket.new(ip, port)
+  
   rescue StandardError => e
     @logger.error("Failed to connect to #{ip}:#{port}: #{e.message}")
     nil
