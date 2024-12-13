@@ -16,8 +16,14 @@ class Agent99::RegistryClient
     @http_client = Net::HTTP.new(URI.parse(base_url).host, URI.parse(base_url).port)
   end
 
-  def register(name:, capabilities:)
-    request = create_request(:post, "/register", { name: name, capabilities: capabilities })
+  def register(name:, capabilities:, ip: nil, port: nil)
+    payload = { 
+      name: name, 
+      capabilities: capabilities,
+      ip: ip,
+      port: port
+    }.compact
+    request = create_request(:post, "/register", payload)
     @id = send_request(request)
   end
 

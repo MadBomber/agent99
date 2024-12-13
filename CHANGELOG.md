@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### playing_with_p2p
+
+- in this branch I'm looking at a TcpMessageClient and an update to the registry and RegistryClient to support a generic element "info" that would contain information about the agent like maybe its IP address and port for receiving messages.
+
 ## Released
 
 ### [0.0.3] - 2024-12-08
