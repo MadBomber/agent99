@@ -1,39 +1,16 @@
----
-title: "Getting Smart with Agent99"
-categories:
-  - Engineering
-tags:
-  - Agents
-  - Tools
----
+# What is an Agent?
 
-# Getting Smart with Agent99
+An agent is a self-contained piece of code designed to perform a specific function or service. Unlike general-purpose classes or modules, agents can be autonomous entities that focus on doing one thing well. They embody the Single Responsibility Principle (SRP) by design.
 
-Welcome to the first article in a series that introduces the Ruby gem [**agent99**](https://rubygems.org/gems/agent99), which provides a reference implementation framework for the execution and management of software agents. If you're eager to jump right in, feel free to visit the [software repository](https://github.com/MadBomber/agent99).
+I will be using the Ruby programming language and the agent99 gem specifically to illustrate aspects of what I think good software agents should look like.  I choose Ruby because:
 
-> **NOTE:** The Ruby agent code shown in this article is based on working examples. For the most up-to-date and complete examples, please refer to the [agent99 repo](https://github.com/MadBomber/agent99/tree/main/examples).
-
-## Background
-
-I've been developing software systems since I wrote my first computer program in the fall of 1970. It was a one-liner in APL - A Programming Language. Of course, all programs in APL are essentially one-liners. I'm very happy that I've been using Ruby since 2005.
-
-With this long history, I've accumulated some references that sometimes puzzle newer developers. For instance, when I mentioned that Agent 99 is smarter than Agent 86, my team had no idea what I was talking about.
-
-One of my favorite spy shows from the 1960s is [**Get Smart**](https://www.youtube.com/watch?v=16_6XrPlV-w), a title that resonates with today's growing interest in integrating artificial intelligence (AI) into every software project, which is not always for the better.
-
-In Get Smart, Agent 99, portrayed by Barbara Feldon, is a skilled and intelligent agent who excels through quick thinking and resourcefulness. In a male-dominated world, she stands as a symbol of capability and independence.
-
-Here's how the Ruby programming language, like Agent 99, offers unique benefits in a Python-dominated AI landscape:
-
-- **Refreshing Alternative:** Ruby allows developers to create elegant and expressive AI applications.
-- **Encourages Innovation:** It promotes paradigm shifts, challenging the Python status quo in AI development.
-- **Readable and Maintainable:** Developers who value clarity can find their niche in Ruby's design.
-- **Supports Unique Projects:** Ruby's metaprogramming capabilities pave the way for creative AI solutions.
-- **Integration-friendly:** Greater integration of Ruby-based frameworks makes them viable choices in the AI landscape.
-- **Object-Oriented Strengths:** Ruby's object-oriented style leads to more modular and testable code.
-- **Engaged Community:** Ruby inspires a community that often prefers its syntax over Python's.
-
-Now, let's dive into the fundamental concepts behind the [Agent99 Framework](https://github.com/MadBomber/agent99) as implemented in the Ruby gem.
+- Ruby allows developers to create elegant and expressive AI applications.
+- It promotes paradigm shifts, challenging the Python status quo in AI development.
+- Developers who value clarity can find their niche in Ruby's design.
+- Ruby's metaprogramming capabilities pave the way for creative AI solutions.
+- Greater integration of Ruby-based frameworks makes them viable choices in the AI landscape.
+- Ruby's object-oriented style leads to more modular and testable code.
+- Ruby inspires a community that often prefers its syntax over Python's.
 
 ## Getting Started with Agent99
 
