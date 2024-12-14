@@ -12,17 +12,21 @@ The agent discovery process involves the following steps:
 2. **Discovery**: When an agent needs to discover other agents, it queries the registry for agents with specific capabilities.
 3. **Response**: The registry responds with a list of available agents, allowing them to interact based on their capabilities.
 
-### Declaring Capabilities
+### Declaring Capabilities in the Info Method
 
-Each agent must implement the `capabilities` method to declare its capabilities as an array of strings:
+Each agent must implement the `info` method to declare its capabilities as an array of strings:
 
 ```ruby
-def capabilities
-  ['process_image', 'face_detection']
+def info
+  {
+    # ...
+    capabilities:  ['process_image', 'face_detection'],
+    # ...
+  }
 end
 ```
 
-**Note**: The discovery mechanism is based on an exact match (case insensitive) between the requested capability and the entries in the agent's capabilities array. For example, if an agent declares its capabilities as mentioned above, a discovery request for `'FACE_DETECTION'` will successfully match.
+**Note**: The discovery mechanism is based on an exact match (case insensitive) between the requested capability and the entries in the agent's capabilities array in its information packet. For example, if an agent declares its capabilities as mentioned above, a discovery request for `'FACE_DETECTION'` will successfully match.
 
 ### Discovery API
 

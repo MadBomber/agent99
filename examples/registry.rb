@@ -28,11 +28,19 @@ end
 post '/register' do
   request.body.rewind
   request_data  = JSON.parse(request.body.read, symbolize_names: true)
+  debug_me{[
+    :request_data
+  ]}
   agent_name    = request_data[:name]
   agent_uuid    = SecureRandom.uuid
   
+  debug_me{[
+    :agent_name,
+    :agent_uuid
+  ]}
+
   # Ensure capabilities are lowercase
-  request_data[:info][:capabilities].map!{|c| c.downcase}
+  request_data[:capabilities].map!{|c| c.downcase}
   
   AGENT_REGISTRY << request_data.merge({uuid: agent_uuid})
 
@@ -48,7 +56,7 @@ get '/discover' do
   capability = params['capability'].downcase
 
   matching_agents = AGENT_REGISTRY.select do |agent|
-    agent.dig(:info, :capabilities)&.include?(capability)
+    agent[:capabilities]&.include?(capability)
   end
 
   content_type :json

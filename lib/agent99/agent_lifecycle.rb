@@ -18,10 +18,12 @@ module Agent99::AgentLifecycle
     @id               = nil
     @registry_client  = registry_client
     @message_client   = message_client
-    @logger = logger
+    @logger           = logger
+
+    validate_info_keys
 
     @registry_client.logger = logger
-    register
+    register(info)
 
     @queue = message_client.setup(agent_id: id, logger:)
 
@@ -30,12 +32,33 @@ module Agent99::AgentLifecycle
     setup_signal_handlers
   end
 
+
+  def validate_info_keys
+    required_keys = [:name, :capabilities]
+    if respond_to? :info
+      missing_keys = required_keys - info.keys
+      unless missing_keys.empty?
+        logger.error <<~MESSAGE
+          This agent's info method is missing 
+          #{1 == missing_keys.size ? 'a required key' : 'some required keys'}: 
+          #{missing_keys}
+        MESSAGE
+        .split("\n").join
+        exit(1)
+      end
+    else
+      logger.error "An agent must implement the info method"
+      exit(1)
+    end
+  end
+
+
   # Registers the agent with the registry service.
   #
   # @raise [StandardError] If registration fails
   #
-  def register
-    @id = registry_client.register(name:, capabilities:)
+  def register(agent_info)
+    @id = registry_client.register(info: agent_info)
     logger.info "Registered Agent #{name} with ID: #{id}"
   rescue StandardError => e
     handle_error("Error during registration", e)
