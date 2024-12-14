@@ -2,10 +2,10 @@
 
 ## [Unreleased]
 
-### playing_with_p2p
+### [0.0.4] 2024-12-14
 
-- in this branch I'm looking at a TcpMessageClient and an update to the registry and RegistryClient to support a generic element "info" that would contain information about the agent like maybe its IP address and port for receiving messages.
-- replaced the capabilities method with the info method so that lots of stuff can be incorporated into an agent's information packet maintained by the registry.
+- This is a [breaking change](docs/breaking_change_v0.0.4.md)
+- Replaced the capabilities method with the info method so that lots of stuff can be incorporated into an agent's information packet maintained by the registry.
 
 
 ## Released

@@ -1,6 +1,8 @@
-# Agent99 Framework (AFW)
+# Agent99
 
 **Under Development**  Initial release has no AI components - its just a generic client-server / request-response micro-services system using a peer-to-peer messaging broker and a centralized agent registry.  To keep up with the version changes review [The Changelog](./CHANGELOG.md) file.
+
+v0.0.4 has a [breaking_change.](docs/breaking_change_v0.0.4.md)
 
 Agent99 is a Ruby-based framework for building and managing AI agents in a distributed system. It provides a robust foundation for creating intelligent agents that can communicate, discover each other, and perform various tasks.
 
@@ -96,11 +98,13 @@ class MyAgentRequest < SimpleJsonSchemaBuilder::Base
 end
 
 class MyAgent < Agent99::Base
-  REQUEST_SCHEMA  = MyAgentRequest.schema
-
-  def capabilities
-    ['text_processing', 'sentiment_analysis']
-    # TODO: make up mind on keyword or unstructured text
+  def info
+    {
+      type:           :server,
+      name:           self.class.name,
+      capabilities:   ['text_processing', 'sentiment_analysis'],
+      request_schema: MyAgentRequest.schema
+    }
   end
 
   def receive_request
