@@ -128,7 +128,9 @@ module Agent99::MessageProcessing
   # @return [Array] An array of validation errors, empty if validation succeeds
   #
   def validate_schema
-    schema = JsonSchema.parse!(self.class::REQUEST_SCHEMA)
+    return unless info[:request_schema]
+    
+    schema = JsonSchema.parse!(info[:request_schema])
     schema.expand_references!
     validator = JsonSchema::Validator.new(schema)
     

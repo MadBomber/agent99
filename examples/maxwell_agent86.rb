@@ -10,12 +10,21 @@ require_relative '../lib/agent99'
 require_relative 'maxwell_request'
 
 class MaxwellAgent86 < Agent99::Base
-  REQUEST_SCHEMA  = MaxwellRequest.schema
-  TYPE            = :server
-
-  # RESPONSE_SCHEMA = Agent99::RESPONSE.schema
-  # ERROR_SCHEMA    = Agent99::ERROR.schema
-
+  # this information is made available when the agent
+  # registers with the central registry service.  It is
+  # made available during the discovery process.
+  #
+  def info
+    {
+      name:             self.class.to_s,
+      type:             :server,
+      capabilities:     %w[ greeter hello_world hello-world hello],
+      request_schema:   MaxwellRequest.schema,
+      # response_schema:  {}, # Agent99::RESPONSE.schema
+      # control_schema:   {}, # Agent99::CONTROL.schema
+      # error_schema:     {}, # Agent99::ERROR.schema
+    }
+  end
 
   #######################################
   private
@@ -89,26 +98,6 @@ class MaxwellAgent86 < Agent99::Base
   # a response message.
   def receive_response(response)
     loger.warn("Unexpected response type message: response.inspect")
-  end
-
-
-  # Phase One Implementation is to do a search
-  # using the String#include? and the Array#include?
-  # methods.  If you want discrete word-based selection
-  # then use an Array of Strings to define the different
-  # things this agent can do.
-  #
-  # If you want to match on sub-strings then define the
-  # the capabilities as a String.
-  #
-  # Subsequent implementations may use a semantic search
-  # to find the agents to use in which case capabilities may
-  # be constrained to be a String.
-  #
-  # For now, lets just go with the Array of Strings.
-  #
-  def capabilities
-    %w[ greeter hello_world hello-world hello]   
   end
 end
 

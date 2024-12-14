@@ -8,17 +8,18 @@ class Agent99::RegistryClient
   attr_accessor :logger
 
   def initialize(
-      base_url: ENV.fetch('REGISTRY_BASE_URL', 'http://localhost:4567'),
+      base_url: ENV.fetch('AGENT99_REGISTRY_URL', 'http://localhost:4567'),
       logger:   Logger.new($stdout)
     )
-    @base_url = base_url
-    @logger   = logger
-    @http_client = Net::HTTP.new(URI.parse(base_url).host, URI.parse(base_url).port)
+    @base_url     = base_url
+    @logger       = logger
+    @http_client  = Net::HTTP.new(URI.parse(base_url).host, URI.parse(base_url).port)
   end
 
-  def register(name:, capabilities:)
-    request = create_request(:post, "/register", { name: name, capabilities: capabilities })
-    @id = send_request(request)
+  def register(info:)
+    payload = info
+    request = create_request(:post, "/register", payload)
+    @id     = send_request(request)
   end
 
   def withdraw(id)
@@ -37,16 +38,16 @@ class Agent99::RegistryClient
 
 
   def fetch_all_agents
-    request = create_request(:get, "/")
-    response = send_request(request)
+    request   = create_request(:get, "/")
+    response  = send_request(request)
   end
 
   ################################################
   private
 
   def create_request(method, path, body = nil)
-    request = Object.const_get("Net::HTTP::#{method.capitalize}").new(path, { "Content-Type" => "application/json" })
-    request.body = body.to_json if body
+    request       = Object.const_get("Net::HTTP::#{method.capitalize}").new(path, { "Content-Type" => "application/json" })
+    request.body  = body.to_json if body
     request
   end
 

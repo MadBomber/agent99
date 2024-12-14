@@ -4,18 +4,27 @@
 require_relative '../lib/agent99'
 
 class Control < Agent99::Base
-  TYPE = :hybrid
+  # this information is made available when the agent
+  # registers with the central registry service.  It is
+  # made available during the discovery process.
+  #
+  def info
+    {
+      name:             self.class.to_s,
+      type:             :hybrid,
+      capabilities:     ['control', 'headquarters', 'secret underground base'],
+      # request_schema:   ControlRequest.schema,
+      # response_schema:  {}, # Agent99::RESPONSE.schema
+      # control_schema:   {}, # Agent99::CONTROL.schema
+      # error_schema:     {}, # Agent99::ERROR.schema
+    }
+  end
 
   attr_accessor :statuses
 
   def init
     @agents = @registry_client.fetch_all_agents
     @statuses = {}
-  end
-
-
-  def capabilities
-    ['control', 'headquarters', 'secret underground base']
   end
 
 

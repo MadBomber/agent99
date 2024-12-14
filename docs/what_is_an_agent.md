@@ -44,11 +44,17 @@ Here's a simple example of an Agent99 agent class running in an independent proc
 require 'agent99'
 
 class ExampleAgent < Agent99::Base
-  TYPE = :server
-
-  def capabilities
-    %w[ rubber_stamp yes_man example noop always_succeed ]
-  end
+  def info
+    {
+      name:             self.class.to_s,
+      type:             :server,
+      capabilities:     %w[ rubber_stamp yes_man example ],
+      # request_schema:   {}, # ExampleRequest.schema,
+      # response_schema:  {}, # Agent99::RESPONSE.schema
+      # control_schema:   {}, # Agent99::CONTROL.schema
+      # error_schema:     {}, # Agent99::ERROR.schema
+    }
+  end  
 
   def receive_request
     logger.info "Example agent received request: #{payload}"
@@ -63,11 +69,11 @@ ExampleAgent.new.run
 ruby example_agent.rb
 ```
 
-Each agent subclass is responsible for specific methods that define its unique capabilities and how it handles requests. The capabilities method defines what things the agent can perform. Since we define a software agent below as code that does one thing, each entry in this Array of Strings is basically a synonym.
+Each agent subclass is responsible for specific methods that define its unique capabilities and how it handles requests.  The `info` method provides a comprehensive information packet about the agent. It returns a hash containing key details that are crucial for agent registration and discovery within the system.  The **:capabilities** entry in the `info` packet in an Array of Strings - synonyms - for the thing that the agent does.
 
-For a server type agent, the only methods that are required to be defined, as in the ExampleAgent class above, are its **capabilities** and its **receive_request** methods. Everything else from initialization, registration, message dispatching, and graceful shutdown are handled by the default methods within the **Agent99::Base** class.
+For a server type agent, the only methods that are required to be defined, as in the ExampleAgent class above, are its **info** and its **receive_request** methods. Everything else from initialization, registration, message dispatching, and graceful shutdown are handled by the default methods within the **Agent99::Base** class.
 
-More complex agents will require methods like **handle_response** and **handle_control** and potentially custom implementations of **init**, **initialize**, or **fini** may be necessary for managing state or resources.
+More complex agents will require methods like **receive_response** and **receive_control** and potentially custom implementations of **init**, **initialize**, or **fini** may be necessary for managing state or resources.
 
 > **RoadMap:** Currently, the Agent99 implementation defines the **capabilities** value as an `Array(String)`, with plans to enhance this functionality into descriptive unstructured text akin to defining tools for functional callbacks in LLM processing using semantic search.
 
@@ -247,12 +253,16 @@ require 'agent99'
 require_relative 'maxwell_request'
 
 class MaxwellAgent86 < Agent99::Base
-  REQUEST_SCHEMA = MaxwellRequest.schema
-  # ...
-end
+  def info
+    {
+      # ...
+      request_schema: MaxwellRequest.schema,
+      # ...
+    }
+  end
 ```
 
-When an agent subclass defines a **REQUEST_SCHEMA**, the message processing of the **Agent99::Base** validates all incoming requests against the schema. If there are errors, those errors are returned to the sender without presenting the request message to the agent's custom **receive_request** method.
+When an agent subclass defines a **:request_schema** in its `info`, the message processing of the **Agent99::Base** validates all incoming requests against the schema. If there are errors, those errors are returned to the sender without presenting the request message to the agent's custom **receive_request** method.
 
 #### Response Messages
 

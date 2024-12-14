@@ -6,13 +6,23 @@ When creating a new agent by subclassing `Agent99::Base`, you must implement cer
 
 ### Required Methods
 
-#### `capabilities`
-Returns an array of strings describing the agent's capabilities.
+#### `info`
+ The `info` method provides a comprehensive information packet about the agent. It returns a hash containing key details that are crucial for agent registration and discovery within the system.
 ```ruby
-def capabilities
-  ['process_image', 'face_detection']
+def info
+  {
+    name:             self.class.to_s,
+    type:             :server,
+    capabilities:     %w[ greeter hello_world hello-world hello],
+    request_schema:   MaxwellRequest.schema,
+    # response_schema:  {}, # Agent99::RESPONSE.schema
+    # control_schema:   {}, # Agent99::CONTROL.schema
+    # error_schema:     {}, # Agent99::ERROR.schema
+  }
 end
 ```
+
+Entries for **:name** and **:capabilities** are required.  Other entries are optional.  This entire info packet is stored by the central registry and provided to other agents on a discover "hit" so that the inquiring agents know all the target agent is willing to tell them.
 
 #### `receive_request`
 Handles incoming request messages. Must be implemented if the agent accepts requests.

@@ -37,7 +37,11 @@ class Agent99::Base
 
   MESSAGE_TYPES = %w[request response control]
 
-  attr_reader :id, :capabilities, :name, :payload, :header, :logger, :queue
+  attr_reader :id, :capabilities, :name
+  attr_reader :payload, :header, :queue
+  attr_reader :logger
+  attr_reader :agents
+  
   attr_accessor :registry_client, :message_client
 
 

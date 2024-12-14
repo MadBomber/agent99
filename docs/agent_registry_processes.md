@@ -38,8 +38,14 @@ end
 # Define the new Agent ....
 
 class MyAgent < Agent99::Base
-  REQUEST_SCHEMA    = MyAgentRequest.schema
-  def capabilities  = %w[ greeter hello_world ]
+  def info
+    {
+      # ...
+      request_schema: MyAgentRequest.schema
+      capabilities:   %w[ greeter hello_world ],
+      # ...
+    }
+  end
 end
 
 # You may create multiple instances of the agent if needed

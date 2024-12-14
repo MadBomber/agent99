@@ -33,10 +33,15 @@ The AgentWatcher will:
 ### Example Implementation
 
 ```ruby
-class MyDynamicAgent < Agent99::Base
-  TYPE = :server
-  
-  def capabilities = ['my_capability']
+class MyDynamicAgent < Agent99::Base  
+  def info
+    {
+      # ...
+      type:         :server,
+      capabilities: ['my_capability'],
+      # ...
+    }
+  end
   
   def receive_request
     # Handle requests

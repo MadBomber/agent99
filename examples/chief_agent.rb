@@ -14,7 +14,23 @@
 require_relative '../lib/agent99'
 
 class ChiefAgent < Agent99::Base
-  TYPE = :client
+  # this information is made available when the agent
+  # registers with the central registry service.  It is
+  # made available during the discovery process.
+  #
+  def info
+    {
+      name:             self.class.to_s,
+      type:             :client,
+      capabilities:     ['Chief of Control'],
+      # request_schema:   ChiefRequest.schema,
+      # response_schema:  {}, # Agent99::RESPONSE.schema
+      # control_schema:   {}, # Agent99::CONTROL.schema
+      # error_schema:     {}, # Agent99::ERROR.schema
+    }
+  end
+
+
 
   # init is called at the end of the initialization process.
   # It may be only something that a :client type agent would do.
@@ -81,11 +97,6 @@ class ChiefAgent < Agent99::Base
     puts
 
     exit(0)
-  end
-
-
-  def capabilities
-    ['Chief of Control']
   end
 end
 
