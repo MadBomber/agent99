@@ -85,7 +85,11 @@ class ChiefAgent < Agent99::Base
 
 
   def capabilities
-    ['Chief of Control']
+    {
+      info: {
+        capabilities: ['Chief of Control']
+      }
+    }
   end
 end
 

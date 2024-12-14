@@ -28,7 +28,11 @@ require_relative '../lib/agent99'
 class AgentWatcher < Agent99::Base
   TYPE = :client
 
-  def capabilities = %w[ launch_agents watcher launcher ]
+  def capabilities = {
+    info: {
+      capabilities: %w[ launch_agents watcher launcher ]
+    }
+  }
 
   def init
     @watch_path = ENV.fetch('AGENT_WATCH_PATH', './agents')

@@ -15,7 +15,11 @@ class Control < Agent99::Base
 
 
   def capabilities
-    ['control', 'headquarters', 'secret underground base']
+    {
+      info: {
+        capabilities: ['control', 'headquarters', 'secret underground base']
+      }
+    }
   end
 
 

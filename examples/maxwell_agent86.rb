@@ -108,7 +108,11 @@ class MaxwellAgent86 < Agent99::Base
   # For now, lets just go with the Array of Strings.
   #
   def capabilities
-    %w[ greeter hello_world hello-world hello]   
+    {
+      info: {
+        capabilities: %w[ greeter hello_world hello-world hello]
+      }
+    }
   end
 end
 
