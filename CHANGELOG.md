@@ -2,13 +2,14 @@
 
 ## [Unreleased]
 
+## Released
+
 ### [0.0.4] 2024-12-14
 
 - This is a [breaking change](docs/breaking_change_v0.0.4.md)
 - Replaced the capabilities method with the info method so that lots of stuff can be incorporated into an agent's information packet maintained by the registry.
 
 
-## Released
 
 ### [0.0.3] - 2024-12-08
 
