@@ -87,41 +87,36 @@ Here's a basic example of how to create an AI agent:
 ```ruby
 require 'agent99'
 
-class MyAgentRequest < SimpleJsonSchemaBuilder::Base
+class GreeterRequest < SimpleJsonSchemaBuilder::Base
   object do
     object :header, schema: Agent99::HeaderSchema
-
-    # Define your agents parameters ....
-    string :greeting, required: false,  examples: ["Hello"]
-    string :name,     required: true,   examples: ["World"]
+    string :name, required: true, examples: ["World"]
   end
 end
 
-class MyAgent < Agent99::Base
+class GreeterAgent < Agent99::Base
   def info
     {
-      type:           :server,
-      name:           self.class.name,
-      capabilities:   ['text_processing', 'sentiment_analysis'],
-      request_schema: MyAgentRequest.schema
+      name:             self.class.to_s,
+      type:             :server,
+      capabilities:     ['greeter', 'hello_world'],
+      request_schema:   GreeterRequest.schema,
+      # Uncomment and define these schemas as needed:
+      # response_schema:  {}, # Agent99::RESPONSE.schema
+      # control_schema:   {}, # Agent99::CONTROL.schema
+      # error_schema:     {}, # Agent99::ERROR.schema
     }
   end
 
-  def receive_request
-    # Handle the validated incoming requests
-    response = { result: "Processed request" }
-
-    # Not every request needs a response
+  def process_request(payload)
+    name      = payload.dig(:name)
+    response  = { result: "Hello, #{name}!" }
     send_response(response)
-  end
-
-  def receive_response
-    # You sent a request to another agent
-    # now handle the response.
   end
 end
 
-agent = MyAgent.new
+# Create and run the agent
+agent = GreeterAgent.new
 agent.run
 ```
 
@@ -129,7 +124,14 @@ agent.run
 
 The framework can be configured through environment variables:
 
-- `REGISTRY_BASE_URL`: URL of the agent registry service (default: 'http://localhost:4567')  See the default registry service in the examples folder.
+- `AGENT99_REGISTRY_URL`: URL of the agent registry service (default: 'http://localhost:4567')
+
+Depending on which messaging client you are using, additional environment variables may be used.
+
+TODO: show envars for AMQP via Bunny
+TODO: show envars for NATS via nats0server
+
+See the examples folder for a default registry service implementation.
 
 ## Contributing
 
