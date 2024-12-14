@@ -57,7 +57,7 @@ class Control < Agent99::Base
 
 
   def stop_all
-    send_control_message(message: 'stop')
+    send_control_message(message: 'shutdown')
   end
 
   def get_all_status
