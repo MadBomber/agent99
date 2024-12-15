@@ -28,17 +28,9 @@ end
 post '/register' do
   request.body.rewind
   request_data  = JSON.parse(request.body.read, symbolize_names: true)
-  debug_me{[
-    :request_data
-  ]}
   agent_name    = request_data[:name]
   agent_uuid    = SecureRandom.uuid
   
-  debug_me{[
-    :agent_name,
-    :agent_uuid
-  ]}
-
   # Ensure capabilities are lowercase
   request_data[:capabilities].map!{|c| c.downcase}
   
