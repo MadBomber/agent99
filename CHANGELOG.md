@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### extract examples into their own repo
+- MadBomber/agent99_examples has/will have two to main directories named `simple` and `smarter` where the simple has the Sinatra app as a registry and simple agents that illustrate the use of the AMQP message broker for request, respose and control messages.
+- The `smarter` directory will use a rails v8 application with postgresql and LLM access to implement the centra registry along with smarter agents that run in seperate processes as well as the rails process.
+
 ## Released
 
 ### [0.0.4] 2024-12-14
