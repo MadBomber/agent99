@@ -1,5 +1,7 @@
 # Agent99 Framework Examples - 86 and the Chief
 
+FYI ... I am in the process of extracting this examples directory out into its own repository:  [MadBomber/agent99_examples](https://github.com/MadBomber/agent99_examples)
+
 This folder contains example implementations using the Agent99 framework. The framework provides a foundation for building AI agents that can communicate with each other through a message-based system.
 
 ## Files
