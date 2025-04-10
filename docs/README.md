@@ -2,6 +2,10 @@
 
 Welcome to the Agent99 Framework documentation! Below is a table of contents and brief summaries of each markdown file available in this directory.  Explore each document for more detailed information on the Agent99 Framework and how to effectively utilize it in your projects!
 
+## 2025-04-09 Breaking News
+
+Google has announced its Agent-to-agent public protocol called A2A. For additional information see [Google's Blog Post a Repo Links](a2a_protocol.md)
+
 ## Table of Contents
 
 1. **[Agent Discovery](agent_discovery.md)**
@@ -54,4 +58,3 @@ Welcome to the Agent99 Framework documentation! Below is a table of contents and
 
 17. **[Troubleshooting](troubleshooting.md)**
       - Common issues encountered while using Agent99 and suggested steps for debugging, including examining logs and configuration settings.
-
