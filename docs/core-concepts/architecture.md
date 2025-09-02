@@ -10,7 +10,7 @@ Agent99 is a Ruby-based framework designed for building and managing software ag
 
 ### System Components Diagram
 
-![High Level Architecture](diagrams/high_level_architecture.png)
+![High Level Architecture](../assets/diagrams/high_level_architecture.png)
 
 The diagram above (generated from `diagrams/high_level_architecture.dot`) illustrates the key components and their interactions:
 
@@ -72,6 +72,6 @@ The framework supports three primary message types:
 ## Implementation Details
 
 For detailed implementation information, see:
-- [API Reference](api_reference.md) for method specifications
-- [Agent Lifecycle](agent_lifecycle.md) for lifecycle management
-- [Agent Discovery](agent_discovery.md) for discovery mechanisms
+- [API Reference](../api-reference/agent99-base.md) for method specifications
+- [Agent Lifecycle](agent-lifecycle.md) for lifecycle management
+- [Agent Discovery](../framework-components/agent-discovery.md) for discovery mechanisms

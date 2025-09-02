@@ -1,0 +1,144 @@
+site_name: Agent99 Framework Documentation
+site_description: Comprehensive documentation for the Agent99 Ruby gem - A framework for building distributed AI agents
+site_author: MadBomber
+site_url: https://madbomber.github.io/agent99
+repo_url: https://github.com/MadBomber/agent99
+repo_name: MadBomber/agent99
+edit_uri: edit/main/docs/
+
+theme:
+  name: material
+  logo: assets/logo.svg
+  favicon: assets/favicon.ico
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: blue
+      accent: cyan
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: blue
+      accent: cyan
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.sections
+    - navigation.expand
+    - navigation.path
+    - navigation.prune
+    - navigation.indexes
+    - navigation.top
+    - toc.follow
+    - toc.integrate
+    - search.suggest
+    - search.highlight
+    - search.share
+    - header.autohide
+    - content.code.copy
+    - content.code.annotate
+    - content.tabs.link
+
+plugins:
+  - search:
+      separator: '[\s\-,:!=\[\]()"/]+|(?!\b)(?=[A-Z][a-z])|\.(?!\d)|&[lg]t;'
+
+markdown_extensions:
+  - abbr
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - md_in_html
+  - toc:
+      permalink: true
+      toc_depth: 3
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.betterem:
+      smart_enable: all
+  - pymdownx.caret
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.keys
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tilde
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/MadBomber/agent99
+      name: GitHub Repository
+    - icon: fontawesome/solid/gem
+      link: https://rubygems.org/gems/agent99
+      name: RubyGems Package
+  version:
+    provider: mike
+    default: latest
+
+nav:
+  - Home: index.md
+  - Getting Started:
+    - Overview: getting-started/overview.md
+    - Installation: getting-started/installation.md
+    - Quick Start: getting-started/quick-start.md
+    - Basic Example: getting-started/basic-example.md
+  - Core Concepts:
+    - What is an Agent?: core-concepts/what-is-an-agent.md
+    - Architecture Overview: core-concepts/architecture.md
+    - Agent Lifecycle: core-concepts/agent-lifecycle.md
+    - Agent Types: core-concepts/agent-types.md
+  - Framework Components:
+    - Agent Registry: framework-components/agent-registry.md
+    - Agent Discovery: framework-components/agent-discovery.md
+    - Messaging System: framework-components/messaging-system.md
+    - Message Processing: framework-components/message-processing.md
+  - Agent Development:
+    - Custom Agent Implementation: agent-development/custom-agent-implementation.md
+    - Schema Definition: agent-development/schema-definition.md
+    - Request & Response Handling: agent-development/request-response-handling.md
+    - Error Handling: agent-development/error-handling-and-logging.md
+  - Advanced Topics:
+    - Control Actions: advanced-topics/control-actions.md
+    - Advanced Features: advanced-topics/advanced-features.md
+    - Multi-Agent Processing: advanced-topics/multi-agent-processing.md
+    - A2A Protocol: advanced-topics/a2a-protocol.md
+    - Model Context Protocol: advanced-topics/model-context-protocol.md
+    - Extending the Framework: advanced-topics/extending-the-framework.md
+  - API Reference:
+    - Agent99::Base: api-reference/agent99-base.md
+    - Registry Client: api-reference/registry-client.md
+  - Operations:
+    - Configuration: operations/configuration.md
+    - Security: operations/security.md
+    - Performance Considerations: operations/performance-considerations.md
+    - Troubleshooting: operations/troubleshooting.md
+    - Breaking Changes: operations/breaking-changes.md
+  - Examples:
+    - Basic Examples: examples/basic-examples.md
+
+copyright: Copyright &copy; 2024 MadBomber - MIT License

@@ -42,7 +42,7 @@ and validation rules.
     - Error is logged
     - Request is not processed further
 
-![Request Message Processing Flow](diagrams/request_flow.png)
+![Request Message Processing Flow](../assets/diagrams/request_flow.png)
 
 #### Response Processing
 1. Response message is received

@@ -66,7 +66,7 @@ my_agent.id
 
 The image below shows how the `Agent99::Base` class uses dependency injection in its constructor method to bring in an instance of the `RegristryClient` class to provide an interface to the centralized regristery service.
 
-![Agent Register, Discover and Withdraw Processes](diagrams/agent_registry_processes.png)
+![Agent Register, Discover and Withdraw Processes](../assets/diagrams/agent_registry_processes.png)
 
 The above image also show the other services provided via the RegistryClient class.
 
