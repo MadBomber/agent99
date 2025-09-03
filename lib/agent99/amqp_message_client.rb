@@ -34,10 +34,10 @@ class Agent99::AmqpMessageClient
       config: CONFIG,
       logger: Logger.new($stdout))
     @config     = config
+    @logger     = logger
     @connection = create_amqp_connection
     @channel    = @connection.create_channel
     @exchange   = @channel.default_exchange
-    @logger     = logger
   end
 
   def setup(agent_id:, logger:)

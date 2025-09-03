@@ -4,12 +4,35 @@ require "test_helper"
 
 class TestAmqpMessageClient < Minitest::Test
   def test_initialize_with_default_config
+    # Stub the create_amqp_connection method to avoid real connection
+    Agent99::AmqpMessageClient.class_eval do
+      alias_method :original_create_amqp_connection, :create_amqp_connection
+      
+      def create_amqp_connection
+        mock_connection = Object.new
+        def mock_connection.create_channel
+          mock_channel = Object.new
+          def mock_channel.default_exchange
+            Object.new
+          end
+          mock_channel
+        end
+        mock_connection
+      end
+    end
+    
     client = Agent99::AmqpMessageClient.new(logger: @logger)
     
     config = client.instance_variable_get(:@config)
     assert_equal "127.0.0.1", config[:host]
     assert_equal 5672, config[:port]
     assert_equal false, config[:ssl]
+    
+    # Restore original method
+    Agent99::AmqpMessageClient.class_eval do
+      alias_method :create_amqp_connection, :original_create_amqp_connection
+      remove_method :original_create_amqp_connection
+    end
   end
 
   def test_initialize_with_custom_config
@@ -186,9 +209,38 @@ class TestAmqpMessageClient < Minitest::Test
   end
 
   def test_singleton_instance
+    # Stub the create_amqp_connection method to avoid real connection
+    Agent99::AmqpMessageClient.class_eval do
+      alias_method :original_create_amqp_connection, :create_amqp_connection
+      
+      def create_amqp_connection
+        mock_connection = Object.new
+        def mock_connection.create_channel
+          mock_channel = Object.new
+          def mock_channel.default_exchange
+            Object.new
+          end
+          mock_channel
+        end
+        mock_connection
+      end
+    end
+    
+    # Clear any existing instance to ensure we test the singleton pattern
+    Agent99::AmqpMessageClient.instance_variable_set(:@instance, nil)
+    
     instance1 = Agent99::AmqpMessageClient.instance
     instance2 = Agent99::AmqpMessageClient.instance
     
     assert_same instance1, instance2
+    
+    # Restore original method
+    Agent99::AmqpMessageClient.class_eval do
+      alias_method :create_amqp_connection, :original_create_amqp_connection
+      remove_method :original_create_amqp_connection
+    end
+    
+    # Clean up singleton instance for other tests
+    Agent99::AmqpMessageClient.instance_variable_set(:@instance, nil)
   end
 end
