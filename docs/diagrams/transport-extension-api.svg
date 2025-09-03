@@ -1,0 +1,309 @@
+<svg width="1000" height="900" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background transparent -->
+  
+  <!-- Title -->
+  <text x="500" y="30" text-anchor="middle" fill="#f7fafc" 
+        font-family="Arial, sans-serif" font-size="20" font-weight="bold">
+    SmartMessage Transport Extension API Design
+  </text>
+  
+  <!-- Core SmartMessage Interface -->
+  <rect x="50" y="70" width="900" height="120" 
+        fill="#553c9a" stroke="#7c3aed" stroke-width="2" rx="8"/>
+  <text x="500" y="100" text-anchor="middle" fill="#e9d5ff" 
+        font-family="Arial, sans-serif" font-size="16" font-weight="bold">
+    SmartMessage::Transport::Base (Core Interface)
+  </text>
+  
+  <!-- Core methods -->
+  <text x="80" y="125" fill="#c4b5fd" 
+        font-family="monospace" font-size="11" font-weight="bold">
+    def publish(message, options = {})
+  </text>
+  <text x="350" y="125" fill="#c4b5fd" 
+        font-family="monospace" font-size="11" font-weight="bold">
+    def subscribe(queue, &amp;block)
+  </text>
+  <text x="620" y="125" fill="#c4b5fd" 
+        font-family="monospace" font-size="11" font-weight="bold">
+    def connect
+  </text>
+  <text x="750" y="125" fill="#c4b5fd" 
+        font-family="monospace" font-size="11" font-weight="bold">
+    def disconnect
+  </text>
+  
+  <text x="80" y="145" fill="#c4b5fd" 
+        font-family="monospace" font-size="11" font-weight="bold">
+    def setup(config)
+  </text>
+  <text x="250" y="145" fill="#c4b5fd" 
+        font-family="monospace" font-size="11" font-weight="bold">
+    def healthy?
+  </text>
+  <text x="380" y="145" fill="#c4b5fd" 
+        font-family="monospace" font-size="11" font-weight="bold">
+    def stats
+  </text>
+  <text x="500" y="145" fill="#c4b5fd" 
+        font-family="monospace" font-size="11" font-weight="bold">
+    def cleanup
+  </text>
+  
+  <text x="80" y="165" fill="#a78bfa" 
+        font-family="Arial, sans-serif" font-size="10">
+    Required methods all transport extensions must implement
+  </text>
+  
+  <!-- Extension Implementations -->
+  
+  <!-- AMQP Extension -->
+  <rect x="50" y="220" width="430" height="160" 
+        fill="#7c2d12" stroke="#dc2626" stroke-width="2" rx="8" opacity="0.9"/>
+  <text x="265" y="245" text-anchor="middle" fill="#fef2f2" 
+        font-family="Arial, sans-serif" font-size="14" font-weight="bold">
+    smart_message-transport-amqp
+  </text>
+  
+  <text x="70" y="270" fill="#fecaca" 
+        font-family="monospace" font-size="10">
+    class SmartMessage::Transport::AMQP &lt; Base
+  </text>
+  <text x="70" y="290" fill="#fecaca" 
+        font-family="monospace" font-size="9">
+      def publish(message, options = {})
+  </text>
+  <text x="90" y="305" fill="#fca5a5" 
+        font-family="monospace" font-size="9">
+        @bunny_exchange.publish(message.to_json,
+  </text>
+  <text x="90" y="320" fill="#fca5a5" 
+        font-family="monospace" font-size="9">
+          routing_key: message.to)
+  </text>
+  <text x="70" y="340" fill="#fecaca" 
+        font-family="monospace" font-size="9">
+      def subscribe(queue, &amp;block)
+  </text>
+  <text x="90" y="355" fill="#fca5a5" 
+        font-family="monospace" font-size="9">
+        @bunny_queue.subscribe do |delivery, props, body|
+  </text>
+  <text x="90" y="370" fill="#fca5a5" 
+        font-family="monospace" font-size="9">
+          yield SmartMessage.parse(body)
+  </text>
+  
+  <!-- Lanet Extension -->
+  <rect x="520" y="220" width="430" height="160" 
+        fill="#065f46" stroke="#10b981" stroke-width="2" rx="8" opacity="0.9"/>
+  <text x="735" y="245" text-anchor="middle" fill="#d1fae5" 
+        font-family="Arial, sans-serif" font-size="14" font-weight="bold">
+    smart_message-transport-lanet
+  </text>
+  
+  <text x="540" y="270" fill="#a7f3d0" 
+        font-family="monospace" font-size="10">
+    class SmartMessage::Transport::Lanet &lt; Base
+  </text>
+  <text x="540" y="290" fill="#a7f3d0" 
+        font-family="monospace" font-size="9">
+      def publish(message, options = {})
+  </text>
+  <text x="560" y="305" fill="#6ee7b7" 
+        font-family="monospace" font-size="9">
+        target_ip = resolve_agent_ip(message.to)
+  </text>
+  <text x="560" y="320" fill="#6ee7b7" 
+        font-family="monospace" font-size="9">
+        @lanet.send_to(target_ip, message.to_json)
+  </text>
+  <text x="540" y="340" fill="#a7f3d0" 
+        font-family="monospace" font-size="9">
+      def subscribe(queue, &amp;block)
+  </text>
+  <text x="560" y="355" fill="#6ee7b7" 
+        font-family="monospace" font-size="9">
+        @lanet.listen do |msg|
+  </text>
+  <text x="560" y="370" fill="#6ee7b7" 
+        font-family="monospace" font-size="9">
+          yield SmartMessage.parse(msg)
+  </text>
+  
+  <!-- NATS Extension -->
+  <rect x="50" y="410" width="430" height="160" 
+        fill="#1e40af" stroke="#3b82f6" stroke-width="2" rx="8" opacity="0.9"/>
+  <text x="265" y="435" text-anchor="middle" fill="#dbeafe" 
+        font-family="Arial, sans-serif" font-size="14" font-weight="bold">
+    smart_message-transport-nats
+  </text>
+  
+  <text x="70" y="460" fill="#bfdbfe" 
+        font-family="monospace" font-size="10">
+    class SmartMessage::Transport::NATS &lt; Base
+  </text>
+  <text x="70" y="480" fill="#bfdbfe" 
+        font-family="monospace" font-size="9">
+      def publish(message, options = {})
+  </text>
+  <text x="90" y="495" fill="#93c5fd" 
+        font-family="monospace" font-size="9">
+        subject = build_subject(message)
+  </text>
+  <text x="90" y="510" fill="#93c5fd" 
+        font-family="monospace" font-size="9">
+        @nats.publish(subject, message.to_json)
+  </text>
+  <text x="70" y="530" fill="#bfdbfe" 
+        font-family="monospace" font-size="9">
+      def subscribe(queue, &amp;block)
+  </text>
+  <text x="90" y="545" fill="#93c5fd" 
+        font-family="monospace" font-size="9">
+        @nats.subscribe(queue) do |msg|
+  </text>
+  <text x="90" y="560" fill="#93c5fd" 
+        font-family="monospace" font-size="9">
+          yield SmartMessage.parse(msg.data)
+  </text>
+  
+  <!-- Plugin Registration -->
+  <rect x="520" y="410" width="430" height="160" 
+        fill="#1f2937" stroke="#374151" stroke-width="2" rx="8" opacity="0.9"/>
+  <text x="735" y="435" text-anchor="middle" fill="#f9fafb" 
+        font-family="Arial, sans-serif" font-size="14" font-weight="bold">
+    Plugin Registration System
+  </text>
+  
+  <text x="540" y="460" fill="#e5e7eb" 
+        font-family="monospace" font-size="10">
+    SmartMessage::Transport.register(:amqp) do
+  </text>
+  <text x="560" y="475" fill="#d1d5db" 
+        font-family="monospace" font-size="9">
+      SmartMessage::Transport::AMQP
+  </text>
+  <text x="540" y="490" fill="#e5e7eb" 
+        font-family="monospace" font-size="10">
+    end
+  </text>
+  
+  <text x="540" y="510" fill="#e5e7eb" 
+        font-family="monospace" font-size="10">
+    SmartMessage::Transport.register(:lanet) do
+  </text>
+  <text x="560" y="525" fill="#d1d5db" 
+        font-family="monospace" font-size="9">
+      SmartMessage::Transport::Lanet
+  </text>
+  <text x="540" y="540" fill="#e5e7eb" 
+        font-family="monospace" font-size="10">
+    end
+  </text>
+  
+  <text x="540" y="555" fill="#9ca3af" 
+        font-family="Arial, sans-serif" font-size="9">
+    Auto-discovered when gem is loaded
+  </text>
+  
+  <!-- Usage Examples -->
+  <rect x="50" y="600" width="900" height="120" 
+        fill="#0f172a" stroke="#334155" stroke-width="2" rx="8" opacity="0.9"/>
+  <text x="500" y="625" text-anchor="middle" fill="#f1f5f9" 
+        font-family="Arial, sans-serif" font-size="16" font-weight="bold">
+    Usage Examples
+  </text>
+  
+  <text x="70" y="650" fill="#60a5fa" 
+        font-family="monospace" font-size="11" font-weight="bold">
+    # Agent99 with enhanced BunnyFarm
+  </text>
+  <text x="70" y="665" fill="#93c5fd" 
+        font-family="monospace" font-size="10">
+    class CapabilityRequest &lt; SmartMessage::Base
+  </text>
+  <text x="90" y="680" fill="#bfdbfe" 
+        font-family="monospace" font-size="10">
+      config do
+  </text>
+  <text x="110" y="695" fill="#dbeafe" 
+        font-family="monospace" font-size="10">
+        transport :amqp  # or :lanet, :nats, :redis, :memory
+  </text>
+  <text x="90" y="710" fill="#bfdbfe" 
+        font-family="monospace" font-size="10">
+      end
+  </text>
+  
+  <text x="500" y="650" fill="#fbbf24" 
+        font-family="monospace" font-size="11" font-weight="bold">
+    # Dynamic transport selection
+  </text>
+  <text x="500" y="665" fill="#fcd34d" 
+        font-family="monospace" font-size="10">
+    message.config do
+  </text>
+  <text x="520" y="680" fill="#fde68a" 
+        font-family="monospace" font-size="10">
+      transport select_transport(target_agent)
+  </text>
+  <text x="500" y="695" fill="#fcd34d" 
+        font-family="monospace" font-size="10">
+    end
+  </text>
+  <text x="500" y="710" fill="#fcd34d" 
+        font-family="monospace" font-size="10">
+    message.publish
+  </text>
+  
+  <!-- Configuration -->
+  <rect x="50" y="750" width="900" height="120" 
+        fill="#1a202c" stroke="#2d3748" stroke-width="1" rx="5" opacity="0.9"/>
+  <text x="500" y="775" text-anchor="middle" fill="#f7fafc" 
+        font-family="Arial, sans-serif" font-size="16" font-weight="bold">
+    Configuration &amp; Installation
+  </text>
+  
+  <text x="70" y="800" fill="#68d391" 
+        font-family="monospace" font-size="11" font-weight="bold">
+    # Gemfile
+  </text>
+  <text x="70" y="815" fill="#9ae6b4" 
+        font-family="monospace" font-size="10">
+    gem 'smart_message'                    # Core + Memory/Redis
+  </text>
+  <text x="70" y="830" fill="#9ae6b4" 
+        font-family="monospace" font-size="10">
+    gem 'smart_message-transport-amqp'     # Enterprise messaging
+  </text>
+  <text x="70" y="845" fill="#9ae6b4" 
+        font-family="monospace" font-size="10">
+    gem 'smart_message-transport-lanet'    # P2P LAN optimization
+  </text>
+  <text x="70" y="860" fill="#9ae6b4" 
+        font-family="monospace" font-size="10">
+    gem 'smart_message-transport-nats'     # High-performance distributed
+  </text>
+  
+  <text x="500" y="800" fill="#fbb6ce" 
+        font-family="monospace" font-size="11" font-weight="bold">
+    # Auto-registration on require
+  </text>
+  <text x="500" y="815" fill="#f687b3" 
+        font-family="monospace" font-size="10">
+    require 'smart_message-transport-amqp'
+  </text>
+  <text x="500" y="830" fill="#f687b3" 
+        font-family="monospace" font-size="10">
+    # Transport now available as :amqp
+  </text>
+  <text x="500" y="845" fill="#f687b3" 
+        font-family="monospace" font-size="10">
+    SmartMessage::Transport.available_transports
+  </text>
+  <text x="500" y="860" fill="#f687b3" 
+        font-family="monospace" font-size="10">
+    # => [:memory, :redis, :amqp]
+  </text>
+</svg>

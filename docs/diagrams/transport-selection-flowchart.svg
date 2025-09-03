@@ -1,0 +1,264 @@
+<svg width="1000" height="800" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background transparent -->
+  
+  <!-- Title -->
+  <text x="500" y="30" text-anchor="middle" fill="#f7fafc" 
+        font-family="Arial, sans-serif" font-size="20" font-weight="bold">
+    Agent99 Smart Transport Selection Flow
+  </text>
+  
+  <!-- Start -->
+  <ellipse cx="500" cy="80" rx="80" ry="30" 
+           fill="#2d3748" stroke="#4a5568" stroke-width="2"/>
+  <text x="500" y="88" text-anchor="middle" fill="#e2e8f0" 
+        font-family="Arial, sans-serif" font-size="12" font-weight="bold">
+    Agent Message
+  </text>
+  <text x="500" y="100" text-anchor="middle" fill="#cbd5e0" 
+        font-family="Arial, sans-serif" font-size="10">
+    to Target Agent
+  </text>
+  
+  <!-- First Decision: Same Process? -->
+  <polygon points="500,150 580,180 500,210 420,180" 
+           fill="#553c9a" stroke="#7c3aed" stroke-width="2"/>
+  <text x="500" y="175" text-anchor="middle" fill="#e9d5ff" 
+        font-family="Arial, sans-serif" font-size="11" font-weight="bold">
+    Same
+  </text>
+  <text x="500" y="190" text-anchor="middle" fill="#e9d5ff" 
+        font-family="Arial, sans-serif" font-size="11" font-weight="bold">
+    Process?
+  </text>
+  
+  <!-- Memory Transport -->
+  <rect x="200" y="150" width="120" height="60" 
+        fill="#2f855a" stroke="#48bb78" stroke-width="2" rx="8"/>
+  <text x="260" y="175" text-anchor="middle" fill="#f0fff4" 
+        font-family="Arial, sans-serif" font-size="12" font-weight="bold">
+    Memory
+  </text>
+  <text x="260" y="190" text-anchor="middle" fill="#c6f6d5" 
+        font-family="Arial, sans-serif" font-size="10">
+    Transport
+  </text>
+  <text x="260" y="202" text-anchor="middle" fill="#a7f3d0" 
+        font-family="Arial, sans-serif" font-size="8">
+    Instant delivery
+  </text>
+  
+  <!-- Second Decision: Same Machine? -->
+  <polygon points="500,280 580,310 500,340 420,310" 
+           fill="#553c9a" stroke="#7c3aed" stroke-width="2"/>
+  <text x="500" y="305" text-anchor="middle" fill="#e9d5ff" 
+        font-family="Arial, sans-serif" font-size="11" font-weight="bold">
+    Same
+  </text>
+  <text x="500" y="320" text-anchor="middle" fill="#e9d5ff" 
+        font-family="Arial, sans-serif" font-size="11" font-weight="bold">
+    Machine?
+  </text>
+  
+  <!-- Redis Transport -->
+  <rect x="200" y="280" width="120" height="60" 
+        fill="#d69e2e" stroke="#ed8936" stroke-width="2" rx="8"/>
+  <text x="260" y="305" text-anchor="middle" fill="#fffbeb" 
+        font-family="Arial, sans-serif" font-size="12" font-weight="bold">
+    Redis
+  </text>
+  <text x="260" y="320" text-anchor="middle" fill="#fde68a" 
+        font-family="Arial, sans-serif" font-size="10">
+    Transport
+  </text>
+  <text x="260" y="332" text-anchor="middle" fill="#fcd34d" 
+        font-family="Arial, sans-serif" font-size="8">
+    Local pub/sub
+  </text>
+  
+  <!-- Third Decision: Same LAN? -->
+  <polygon points="500,410 580,440 500,470 420,440" 
+           fill="#553c9a" stroke="#7c3aed" stroke-width="2"/>
+  <text x="500" y="435" text-anchor="middle" fill="#e9d5ff" 
+        font-family="Arial, sans-serif" font-size="11" font-weight="bold">
+    Same
+  </text>
+  <text x="500" y="450" text-anchor="middle" fill="#e9d5ff" 
+        font-family="Arial, sans-serif" font-size="11" font-weight="bold">
+    LAN?
+  </text>
+  
+  <!-- Lanet Transport -->
+  <rect x="200" y="410" width="120" height="60" 
+        fill="#065f46" stroke="#10b981" stroke-width="2" rx="8"/>
+  <text x="260" y="435" text-anchor="middle" fill="#d1fae5" 
+        font-family="Arial, sans-serif" font-size="12" font-weight="bold">
+    Lanet
+  </text>
+  <text x="260" y="450" text-anchor="middle" fill="#a7f3d0" 
+        font-family="Arial, sans-serif" font-size="10">
+    Transport
+  </text>
+  <text x="260" y="462" text-anchor="middle" fill="#6ee7b7" 
+        font-family="Arial, sans-serif" font-size="8">
+    P2P encrypted
+  </text>
+  
+  <!-- Fourth Decision: Reliable Required? -->
+  <polygon points="500,540 580,570 500,600 420,570" 
+           fill="#553c9a" stroke="#7c3aed" stroke-width="2"/>
+  <text x="500" y="565" text-anchor="middle" fill="#e9d5ff" 
+        font-family="Arial, sans-serif" font-size="11" font-weight="bold">
+    Reliable
+  </text>
+  <text x="500" y="580" text-anchor="middle" fill="#e9d5ff" 
+        font-family="Arial, sans-serif" font-size="11" font-weight="bold">
+    Required?
+  </text>
+  
+  <!-- AMQP Transport -->
+  <rect x="650" y="540" width="120" height="60" 
+        fill="#7c2d12" stroke="#dc2626" stroke-width="2" rx="8"/>
+  <text x="710" y="565" text-anchor="middle" fill="#fef2f2" 
+        font-family="Arial, sans-serif" font-size="12" font-weight="bold">
+    AMQP
+  </text>
+  <text x="710" y="580" text-anchor="middle" fill="#fecaca" 
+        font-family="Arial, sans-serif" font-size="10">
+    Transport
+  </text>
+  <text x="710" y="592" text-anchor="middle" fill="#fca5a5" 
+        font-family="Arial, sans-serif" font-size="8">
+    Guaranteed delivery
+  </text>
+  
+  <!-- NATS Transport -->
+  <rect x="650" y="650" width="120" height="60" 
+        fill="#1e40af" stroke="#3b82f6" stroke-width="2" rx="8"/>
+  <text x="710" y="675" text-anchor="middle" fill="#dbeafe" 
+        font-family="Arial, sans-serif" font-size="12" font-weight="bold">
+    NATS
+  </text>
+  <text x="710" y="690" text-anchor="middle" fill="#bfdbfe" 
+        font-family="Arial, sans-serif" font-size="10">
+    Transport
+  </text>
+  <text x="710" y="702" text-anchor="middle" fill="#93c5fd" 
+        font-family="Arial, sans-serif" font-size="8">
+    High performance
+  </text>
+  
+  <!-- Arrow definitions -->
+  <defs>
+    <marker id="greenarrow" markerWidth="10" markerHeight="7" 
+            refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#10b981"/>
+    </marker>
+    <marker id="redarrow" markerWidth="10" markerHeight="7" 
+            refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#dc2626"/>
+    </marker>
+    <marker id="bluearrow" markerWidth="10" markerHeight="7" 
+            refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#3b82f6"/>
+    </marker>
+    <marker id="purplearrow" markerWidth="10" markerHeight="7" 
+            refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#7c3aed"/>
+    </marker>
+  </defs>
+  
+  <!-- Flow arrows -->
+  <line x1="500" y1="110" x2="500" y2="145" 
+        stroke="#7c3aed" stroke-width="2" marker-end="url(#purplearrow)"/>
+  
+  <!-- Yes paths -->
+  <line x1="420" y1="180" x2="330" y2="180" 
+        stroke="#10b981" stroke-width="2" marker-end="url(#greenarrow)"/>
+  <text x="375" y="175" text-anchor="middle" fill="#10b981" 
+        font-family="Arial, sans-serif" font-size="10" font-weight="bold">
+    YES
+  </text>
+  
+  <line x1="420" y1="310" x2="330" y2="310" 
+        stroke="#10b981" stroke-width="2" marker-end="url(#greenarrow)"/>
+  <text x="375" y="305" text-anchor="middle" fill="#10b981" 
+        font-family="Arial, sans-serif" font-size="10" font-weight="bold">
+    YES
+  </text>
+  
+  <line x1="420" y1="440" x2="330" y2="440" 
+        stroke="#10b981" stroke-width="2" marker-end="url(#greenarrow)"/>
+  <text x="375" y="435" text-anchor="middle" fill="#10b981" 
+        font-family="Arial, sans-serif" font-size="10" font-weight="bold">
+    YES
+  </text>
+  
+  <line x1="580" y1="570" x2="640" y2="570" 
+        stroke="#dc2626" stroke-width="2" marker-end="url(#redarrow)"/>
+  <text x="610" y="565" text-anchor="middle" fill="#dc2626" 
+        font-family="Arial, sans-serif" font-size="10" font-weight="bold">
+    YES
+  </text>
+  
+  <!-- No paths -->
+  <line x1="500" y1="210" x2="500" y2="275" 
+        stroke="#7c3aed" stroke-width="2" marker-end="url(#purplearrow)"/>
+  <text x="515" y="240" fill="#7c3aed" 
+        font-family="Arial, sans-serif" font-size="10" font-weight="bold">
+    NO
+  </text>
+  
+  <line x1="500" y1="340" x2="500" y2="405" 
+        stroke="#7c3aed" stroke-width="2" marker-end="url(#purplearrow)"/>
+  <text x="515" y="370" fill="#7c3aed" 
+        font-family="Arial, sans-serif" font-size="10" font-weight="bold">
+    NO
+  </text>
+  
+  <line x1="500" y1="470" x2="500" y2="535" 
+        stroke="#7c3aed" stroke-width="2" marker-end="url(#purplearrow)"/>
+  <text x="515" y="500" fill="#7c3aed" 
+        font-family="Arial, sans-serif" font-size="10" font-weight="bold">
+    NO
+  </text>
+  
+  <line x1="500" y1="600" x2="650" y2="680" 
+        stroke="#3b82f6" stroke-width="2" marker-end="url(#bluearrow)"/>
+  <text x="575" y="635" text-anchor="middle" fill="#3b82f6" 
+        font-family="Arial, sans-serif" font-size="10" font-weight="bold">
+    NO
+  </text>
+  
+  <!-- Performance characteristics -->
+  <rect x="50" y="730" width="900" height="50" 
+        fill="#0f172a" stroke="#334155" stroke-width="1" rx="5" opacity="0.9"/>
+  <text x="70" y="750" fill="#f1f5f9" 
+        font-family="Arial, sans-serif" font-size="12" font-weight="bold">
+    Performance Characteristics:
+  </text>
+  <text x="70" y="765" fill="#10b981" 
+        font-family="Arial, sans-serif" font-size="10">
+    Memory: ~1μs • 
+  </text>
+  <text x="170" y="765" fill="#ed8936" 
+        font-family="Arial, sans-serif" font-size="10">
+    Redis: ~100μs • 
+  </text>
+  <text x="280" y="765" fill="#10b981" 
+        font-family="Arial, sans-serif" font-size="10">
+    Lanet: ~1ms • 
+  </text>
+  <text x="370" y="765" fill="#dc2626" 
+        font-family="Arial, sans-serif" font-size="10">
+    AMQP: ~5ms • 
+  </text>
+  <text x="460" y="765" fill="#3b82f6" 
+        font-family="Arial, sans-serif" font-size="10">
+    NATS: ~2ms
+  </text>
+  
+  <text x="600" y="765" fill="#a0aec0" 
+        font-family="Arial, sans-serif" font-size="10">
+    (Estimated latency, varies by network and load)
+  </text>
+</svg>

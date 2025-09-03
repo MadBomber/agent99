@@ -1,0 +1,198 @@
+<svg width="1100" height="800" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background transparent -->
+  
+  <!-- Title -->
+  <text x="550" y="30" text-anchor="middle" fill="#f7fafc" 
+        font-family="Arial, sans-serif" font-size="18" font-weight="bold">
+    Agent99 + SmartMessage + Lanet Message Flow
+  </text>
+  
+  <!-- Entity columns -->
+  <line x1="150" y1="60" x2="150" y2="750" stroke="#4a5568" stroke-width="2"/>
+  <rect x="80" y="60" width="140" height="40" fill="#1a365d" stroke="#3182ce" stroke-width="2" rx="5"/>
+  <text x="150" y="85" text-anchor="middle" fill="#bee3f8" 
+        font-family="Arial, sans-serif" font-size="12" font-weight="bold">
+    Source Agent
+  </text>
+  
+  <line x1="350" y1="60" x2="350" y2="750" stroke="#4a5568" stroke-width="2"/>
+  <rect x="275" y="60" width="150" height="40" fill="#553c9a" stroke="#7c3aed" stroke-width="2" rx="5"/>
+  <text x="350" y="85" text-anchor="middle" fill="#e9d5ff" 
+        font-family="Arial, sans-serif" font-size="12" font-weight="bold">
+    SmartMessage
+  </text>
+  
+  <line x1="550" y1="60" x2="550" y2="750" stroke="#4a5568" stroke-width="2"/>
+  <rect x="480" y="60" width="140" height="40" fill="#065f46" stroke="#10b981" stroke-width="2" rx="5"/>
+  <text x="550" y="85" text-anchor="middle" fill="#d1fae5" 
+        font-family="Arial, sans-serif" font-size="12" font-weight="bold">
+    Lanet Transport
+  </text>
+  
+  <line x1="750" y1="60" x2="750" y2="750" stroke="#4a5568" stroke-width="2"/>
+  <rect x="680" y="60" width="140" height="40" fill="#92400e" stroke="#f59e0b" stroke-width="2" rx="5"/>
+  <text x="750" y="85" text-anchor="middle" fill="#fef3c7" 
+        font-family="Arial, sans-serif" font-size="12" font-weight="bold">
+    NATS/AMQP
+  </text>
+  
+  <line x1="950" y1="60" x2="950" y2="750" stroke="#4a5568" stroke-width="2"/>
+  <rect x="880" y="60" width="140" height="40" fill="#2d3748" stroke="#4a5568" stroke-width="2" rx="5"/>
+  <text x="950" y="85" text-anchor="middle" fill="#e2e8f0" 
+        font-family="Arial, sans-serif" font-size="12" font-weight="bold">
+    Target Agent
+  </text>
+  
+  <!-- Arrow definitions -->
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="7" 
+            refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#cbd5e0"/>
+    </marker>
+    <marker id="greenarrow" markerWidth="10" markerHeight="7" 
+            refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#10b981"/>
+    </marker>
+    <marker id="yellowarrow" markerWidth="10" markerHeight="7" 
+            refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#f59e0b"/>
+    </marker>
+  </defs>
+  
+  <!-- Message Flow Steps -->
+  
+  <!-- Step 1: Agent publishes message -->
+  <line x1="150" y1="130" x2="340" y2="130" 
+        stroke="#cbd5e0" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="245" y="125" text-anchor="middle" fill="#cbd5e0" 
+        font-family="Arial, sans-serif" font-size="10">
+    1. publish(:greeting, to: 'target_uuid')
+  </text>
+  
+  <!-- Step 2: SmartMessage routing decision -->
+  <rect x="270" y="150" width="160" height="60" 
+        fill="#44337a" stroke="#7c3aed" stroke-width="2" rx="5" opacity="0.8"/>
+  <text x="350" y="170" text-anchor="middle" fill="#e9d5ff" 
+        font-family="Arial, sans-serif" font-size="11" font-weight="bold">
+    2. Transport Selection
+  </text>
+  <text x="350" y="185" text-anchor="middle" fill="#c4b5fd" 
+        font-family="Arial, sans-serif" font-size="10">
+    Check: same_lan?(target)
+  </text>
+  <text x="350" y="200" text-anchor="middle" fill="#c4b5fd" 
+        font-family="Arial, sans-serif" font-size="10">
+    → Use Lanet for LAN
+  </text>
+  
+  <!-- Step 3a: LAN route (Lanet) -->
+  <line x1="350" y1="230" x2="540" y2="250" 
+        stroke="#10b981" stroke-width="3" marker-end="url(#greenarrow)"/>
+  <text x="445" y="235" text-anchor="middle" fill="#10b981" 
+        font-family="Arial, sans-serif" font-size="10" font-weight="bold">
+    3a. LAN: Lanet.send_to(ip, message)
+  </text>
+  
+  <!-- Step 3b: WAN route (NATS/AMQP) -->
+  <line x1="350" y1="280" x2="740" y2="300" 
+        stroke="#f59e0b" stroke-width="2" stroke-dasharray="8,4" marker-end="url(#yellowarrow)"/>
+  <text x="545" y="285" text-anchor="middle" fill="#f59e0b" 
+        font-family="Arial, sans-serif" font-size="10">
+    3b. WAN: broker.publish(queue, message)
+  </text>
+  
+  <!-- Step 4a: Lanet direct delivery -->
+  <line x1="550" y1="330" x2="940" y2="350" 
+        stroke="#10b981" stroke-width="3" marker-end="url(#greenarrow)"/>
+  <text x="745" y="335" text-anchor="middle" fill="#10b981" 
+        font-family="Arial, sans-serif" font-size="10" font-weight="bold">
+    4a. Direct P2P delivery (encrypted)
+  </text>
+  
+  <!-- Step 4b: Broker delivery -->
+  <line x1="750" y1="380" x2="940" y2="400" 
+        stroke="#f59e0b" stroke-width="2" stroke-dasharray="8,4" marker-end="url(#yellowarrow)"/>
+  <text x="845" y="385" text-anchor="middle" fill="#f59e0b" 
+        font-family="Arial, sans-serif" font-size="10">
+    4b. Broker delivery
+  </text>
+  
+  <!-- Step 5: Message processing -->
+  <rect x="870" y="430" width="160" height="60" 
+        fill="#1f2937" stroke="#4b5563" stroke-width="2" rx="5" opacity="0.8"/>
+  <text x="950" y="450" text-anchor="middle" fill="#e5e7eb" 
+        font-family="Arial, sans-serif" font-size="11" font-weight="bold">
+    5. Process Message
+  </text>
+  <text x="950" y="465" text-anchor="middle" fill="#d1d5db" 
+        font-family="Arial, sans-serif" font-size="10">
+    SmartMessage.handle()
+  </text>
+  <text x="950" y="480" text-anchor="middle" fill="#d1d5db" 
+        font-family="Arial, sans-serif" font-size="10">
+    → Agent business logic
+  </text>
+  
+  <!-- Response flow -->
+  <text x="550" y="540" text-anchor="middle" fill="#cbd5e0" 
+        font-family="Arial, sans-serif" font-size="14" font-weight="bold">
+    Response Flow (Same Path in Reverse)
+  </text>
+  
+  <!-- Response step 6 -->
+  <line x1="950" y1="570" x2="360" y2="590" 
+        stroke="#a78bfa" stroke-width="2" stroke-dasharray="3,3" marker-end="url(#arrow)"/>
+  <text x="655" y="575" text-anchor="middle" fill="#a78bfa" 
+        font-family="Arial, sans-serif" font-size="10">
+    6. Response via same transport path
+  </text>
+  
+  <!-- Response step 7 -->
+  <line x1="350" y1="620" x2="160" y2="640" 
+        stroke="#a78bfa" stroke-width="2" stroke-dasharray="3,3" marker-end="url(#arrow)"/>
+  <text x="255" y="625" text-anchor="middle" fill="#a78bfa" 
+        font-family="Arial, sans-serif" font-size="10">
+    7. Delivered to source agent
+  </text>
+  
+  <!-- Benefits box -->
+  <rect x="50" y="680" width="1000" height="60" 
+        fill="#0f172a" stroke="#334155" stroke-width="1" rx="5" opacity="0.9"/>
+  <text x="70" y="705" fill="#f1f5f9" 
+        font-family="Arial, sans-serif" font-size="12" font-weight="bold">
+    Benefits:
+  </text>
+  <text x="140" y="705" fill="#cbd5e0" 
+        font-family="Arial, sans-serif" font-size="11">
+    • Automatic transport selection
+  </text>
+  <text x="320" y="705" fill="#cbd5e0" 
+        font-family="Arial, sans-serif" font-size="11">
+    • Unified API regardless of transport
+  </text>
+  <text x="520" y="705" fill="#cbd5e0" 
+        font-family="Arial, sans-serif" font-size="11">
+    • LAN optimization with Lanet P2P
+  </text>
+  <text x="720" y="705" fill="#cbd5e0" 
+        font-family="Arial, sans-serif" font-size="11">
+    • WAN fallback with brokers
+  </text>
+  
+  <text x="140" y="725" fill="#cbd5e0" 
+        font-family="Arial, sans-serif" font-size="11">
+    • Built-in encryption/security
+  </text>
+  <text x="320" y="725" fill="#cbd5e0" 
+        font-family="Arial, sans-serif" font-size="11">
+    • Clean separation of concerns
+  </text>
+  <text x="520" y="725" fill="#cbd5e0" 
+        font-family="Arial, sans-serif" font-size="11">
+    • Transparent to Agent99 logic
+  </text>
+  <text x="720" y="725" fill="#cbd5e0" 
+        font-family="Arial, sans-serif" font-size="11">
+    • Extensible plugin architecture
+  </text>
+</svg>

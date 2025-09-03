@@ -1,0 +1,77 @@
+<svg width="800" height="400" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background transparent -->
+  
+  <!-- Agent99 Layer -->
+  <rect x="50" y="50" width="700" height="80" 
+        fill="#2d3748" stroke="#4a5568" stroke-width="2" rx="8"/>
+  <text x="400" y="85" text-anchor="middle" fill="#e2e8f0" 
+        font-family="Arial, sans-serif" font-size="18" font-weight="bold">
+    Agent99 (Business Logic Layer)
+  </text>
+  <text x="400" y="105" text-anchor="middle" fill="#cbd5e0" 
+        font-family="Arial, sans-serif" font-size="14">
+    Agent capabilities, discovery, lifecycle, request/response handling
+  </text>
+  
+  <!-- SmartMessage Layer -->
+  <rect x="50" y="150" width="700" height="80" 
+        fill="#1a365d" stroke="#2c5282" stroke-width="2" rx="8"/>
+  <text x="400" y="185" text-anchor="middle" fill="#bee3f8" 
+        font-family="Arial, sans-serif" font-size="18" font-weight="bold">
+    SmartMessage (Message Abstraction Layer)
+  </text>
+  <text x="400" y="205" text-anchor="middle" fill="#90cdf4" 
+        font-family="Arial, sans-serif" font-size="14">
+    Unified pub/sub API, entity addressing, serialization, transport selection
+  </text>
+  
+  <!-- Transport Layer -->
+  <rect x="50" y="250" width="700" height="100" 
+        fill="#1a202c" stroke="#2d3748" stroke-width="2" rx="8"/>
+  <text x="400" y="285" text-anchor="middle" fill="#f7fafc" 
+        font-family="Arial, sans-serif" font-size="18" font-weight="bold">
+    Transport Layer (Multiple Options)
+  </text>
+  
+  <!-- Transport Options -->
+  <rect x="80" y="300" width="180" height="35" 
+        fill="#2f855a" stroke="#48bb78" stroke-width="1" rx="4"/>
+  <text x="170" y="322" text-anchor="middle" fill="#f0fff4" 
+        font-family="Arial, sans-serif" font-size="12" font-weight="bold">
+    Lanet (P2P LAN)
+  </text>
+  
+  <rect x="310" y="300" width="180" height="35" 
+        fill="#d69e2e" stroke="#ed8936" stroke-width="1" rx="4"/>
+  <text x="400" y="322" text-anchor="middle" fill="#fffbeb" 
+        font-family="Arial, sans-serif" font-size="12" font-weight="bold">
+    NATS (WAN/Internet)
+  </text>
+  
+  <rect x="540" y="300" width="180" height="35" 
+        fill="#7c2d12" stroke="#c05621" stroke-width="1" rx="4"/>
+  <text x="630" y="322" text-anchor="middle" fill="#fef7f0" 
+        font-family="Arial, sans-serif" font-size="12" font-weight="bold">
+    AMQP (Enterprise)
+  </text>
+  
+  <!-- Arrows showing data flow -->
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" 
+            refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#cbd5e0"/>
+    </marker>
+  </defs>
+  
+  <!-- Bidirectional arrows -->
+  <line x1="400" y1="130" x2="400" y2="145" 
+        stroke="#cbd5e0" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <line x1="400" y1="230" x2="400" y2="245" 
+        stroke="#cbd5e0" stroke-width="2" marker-end="url(#arrowhead)"/>
+        
+  <!-- Return arrows -->
+  <line x1="410" y1="145" x2="410" y2="130" 
+        stroke="#a0aec0" stroke-width="1" marker-end="url(#arrowhead)"/>
+  <line x1="410" y1="245" x2="410" y2="230" 
+        stroke="#a0aec0" stroke-width="1" marker-end="url(#arrowhead)"/>
+</svg>
