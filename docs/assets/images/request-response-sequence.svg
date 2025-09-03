@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" style="background: transparent;">
+  <defs>
+    <marker id="arrow-seq" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
+      <path d="M0,0 L10,5 L0,10" fill="none" stroke="#66b3ff" stroke-width="1.5"/>
+    </marker>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Client Agent -->
+  <rect x="80" y="40" width="120" height="40" rx="5" fill="#2a2a3e" stroke="#66b3ff" stroke-width="2"/>
+  <text x="140" y="65" text-anchor="middle" font-family="monospace" font-size="14" fill="#e0e0e0">Client Agent</text>
+  <line x1="140" y1="80" x2="140" y2="350" stroke="#444" stroke-width="1" stroke-dasharray="5,5"/>
+  
+  <!-- Server Agent -->
+  <rect x="380" y="40" width="120" height="40" rx="5" fill="#2a2a3e" stroke="#66b3ff" stroke-width="2"/>
+  <text x="440" y="65" text-anchor="middle" font-family="monospace" font-size="14" fill="#e0e0e0">Server Agent</text>
+  <line x1="440" y1="80" x2="440" y2="350" stroke="#444" stroke-width="1" stroke-dasharray="5,5"/>
+  
+  <!-- Request -->
+  <path d="M 140 120 L 430 120" stroke="#66b3ff" stroke-width="2" marker-end="url(#arrow-seq)" filter="url(#glow)"/>
+  <rect x="240" y="105" width="140" height="25" rx="3" fill="#1a1a2e" stroke="#66b3ff" stroke-width="1"/>
+  <text x="310" y="122" text-anchor="middle" font-family="monospace" font-size="12" fill="#99ccff">Request (payload)</text>
+  
+  <!-- Process -->
+  <rect x="425" y="160" width="30" height="60" rx="3" fill="#3a3a5e" stroke="#ff9966" stroke-width="1"/>
+  <text x="490" y="193" font-family="monospace" font-size="11" fill="#ffcc99">Process</text>
+  <text x="490" y="208" font-family="monospace" font-size="11" fill="#ffcc99">request</text>
+  
+  <!-- Response -->
+  <path d="M 440 260 L 150 260" stroke="#66ff99" stroke-width="2" marker-end="url(#arrow-seq)" filter="url(#glow)"/>
+  <rect x="240" y="245" width="140" height="25" rx="3" fill="#1a1a2e" stroke="#66ff99" stroke-width="1"/>
+  <text x="310" y="262" text-anchor="middle" font-family="monospace" font-size="12" fill="#99ffcc">Response (result)</text>
+</svg>

@@ -17,7 +17,7 @@ Agent99 needs a message broker for agent communication. Choose one:
     # Install NATS server
     brew install nats-server  # macOS
     # OR download from https://nats.io/download/
-    
+
     # Start NATS
     nats-server
     ```
@@ -26,7 +26,7 @@ Agent99 needs a message broker for agent communication. Choose one:
     ```bash
     # Install RabbitMQ
     brew install rabbitmq  # macOS
-    
+
     # Start RabbitMQ
     brew services start rabbitmq
     ```
@@ -63,12 +63,12 @@ class MyFirstAgent < Agent99::Base
   def process_request(payload)
     name = payload.dig(:name) || "World"
     logger.info "Processing greeting request for: #{name}"
-    
+
     response = {
       message: "Hello, #{name}! Welcome to Agent99!",
       timestamp: Time.now.iso8601
     }
-    
+
     send_response(response)
   end
 end
@@ -113,15 +113,15 @@ class TestClient < Agent99::Base
   def test_greeting
     # Discover greeting agents
     agents = discover_agents(['greeting'])
-    
+
     if agents.any?
       target_agent = agents.first
       puts "📡 Found agent: #{target_agent[:name]}"
-      
+
       # Send a request
       request = { name: "Agent99 User" }
       response = send_request(target_agent[:name], request)
-      
+
       puts "✅ Response: #{response[:message]}"
     else
       puts "❌ No greeting agents found"
@@ -150,6 +150,7 @@ Expected output:
 ## 🎉 Success!
 
 You've successfully:
+
 - ✅ Installed Agent99
 - ✅ Started a message broker and registry
 - ✅ Created and ran your first agent

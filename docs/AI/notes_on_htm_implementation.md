@@ -212,8 +212,12 @@ Are there any ruby gems that implement knowledge graphs
 
   graph.add_edges(node1, node2)
 
-  graph.output(png: "knowledge_graph.png")
+  # See knowledge graph visualization at:
+  # docs/assets/images/knowledge-graph.svg
+  # graph.output(png: "knowledge_graph.png")
   ```
+  
+  ![Knowledge Graph Example](../assets/images/knowledge-graph.svg)
 
   3. RGL (Ruby Graph Library)
   A pure Ruby graph library that provides a set of graph data structures and algorithms.

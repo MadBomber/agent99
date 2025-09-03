@@ -4,13 +4,7 @@ Agent99 supports three fundamental agent types, each designed for different comm
 
 ## Overview
 
-```mermaid
-graph LR
-    A[Client Agent] -->|sends requests| B[Server Agent]
-    B -->|sends responses| A
-    C[Hybrid Agent] -->|can send & receive| D[Any Agent]
-    D -->|can send & receive| C
-```
+![Agent Types Overview](../assets/images/agent-types-overview.svg)
 
 ## Server Agents
 
@@ -213,31 +207,11 @@ end
 
 ### Request-Response (Server/Client)
 
-```mermaid
-sequenceDiagram
-    participant C as Client Agent
-    participant S as Server Agent
-    
-    C->>S: Request (with payload)
-    S->>S: Process request
-    S->>C: Response (with result)
-```
+![Request-Response Pattern](../assets/images/request-response-sequence.svg)
 
 ### Proxy Pattern (Hybrid)
 
-```mermaid
-sequenceDiagram
-    participant C as Client
-    participant H as Hybrid Agent
-    participant S as Server
-    
-    C->>H: Request
-    H->>H: Check cache/policy
-    H->>S: Forward request
-    S->>H: Response
-    H->>H: Update cache/stats
-    H->>C: Forward response
-```
+![Proxy Pattern](../assets/images/proxy-pattern-sequence.svg)
 
 ## Best Practices
 

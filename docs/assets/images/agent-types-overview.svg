@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 300" style="background: transparent;">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L10,5 L0,10 L5,5 z" fill="#66b3ff"/>
+    </marker>
+    <filter id="shadow">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
+      <feOffset dx="2" dy="2" result="offsetblur"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.3"/>
+      </feComponentTransfer>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Client Agent -->
+  <rect x="30" y="40" width="140" height="60" rx="8" fill="#2a2a3e" stroke="#66b3ff" stroke-width="2" filter="url(#shadow)"/>
+  <text x="100" y="75" text-anchor="middle" font-family="monospace" font-size="14" fill="#e0e0e0">Client Agent</text>
+  
+  <!-- Server Agent -->
+  <rect x="330" y="40" width="140" height="60" rx="8" fill="#2a2a3e" stroke="#66b3ff" stroke-width="2" filter="url(#shadow)"/>
+  <text x="400" y="75" text-anchor="middle" font-family="monospace" font-size="14" fill="#e0e0e0">Server Agent</text>
+  
+  <!-- Hybrid Agent -->
+  <rect x="180" y="180" width="140" height="60" rx="8" fill="#2a2a3e" stroke="#ff9966" stroke-width="2" filter="url(#shadow)"/>
+  <text x="250" y="215" text-anchor="middle" font-family="monospace" font-size="14" fill="#e0e0e0">Hybrid Agent</text>
+  
+  <!-- Any Agent -->
+  <rect x="480" y="180" width="140" height="60" rx="8" fill="#2a2a3e" stroke="#ff9966" stroke-width="2" filter="url(#shadow)"/>
+  <text x="550" y="215" text-anchor="middle" font-family="monospace" font-size="14" fill="#e0e0e0">Any Agent</text>
+  
+  <!-- Arrows with labels -->
+  <!-- Client to Server -->
+  <path d="M 170 70 L 330 70" stroke="#66b3ff" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="250" y="60" text-anchor="middle" font-family="monospace" font-size="11" fill="#99ccff">sends requests</text>
+  
+  <!-- Server to Client -->
+  <path d="M 330 90 L 170 90" stroke="#66b3ff" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="250" y="105" text-anchor="middle" font-family="monospace" font-size="11" fill="#99ccff">sends responses</text>
+  
+  <!-- Hybrid to Any -->
+  <path d="M 320 200 L 480 200" stroke="#ff9966" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="400" y="190" text-anchor="middle" font-family="monospace" font-size="11" fill="#ffcc99">can send &amp; receive</text>
+  
+  <!-- Any to Hybrid -->
+  <path d="M 480 220 L 320 220" stroke="#ff9966" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="400" y="235" text-anchor="middle" font-family="monospace" font-size="11" fill="#ffcc99">can send &amp; receive</text>
+</svg>

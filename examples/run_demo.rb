@@ -178,7 +178,7 @@ class Agent99Demo
     
     # Check for rabbitmq (optional warning)
     begin
-      system("rabbitmq-server --help > /dev/null 2>&1")
+      system("which rabbitmq-server > /dev/null 2>&1")
       unless $?.success?
         puts "⚠️  RabbitMQ not found. Install with: brew install rabbitmq-server"
         puts "   Continuing anyway - agents will use fallback message client"

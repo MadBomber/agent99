@@ -31,6 +31,8 @@ and validation rules.
 
 ### Message Processing Flow
 
+![Message Processing Flow](../assets/images/message-processing-flow.svg)
+
 #### Request Processing
 1. Message arrives and is validated against schema
 2. If validation passes:
@@ -42,7 +44,7 @@ and validation rules.
     - Error is logged
     - Request is not processed further
 
-![Request Message Processing Flow](../assets/diagrams/request_flow.png)
+![Request Message Processing Flow](../assets/images/request-flow.svg)
 
 #### Response Processing
 1. Response message is received

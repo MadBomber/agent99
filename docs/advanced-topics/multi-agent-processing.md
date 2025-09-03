@@ -4,29 +4,7 @@ Multi-agent processing allows you to run multiple agents within the same process
 
 ## Overview
 
-```mermaid
-graph TD
-    subgraph "Process 1"
-        A1[Agent A]
-        A2[Agent B] 
-        A3[Agent C]
-    end
-    
-    subgraph "Process 2"
-        B1[Agent D]
-        B2[Agent E]
-    end
-    
-    subgraph "Message Broker"
-        MB[NATS/AMQP]
-    end
-    
-    A1 --> MB
-    A2 --> MB
-    A3 --> MB
-    B1 --> MB
-    B2 --> MB
-```
+![Multi-Agent System](../assets/images/multi-agent-system.svg)
 
 ## Single Process, Multiple Agents
 

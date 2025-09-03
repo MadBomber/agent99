@@ -156,7 +156,7 @@ It supports three core operations:
 
 #### 1. Register
 
-![Central Registry Process](/assets/images/agent_registry_process.png)
+![Central Registry Process](../assets/images/agent-registry-process.svg)
 
 Agents register by providing their information (e.g., name and capabilities) to the registry service. Here's how registration works in practice:
 

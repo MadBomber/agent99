@@ -6,6 +6,8 @@ The lifecycle of an agent within Agent99 consists of several key stages that are
 
 ### Lifecycle Stages
 
+![Agent Lifecycle](../assets/images/agent-lifecycle.svg)
+
 1. **Creation**: An agent is instantiated through the `Agent99::Base` class.
 2. **Initialization**: The agent sets up resources and establishes connections.
 3. **Running**: The agent processes messages and performs its designated tasks.

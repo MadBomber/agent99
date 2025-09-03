@@ -73,7 +73,9 @@ node2 = graph.add_nodes("Physics")
 
 graph.add_edges(node1, node2)
 
-graph.output(png: "knowledge_graph.png")
+# See knowledge graph visualization at:
+# docs/assets/images/knowledge-graph.svg
+# graph.output(png: "knowledge_graph.png")
 
 ############################################
 require "rgl/adjacency"

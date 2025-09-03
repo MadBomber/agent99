@@ -4,6 +4,8 @@
 
 Agent99 provides a robust control system that allows for dynamic management of agents during runtime. Control actions enable administrative operations and state management without requiring agent restarts or redeployment.
 
+![Control Actions State Machine](../assets/images/control-actions-state.svg)
+
 ### Built-in Control Actions
 
 The framework includes several built-in control actions:

@@ -10,9 +10,9 @@ Agent99 is a Ruby-based framework designed for building and managing software ag
 
 ### System Components Diagram
 
-![High Level Architecture](../assets/diagrams/high_level_architecture.png)
+![Agent99 Architecture](../assets/images/agent99-architecture.svg)
 
-The diagram above (generated from `diagrams/high_level_architecture.dot`) illustrates the key components and their interactions:
+The diagram above illustrates the key components and their interactions:
 
 - **Agents**: Come in three types:
    - Client Agents: Only make requests

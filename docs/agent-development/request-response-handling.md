@@ -4,20 +4,7 @@ Understanding how to properly handle requests and responses is fundamental to bu
 
 ## Request Processing Lifecycle
 
-```mermaid
-sequenceDiagram
-    participant MB as Message Broker
-    participant A as Agent
-    participant P as process_request
-    
-    MB->>A: Incoming message
-    A->>A: Validate headers
-    A->>A: Parse payload
-    A->>P: Call process_request(payload)
-    P->>P: Business logic
-    P->>A: send_response() or send_error()
-    A->>MB: Outgoing response
-```
+![Request Processing Lifecycle](../assets/images/request-processing-lifecycle.svg)
 
 ## Basic Request Handling
 
