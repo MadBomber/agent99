@@ -1,0 +1,234 @@
+<svg width="1000" height="700" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background transparent -->
+  
+  <!-- Title -->
+  <text x="500" y="30" text-anchor="middle" fill="#f7fafc" 
+        font-family="Arial, sans-serif" font-size="20" font-weight="bold">
+    SmartMessage Transport Extension Architecture
+  </text>
+  
+  <!-- Agent99 Layer -->
+  <rect x="50" y="70" width="900" height="80" 
+        fill="#2d3748" stroke="#4a5568" stroke-width="2" rx="8"/>
+  <text x="500" y="100" text-anchor="middle" fill="#e2e8f0" 
+        font-family="Arial, sans-serif" font-size="18" font-weight="bold">
+    Agent99: Multi-Process Agent Coordination
+  </text>
+  <text x="500" y="125" text-anchor="middle" fill="#cbd5e0" 
+        font-family="Arial, sans-serif" font-size="14">
+    Coordinates agent objects across multiple processes executing anywhere
+  </text>
+  
+  <!-- Enhanced BunnyFarm Layer -->
+  <rect x="50" y="170" width="900" height="80" 
+        fill="#1a365d" stroke="#2c5282" stroke-width="2" rx="8"/>
+  <text x="500" y="200" text-anchor="middle" fill="#bee3f8" 
+        font-family="Arial, sans-serif" font-size="18" font-weight="bold">
+    Enhanced BunnyFarm: Workflow + SmartMessage Integration
+  </text>
+  <text x="500" y="220" text-anchor="middle" fill="#90cdf4" 
+        font-family="Arial, sans-serif" font-size="14">
+    Message workflows with transport abstraction capabilities
+  </text>
+  
+  <!-- SmartMessage Core Layer -->
+  <rect x="50" y="270" width="900" height="80" 
+        fill="#553c9a" stroke="#7c3aed" stroke-width="2" rx="8"/>
+  <text x="500" y="300" text-anchor="middle" fill="#e9d5ff" 
+        font-family="Arial, sans-serif" font-size="18" font-weight="bold">
+    SmartMessage Core: Transport Abstraction + Plugin System
+  </text>
+  <text x="500" y="320" text-anchor="middle" fill="#c4b5fd" 
+        font-family="Arial, sans-serif" font-size="14">
+    Core gem with Memory + Redis transports, plugin architecture for extensions
+  </text>
+  
+  <!-- Transport Extensions Layer -->
+  <rect x="50" y="370" width="900" height="120" 
+        fill="#1a202c" stroke="#2d3748" stroke-width="2" rx="8"/>
+  <text x="500" y="400" text-anchor="middle" fill="#f7fafc" 
+        font-family="Arial, sans-serif" font-size="18" font-weight="bold">
+    Transport Extensions (Plugin Ecosystem)
+  </text>
+  
+  <!-- Core Transports -->
+  <text x="150" y="430" text-anchor="middle" fill="#a0aec0" 
+        font-family="Arial, sans-serif" font-size="12" font-weight="bold">
+    Core Transports
+  </text>
+  
+  <rect x="80" y="440" width="140" height="40" 
+        fill="#2f855a" stroke="#48bb78" stroke-width="1" rx="4"/>
+  <text x="150" y="465" text-anchor="middle" fill="#f0fff4" 
+        font-family="Arial, sans-serif" font-size="11" font-weight="bold">
+    Memory
+  </text>
+  <text x="150" y="475" text-anchor="middle" fill="#c6f6d5" 
+        font-family="Arial, sans-serif" font-size="9">
+    Single Process
+  </text>
+  
+  <rect x="240" y="440" width="140" height="40" 
+        fill="#d69e2e" stroke="#ed8936" stroke-width="1" rx="4"/>
+  <text x="310" y="465" text-anchor="middle" fill="#fffbeb" 
+        font-family="Arial, sans-serif" font-size="11" font-weight="bold">
+    Redis
+  </text>
+  <text x="310" y="475" text-anchor="middle" fill="#fde68a" 
+        font-family="Arial, sans-serif" font-size="9">
+    Multi-Process Local
+  </text>
+  
+  <!-- Extension Transports -->
+  <text x="650" y="430" text-anchor="middle" fill="#a0aec0" 
+        font-family="Arial, sans-serif" font-size="12" font-weight="bold">
+    Extension Gems
+  </text>
+  
+  <rect x="420" y="440" width="160" height="40" 
+        fill="#7c2d12" stroke="#dc2626" stroke-width="1" rx="4"/>
+  <text x="500" y="460" text-anchor="middle" fill="#fef2f2" 
+        font-family="Arial, sans-serif" font-size="11" font-weight="bold">
+    smart_message-
+  </text>
+  <text x="500" y="470" text-anchor="middle" fill="#fecaca" 
+        font-family="Arial, sans-serif" font-size="10" font-weight="bold">
+    transport-amqp
+  </text>
+  <text x="500" y="480" text-anchor="middle" fill="#fca5a5" 
+        font-family="Arial, sans-serif" font-size="8">
+    Enterprise Reliable
+  </text>
+  
+  <rect x="600" y="440" width="160" height="40" 
+        fill="#065f46" stroke="#10b981" stroke-width="1" rx="4"/>
+  <text x="680" y="460" text-anchor="middle" fill="#d1fae5" 
+        font-family="Arial, sans-serif" font-size="11" font-weight="bold">
+    smart_message-
+  </text>
+  <text x="680" y="470" text-anchor="middle" fill="#a7f3d0" 
+        font-family="Arial, sans-serif" font-size="10" font-weight="bold">
+    transport-lanet
+  </text>
+  <text x="680" y="480" text-anchor="middle" fill="#6ee7b7" 
+        font-family="Arial, sans-serif" font-size="8">
+    LAN P2P Direct
+  </text>
+  
+  <rect x="780" y="440" width="160" height="40" 
+        fill="#1e40af" stroke="#3b82f6" stroke-width="1" rx="4"/>
+  <text x="860" y="460" text-anchor="middle" fill="#dbeafe" 
+        font-family="Arial, sans-serif" font-size="11" font-weight="bold">
+    smart_message-
+  </text>
+  <text x="860" y="470" text-anchor="middle" fill="#bfdbfe" 
+        font-family="Arial, sans-serif" font-size="10" font-weight="bold">
+    transport-nats
+  </text>
+  <text x="860" y="480" text-anchor="middle" fill="#93c5fd" 
+        font-family="Arial, sans-serif" font-size="8">
+    High-Perf Distributed
+  </text>
+  
+  <!-- Use Cases -->
+  <rect x="50" y="510" width="900" height="100" 
+        fill="#0f172a" stroke="#334155" stroke-width="1" rx="5" opacity="0.9"/>
+  <text x="70" y="535" fill="#f1f5f9" 
+        font-family="Arial, sans-serif" font-size="14" font-weight="bold">
+    Transport Selection Strategy:
+  </text>
+  
+  <text x="90" y="555" fill="#10b981" 
+        font-family="Arial, sans-serif" font-size="11" font-weight="bold">
+    Memory:
+  </text>
+  <text x="150" y="555" fill="#cbd5e0" 
+        font-family="Arial, sans-serif" font-size="10">
+    Same process agent communication
+  </text>
+  
+  <text x="350" y="555" fill="#ed8936" 
+        font-family="Arial, sans-serif" font-size="11" font-weight="bold">
+    Redis:
+  </text>
+  <text x="390" y="555" fill="#cbd5e0" 
+        font-family="Arial, sans-serif" font-size="10">
+    Multi-process, same machine
+  </text>
+  
+  <text x="90" y="575" fill="#dc2626" 
+        font-family="Arial, sans-serif" font-size="11" font-weight="bold">
+    AMQP:
+  </text>
+  <text x="140" y="575" fill="#cbd5e0" 
+        font-family="Arial, sans-serif" font-size="10">
+    Enterprise, guaranteed delivery
+  </text>
+  
+  <text x="350" y="575" fill="#10b981" 
+        font-family="Arial, sans-serif" font-size="11" font-weight="bold">
+    Lanet:
+  </text>
+  <text x="395" y="575" fill="#cbd5e0" 
+        font-family="Arial, sans-serif" font-size="10">
+    LAN P2P, encrypted, low latency
+  </text>
+  
+  <text x="600" y="575" fill="#3b82f6" 
+        font-family="Arial, sans-serif" font-size="11" font-weight="bold">
+    NATS:
+  </text>
+  <text x="640" y="575" fill="#cbd5e0" 
+        font-family="Arial, sans-serif" font-size="10">
+    High-throughput, distributed coordination
+  </text>
+  
+  <text x="90" y="595" fill="#f1f5f9" 
+        font-family="Arial, sans-serif" font-size="11" font-weight="bold">
+    Plugin Benefits:
+  </text>
+  <text x="190" y="595" fill="#cbd5e0" 
+        font-family="Arial, sans-serif" font-size="10">
+    • Modular architecture • Optional dependencies • Independent evolution • Community ecosystem
+  </text>
+  
+  <!-- Arrows showing flow -->
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" 
+            refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#cbd5e0"/>
+    </marker>
+  </defs>
+  
+  <!-- Flow arrows -->
+  <line x1="500" y1="150" x2="500" y2="165" 
+        stroke="#cbd5e0" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <line x1="500" y1="250" x2="500" y2="265" 
+        stroke="#cbd5e0" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <line x1="500" y1="350" x2="500" y2="365" 
+        stroke="#cbd5e0" stroke-width="2" marker-end="url(#arrowhead)"/>
+  
+  <!-- Gem installation info -->
+  <rect x="50" y="630" width="900" height="50" 
+        fill="#1f2937" stroke="#374151" stroke-width="1" rx="5"/>
+  <text x="70" y="650" fill="#f9fafb" 
+        font-family="Arial, sans-serif" font-size="12" font-weight="bold">
+    Gem Installation:
+  </text>
+  <text x="70" y="665" fill="#d1d5db" 
+        font-family="Arial, sans-serif" font-size="10">
+    gem 'smart_message' # Core + Memory/Redis    
+  </text>
+  <text x="300" y="665" fill="#d1d5db" 
+        font-family="Arial, sans-serif" font-size="10">
+    gem 'smart_message-transport-amqp' # Enterprise
+  </text>
+  <text x="550" y="665" fill="#d1d5db" 
+        font-family="Arial, sans-serif" font-size="10">
+    gem 'smart_message-transport-lanet' # P2P
+  </text>
+  <text x="750" y="665" fill="#d1d5db" 
+        font-family="Arial, sans-serif" font-size="10">
+    gem 'smart_message-transport-nats' # Distributed
+  </text>
+</svg>

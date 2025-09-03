@@ -1,0 +1,181 @@
+<svg width="1000" height="700" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background transparent -->
+  
+  <!-- Title -->
+  <text x="500" y="30" text-anchor="middle" fill="#f7fafc" 
+        font-family="Arial, sans-serif" font-size="20" font-weight="bold">
+    Agent99 Hybrid P2P Network Topology
+  </text>
+  
+  <!-- LAN 1 -->
+  <rect x="50" y="80" width="400" height="250" 
+        fill="none" stroke="#10b981" stroke-width="2" stroke-dasharray="10,5" rx="15"/>
+  <text x="250" y="105" text-anchor="middle" fill="#10b981" 
+        font-family="Arial, sans-serif" font-size="16" font-weight="bold">
+    LAN Segment 1 (192.168.1.0/24)
+  </text>
+  
+  <!-- LAN 2 -->
+  <rect x="550" y="80" width="400" height="250" 
+        fill="none" stroke="#3b82f6" stroke-width="2" stroke-dasharray="10,5" rx="15"/>
+  <text x="750" y="105" text-anchor="middle" fill="#3b82f6" 
+        font-family="Arial, sans-serif" font-size="16" font-weight="bold">
+    LAN Segment 2 (192.168.2.0/24)
+  </text>
+  
+  <!-- Registry Server -->
+  <rect x="425" y="400" width="150" height="80" 
+        fill="#7c2d12" stroke="#dc2626" stroke-width="3" rx="10"/>
+  <text x="500" y="430" text-anchor="middle" fill="#fef2f2" 
+        font-family="Arial, sans-serif" font-size="14" font-weight="bold">
+    Agent Registry
+  </text>
+  <text x="500" y="450" text-anchor="middle" fill="#fecaca" 
+        font-family="Arial, sans-serif" font-size="12">
+    Central Discovery
+  </text>
+  <text x="500" y="470" text-anchor="middle" fill="#fecaca" 
+        font-family="Arial, sans-serif" font-size="12">
+    &amp; Coordination
+  </text>
+  
+  <!-- NATS/AMQP Broker -->
+  <rect x="425" y="520" width="150" height="80" 
+        fill="#92400e" stroke="#f59e0b" stroke-width="3" rx="10"/>
+  <text x="500" y="550" text-anchor="middle" fill="#fef3c7" 
+        font-family="Arial, sans-serif" font-size="14" font-weight="bold">
+    Message Broker
+  </text>
+  <text x="500" y="570" text-anchor="middle" fill="#fde68a" 
+        font-family="Arial, sans-serif" font-size="12">
+    NATS/AMQP
+  </text>
+  <text x="500" y="590" text-anchor="middle" fill="#fde68a" 
+        font-family="Arial, sans-serif" font-size="12">
+    Cross-LAN Bridge
+  </text>
+  
+  <!-- Agents in LAN 1 -->
+  <circle cx="150" cy="180" r="30" fill="#1a365d" stroke="#3182ce" stroke-width="2"/>
+  <text x="150" y="185" text-anchor="middle" fill="#bee3f8" 
+        font-family="Arial, sans-serif" font-size="10" font-weight="bold">
+    Agent A
+  </text>
+  
+  <circle cx="280" cy="150" r="30" fill="#1a365d" stroke="#3182ce" stroke-width="2"/>
+  <text x="280" y="155" text-anchor="middle" fill="#bee3f8" 
+        font-family="Arial, sans-serif" font-size="10" font-weight="bold">
+    Agent B
+  </text>
+  
+  <circle cx="350" cy="220" r="30" fill="#1a365d" stroke="#3182ce" stroke-width="2"/>
+  <text x="350" y="225" text-anchor="middle" fill="#bee3f8" 
+        font-family="Arial, sans-serif" font-size="10" font-weight="bold">
+    Agent C
+  </text>
+  
+  <!-- Agents in LAN 2 -->
+  <circle cx="650" cy="180" r="30" fill="#2d3748" stroke="#4a5568" stroke-width="2"/>
+  <text x="650" y="185" text-anchor="middle" fill="#e2e8f0" 
+        font-family="Arial, sans-serif" font-size="10" font-weight="bold">
+    Agent X
+  </text>
+  
+  <circle cx="780" cy="150" r="30" fill="#2d3748" stroke="#4a5568" stroke-width="2"/>
+  <text x="780" y="155" text-anchor="middle" fill="#e2e8f0" 
+        font-family="Arial, sans-serif" font-size="10" font-weight="bold">
+    Agent Y
+  </text>
+  
+  <circle cx="850" cy="220" r="30" fill="#2d3748" stroke="#4a5568" stroke-width="2"/>
+  <text x="850" y="225" text-anchor="middle" fill="#e2e8f0" 
+        font-family="Arial, sans-serif" font-size="10" font-weight="bold">
+    Agent Z
+  </text>
+  
+  <!-- Lanet P2P Connections within LANs (green) -->
+  <defs>
+    <marker id="greenarrow" markerWidth="8" markerHeight="6" 
+            refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#10b981"/>
+    </marker>
+    <marker id="yellowarrow" markerWidth="8" markerHeight="6" 
+            refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#f59e0b"/>
+    </marker>
+    <marker id="redarrow" markerWidth="8" markerHeight="6" 
+            refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#dc2626"/>
+    </marker>
+  </defs>
+  
+  <!-- P2P connections in LAN 1 -->
+  <line x1="180" y1="180" x2="250" y2="150" 
+        stroke="#10b981" stroke-width="3" stroke-dasharray="5,3" 
+        marker-end="url(#greenarrow)"/>
+  <line x1="250" y1="170" x2="180" y2="180" 
+        stroke="#10b981" stroke-width="2" stroke-dasharray="5,3" 
+        marker-end="url(#greenarrow)"/>
+  <line x1="310" y1="150" x2="340" y2="190" 
+        stroke="#10b981" stroke-width="3" stroke-dasharray="5,3" 
+        marker-end="url(#greenarrow)"/>
+  
+  <!-- P2P connections in LAN 2 -->
+  <line x1="680" y1="180" x2="750" y2="150" 
+        stroke="#10b981" stroke-width="3" stroke-dasharray="5,3" 
+        marker-end="url(#greenarrow)"/>
+  <line x1="750" y1="170" x2="680" y2="180" 
+        stroke="#10b981" stroke-width="2" stroke-dasharray="5,3" 
+        marker-end="url(#greenarrow)"/>
+  <line x1="810" y1="150" x2="840" y2="190" 
+        stroke="#10b981" stroke-width="3" stroke-dasharray="5,3" 
+        marker-end="url(#greenarrow)"/>
+  
+  <!-- Cross-LAN broker connections (yellow) -->
+  <line x1="350" y1="250" x2="450" y2="520" 
+        stroke="#f59e0b" stroke-width="2" 
+        marker-end="url(#yellowarrow)"/>
+  <line x1="650" y1="250" x2="550" y2="520" 
+        stroke="#f59e0b" stroke-width="2" 
+        marker-end="url(#yellowarrow)"/>
+  
+  <!-- Registry connections (red) -->
+  <line x1="280" y1="280" x2="450" y2="400" 
+        stroke="#dc2626" stroke-width="2" 
+        marker-end="url(#redarrow)"/>
+  <line x1="750" y1="280" x2="550" y2="400" 
+        stroke="#dc2626" stroke-width="2" 
+        marker-end="url(#redarrow)"/>
+  
+  <!-- Legend -->
+  <rect x="50" y="620" width="900" height="60" 
+        fill="#1a202c" stroke="#2d3748" stroke-width="1" rx="5"/>
+  <text x="70" y="645" fill="#f7fafc" 
+        font-family="Arial, sans-serif" font-size="14" font-weight="bold">
+    Connection Types:
+  </text>
+  
+  <line x1="200" y1="650" x2="250" y2="650" 
+        stroke="#10b981" stroke-width="3" stroke-dasharray="5,3" 
+        marker-end="url(#greenarrow)"/>
+  <text x="260" y="655" fill="#10b981" 
+        font-family="Arial, sans-serif" font-size="12">
+    Lanet P2P (Same LAN)
+  </text>
+  
+  <line x1="420" y1="650" x2="470" y2="650" 
+        stroke="#f59e0b" stroke-width="2" 
+        marker-end="url(#yellowarrow)"/>
+  <text x="480" y="655" fill="#f59e0b" 
+        font-family="Arial, sans-serif" font-size="12">
+    Broker (Cross-LAN)
+  </text>
+  
+  <line x1="620" y1="650" x2="670" y2="650" 
+        stroke="#dc2626" stroke-width="2" 
+        marker-end="url(#redarrow)"/>
+  <text x="680" y="655" fill="#dc2626" 
+        font-family="Arial, sans-serif" font-size="12">
+    Registry (Discovery)
+  </text>
+</svg>
