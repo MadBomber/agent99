@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" style="background: transparent;">
+  <defs>
+    <marker id="arrow-ctrl" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
+      <path d="M0,0 L10,5 L0,10 L5,5 z" fill="#66b3ff"/>
+    </marker>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Title -->
+  <text x="400" y="30" text-anchor="middle" font-family="monospace" font-size="18" fill="#e0e0e0" font-weight="bold">Agent Control State Machine</text>
+  
+  <!-- States -->
+  <!-- Running -->
+  <rect x="300" y="80" width="200" height="80" rx="10" fill="#2a2a3e" stroke="#66ff99" stroke-width="3" filter="url(#glow)"/>
+  <text x="400" y="110" text-anchor="middle" font-family="monospace" font-size="16" fill="#99ffcc" font-weight="bold">RUNNING</text>
+  <text x="400" y="135" text-anchor="middle" font-family="monospace" font-size="11" fill="#66ff99">• Processing messages</text>
+  <text x="400" y="150" text-anchor="middle" font-family="monospace" font-size="11" fill="#66ff99">• Active state</text>
+  
+  <!-- Paused -->
+  <rect x="50" y="250" width="200" height="80" rx="10" fill="#2a2a3e" stroke="#ffcc66" stroke-width="3" filter="url(#glow)"/>
+  <text x="150" y="280" text-anchor="middle" font-family="monospace" font-size="16" fill="#ffdd99" font-weight="bold">PAUSED</text>
+  <text x="150" y="305" text-anchor="middle" font-family="monospace" font-size="11" fill="#ffcc66">• Messages queued</text>
+  <text x="150" y="320" text-anchor="middle" font-family="monospace" font-size="11" fill="#ffcc66">• Suspended state</text>
+  
+  <!-- Config Update -->
+  <rect x="550" y="250" width="200" height="80" rx="10" fill="#2a2a3e" stroke="#ff99ff" stroke-width="3" filter="url(#glow)"/>
+  <text x="650" y="280" text-anchor="middle" font-family="monospace" font-size="16" fill="#ffccff" font-weight="bold">CONFIG UPDATE</text>
+  <text x="650" y="305" text-anchor="middle" font-family="monospace" font-size="11" fill="#ff99ff">• Apply new settings</text>
+  <text x="650" y="320" text-anchor="middle" font-family="monospace" font-size="11" fill="#ff99ff">• Transient state</text>
+  
+  <!-- Shutdown -->
+  <rect x="300" y="400" width="200" height="80" rx="10" fill="#2a2a3e" stroke="#ff6666" stroke-width="3" filter="url(#glow)"/>
+  <text x="400" y="430" text-anchor="middle" font-family="monospace" font-size="16" fill="#ff9999" font-weight="bold">SHUTDOWN</text>
+  <text x="400" y="455" text-anchor="middle" font-family="monospace" font-size="11" fill="#ff6666">• Cleanup resources</text>
+  <text x="400" y="470" text-anchor="middle" font-family="monospace" font-size="11" fill="#ff6666">• Terminal state</text>
+  
+  <!-- Transitions -->
+  <!-- Running to Paused -->
+  <path d="M 300 120 L 250 250" stroke="#ffcc66" stroke-width="2" marker-end="url(#arrow-ctrl)"/>
+  <text x="240" y="180" text-anchor="middle" font-family="monospace" font-size="11" fill="#ffcc66">pause()</text>
+  
+  <!-- Paused to Running -->
+  <path d="M 250 290 L 300 160" stroke="#66ff99" stroke-width="2" marker-end="url(#arrow-ctrl)"/>
+  <text x="280" y="230" text-anchor="middle" font-family="monospace" font-size="11" fill="#66ff99">resume()</text>
+  
+  <!-- Running to Config -->
+  <path d="M 500 120 L 550 250" stroke="#ff99ff" stroke-width="2" marker-end="url(#arrow-ctrl)"/>
+  <text x="540" y="180" text-anchor="middle" font-family="monospace" font-size="11" fill="#ff99ff">update_config()</text>
+  
+  <!-- Config to Running -->
+  <path d="M 550 290 L 500 160" stroke="#66ff99" stroke-width="2" marker-end="url(#arrow-ctrl)"/>
+  <text x="520" y="230" text-anchor="middle" font-family="monospace" font-size="11" fill="#66ff99">apply()</text>
+  
+  <!-- Running to Shutdown -->
+  <path d="M 400 160 L 400 400" stroke="#ff6666" stroke-width="2" marker-end="url(#arrow-ctrl)"/>
+  <text x="430" y="280" font-family="monospace" font-size="11" fill="#ff6666">shutdown()</text>
+  
+  <!-- Paused to Shutdown -->
+  <path d="M 150 330 L 300 400" stroke="#ff6666" stroke-width="2" marker-end="url(#arrow-ctrl)"/>
+  <text x="210" y="370" font-family="monospace" font-size="11" fill="#ff6666">shutdown()</text>
+  
+  <!-- Config to Shutdown -->
+  <path d="M 650 330 L 500 400" stroke="#ff6666" stroke-width="2" marker-end="url(#arrow-ctrl)"/>
+  <text x="590" y="370" font-family="monospace" font-size="11" fill="#ff6666">shutdown()</text>
+  
+  <!-- Status check (self loop) -->
+  <path d="M 400 80 Q 400 40 400 80" stroke="#66b3ff" stroke-width="1.5" marker-end="url(#arrow-ctrl)" fill="none"/>
+  <text x="400" y="55" text-anchor="middle" font-family="monospace" font-size="10" fill="#99ccff">status()</text>
+  
+  <!-- Legend -->
+  <rect x="620" y="60" width="150" height="100" rx="5" fill="#1a1a2e" stroke="#666" stroke-width="1" opacity="0.8"/>
+  <text x="695" y="80" text-anchor="middle" font-family="monospace" font-size="11" fill="#999" font-weight="bold">Control Actions</text>
+  <text x="630" y="100" font-family="monospace" font-size="9" fill="#ffcc66">• pause</text>
+  <text x="630" y="115" font-family="monospace" font-size="9" fill="#66ff99">• resume</text>
+  <text x="630" y="130" font-family="monospace" font-size="9" fill="#ff99ff">• update_config</text>
+  <text x="630" y="145" font-family="monospace" font-size="9" fill="#ff6666">• shutdown</text>
+</svg>

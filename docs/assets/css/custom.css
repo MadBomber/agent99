@@ -1,0 +1,27 @@
+/* Custom CSS for Agent99 Documentation */
+
+/* Header background - dark red */
+.md-header {
+    background-color: #8B0000 !important; /* Dark red color */
+}
+
+/* Ensure navigation tabs have proper contrast with dark red background */
+.md-header__nav {
+    background-color: #8B0000 !important;
+}
+
+/* Tab bar under header - slightly darker red */
+.md-tabs {
+    background-color: #660000 !important;
+}
+
+/* Active tab styling */
+.md-tabs__link--active {
+    color: #ffffff !important;
+    border-bottom: 2px solid #ffffff;
+}
+
+/* Hover state for tabs */
+.md-tabs__link:hover {
+    color: #ffcccc !important;
+}

@@ -2,7 +2,7 @@
 
 require 'bunny'
 require 'json'
-require 'json_schema'
+require 'simple_json_schema_builder'
 require 'logger'
 
 class Agent99::AmqpMessageClient

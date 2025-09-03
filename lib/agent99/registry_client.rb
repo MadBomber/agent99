@@ -13,7 +13,8 @@ class Agent99::RegistryClient
     )
     @base_url     = base_url
     @logger       = logger
-    @http_client  = Net::HTTP.new(URI.parse(base_url).host, URI.parse(base_url).port)
+    uri = URI.parse(base_url)
+    @http_client  = Net::HTTP.new(uri.host, uri.port)
   end
 
   def register(info:)
@@ -58,10 +59,12 @@ class Agent99::RegistryClient
   
   rescue JSON::ParserError => e
     logger.error "JSON parsing error: #{e.message}"
+    logger.debug "Response body that failed parsing: #{response&.body}"
     nil
   
   rescue StandardError => e
     logger.error "Request error: #{e.message}"
+    logger.debug "Error details: #{e.class} - #{e.backtrace&.first(5)}"
     nil
   end
 

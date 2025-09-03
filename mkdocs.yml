@@ -1,0 +1,195 @@
+# MkDocs Configuration for Agent99 Documentation
+site_name: Agent99 Framework Documentation
+site_description: Comprehensive documentation for the Agent99 Ruby gem - A framework for building distributed AI agents
+site_author: Dewayne VanHoozer
+site_url: https://madbomber.github.io/agent99
+copyright: Copyright &copy; 2015-2025 Dewayne VanHoozer
+
+# Repository information
+repo_url: https://github.com/MadBomber/agent99
+repo_name: MadBomber/agent99
+edit_uri: edit/main/docs/
+
+# Configuration
+theme:
+  name: material
+
+  # Color scheme - Default to light mode
+  palette:
+    # Palette toggle for light mode (default)
+    - scheme: default
+      primary: blue
+      accent: blue
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+
+    # Palette toggle for dark mode
+    - scheme: slate
+      primary: blue
+      accent: blue
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+
+  # Typography
+  font:
+    text: Roboto
+    code: Roboto Mono
+
+  # Theme features
+  features:
+    # Navigation
+    - navigation.instant
+    - navigation.tracking
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.sections
+    - navigation.path
+    - navigation.indexes
+    - navigation.top
+
+    # Table of contents
+    - toc.follow
+
+    # Search
+    - search.suggest
+    - search.highlight
+    - search.share
+
+    # Header
+    - header.autohide
+
+    # Content
+    - content.code.copy
+    - content.code.annotate
+    - content.tabs.link
+    - content.tooltips
+    - content.action.edit
+    - content.action.view
+
+# Plugins
+plugins:
+  - search:
+      separator: '[\s\-,:!=\[\]()"`/]+|\.(?!\d)|&[lg]t;|(?!\b)(?=[A-Z][a-z])'
+
+# Extensions
+markdown_extensions:
+  # Python Markdown
+  - abbr
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - md_in_html
+  - toc:
+      permalink: true
+      title: On this page
+
+  # Python Markdown Extensions
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.betterem:
+      smart_enable: all
+  - pymdownx.caret
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.keys
+  - pymdownx.magiclink:
+      repo_url_shorthand: true
+      user: madbomber
+      repo: agent99
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tilde
+
+# Extra CSS and JavaScript
+extra_css:
+  - assets/css/custom.css
+
+extra_javascript:
+  # - assets/js/mathjax.js
+  - https://polyfill.io/v3/polyfill.min.js?features=es6
+  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+
+# Social media and extra configuration
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/madbomber/agemt99
+      name: AIA on GitHub
+    - icon: fontawesome/solid/gem
+      link: https://rubygems.org/gems/agemt99
+      name: AIA on RubyGems
+
+  # version:
+  #   provider: mike
+
+# Navigation
+nav:
+  - Home: index.md
+  - Getting Started:
+      - Overview: getting-started/overview.md
+      - Installation: getting-started/installation.md
+      - Quick Start: getting-started/quick-start.md
+      - Basic Example: getting-started/basic-example.md
+  - Core Concepts:
+      - What is an Agent?: core-concepts/what-is-an-agent.md
+      - Architecture Overview: core-concepts/architecture.md
+      - Agent Lifecycle: core-concepts/agent-lifecycle.md
+      - Agent Types: core-concepts/agent-types.md
+  - Framework Components:
+      - Agent Registry: framework-components/agent-registry.md
+      - Agent Discovery: framework-components/agent-discovery.md
+      - Messaging System: framework-components/messaging-system.md
+      - Message Processing: framework-components/message-processing.md
+  - Agent Development:
+      - Custom Agent Implementation: agent-development/custom-agent-implementation.md
+      - Schema Definition: agent-development/schema-definition.md
+      - Request & Response Handling: agent-development/request-response-handling.md
+      - Error Handling: agent-development/error-handling-and-logging.md
+  - Advanced Topics:
+      - Control Actions: advanced-topics/control-actions.md
+      - Advanced Features: advanced-topics/advanced-features.md
+      - Multi-Agent Processing: advanced-topics/multi-agent-processing.md
+      - A2A Protocol: advanced-topics/a2a-protocol.md
+      - Model Context Protocol: advanced-topics/model-context-protocol.md
+      - Extending the Framework: advanced-topics/extending-the-framework.md
+  - API Reference:
+      - Overview: api-reference/overview.md
+      - Agent99::Base: api-reference/agent99-base.md
+      - Registry Client: api-reference/registry-client.md
+      - Message Clients: api-reference/message-clients.md
+      - Schemas: api-reference/schemas.md
+  - Operations:
+      - Configuration: operations/configuration.md
+      - Security: operations/security.md
+      - Performance Considerations: operations/performance-considerations.md
+      - Troubleshooting: operations/troubleshooting.md
+      - Breaking Changes: operations/breaking-changes.md
+  - Examples:
+      - Basic Examples: examples/basic-examples.md
+      - Advanced Examples: examples/advanced-examples.md
+  - AI Concepts:
+      - HTM: AI/htm.md
+      - Notes on HTM Implementation: AI/notes_on_htm_implementation.md
+  - Internal Framework:
+      - Central Registry: agent99_framework/central_registry.md
+      - Message Client: agent99_framework/message_client.md
+      - Registry Client: agent99_framework/registry_client.md

@@ -1,0 +1,114 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 700" style="background: transparent;">
+  <defs>
+    <marker id="arrow-reg-proc" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
+      <path d="M0,0 L10,5 L0,10 L5,5 z" fill="#66b3ff"/>
+    </marker>
+    <linearGradient id="grad-reg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#2a2a3e;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1a1a2e;stop-opacity:1" />
+    </linearGradient>
+    <filter id="shadow">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="2"/>
+      <feOffset dx="1" dy="1" result="offsetblur"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.3"/>
+      </feComponentTransfer>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Title -->
+  <text x="500" y="30" text-anchor="middle" font-family="monospace" font-size="18" fill="#e0e0e0" font-weight="bold">Agent Registry Processes</text>
+  
+  <!-- Main Components -->
+  <rect x="50" y="80" width="120" height="60" rx="8" fill="url(#grad-reg)" stroke="#66b3ff" stroke-width="2" filter="url(#shadow)"/>
+  <text x="110" y="115" text-anchor="middle" font-family="monospace" font-size="14" fill="#99ccff" font-weight="bold">MyAgent</text>
+  
+  <rect x="300" y="80" width="140" height="60" rx="8" fill="url(#grad-reg)" stroke="#9966ff" stroke-width="2" filter="url(#shadow)"/>
+  <text x="370" y="115" text-anchor="middle" font-family="monospace" font-size="14" fill="#cc99ff" font-weight="bold">RegistryClient</text>
+  
+  <rect x="600" y="80" width="160" height="80" rx="8" fill="url(#grad-reg)" stroke="#ff9966" stroke-width="2" filter="url(#shadow)"/>
+  <text x="680" y="110" text-anchor="middle" font-family="monospace" font-size="14" fill="#ffcc99" font-weight="bold">Central Registry</text>
+  <text x="680" y="130" text-anchor="middle" font-family="monospace" font-size="11" fill="#ff9966">(Sinatra Server)</text>
+  
+  <!-- Registration Process -->
+  <g id="registration-process">
+    <rect x="50" y="200" width="900" height="140" rx="10" fill="#2a2a3e" stroke="#66ff99" stroke-width="2" stroke-dasharray="5,3" opacity="0.1"/>
+    <text x="70" y="220" font-family="monospace" font-size="14" fill="#66ff99" font-weight="bold">Registration Process</text>
+    
+    <!-- Step 1 -->
+    <path d="M 170 250 L 290 250" stroke="#66ff99" stroke-width="2" marker-end="url(#arrow-reg-proc)"/>
+    <text x="230" y="240" text-anchor="middle" font-family="monospace" font-size="10" fill="#66ff99">1. initialize</text>
+    
+    <!-- Step 2 -->
+    <path d="M 440 250 L 590 250" stroke="#66ff99" stroke-width="2" marker-end="url(#arrow-reg-proc)"/>
+    <text x="515" y="240" text-anchor="middle" font-family="monospace" font-size="9" fill="#66ff99">2. POST /register</text>
+    <text x="515" y="255" text-anchor="middle" font-family="monospace" font-size="8" fill="#99ffcc">{name, capabilities}</text>
+    
+    <!-- Step 3 -->
+    <path d="M 590 290 L 450 290" stroke="#66ff99" stroke-width="2" marker-end="url(#arrow-reg-proc)"/>
+    <text x="520" y="280" text-anchor="middle" font-family="monospace" font-size="9" fill="#66ff99">3. 201 Created</text>
+    <text x="520" y="305" text-anchor="middle" font-family="monospace" font-size="8" fill="#99ffcc">{uuid}</text>
+    
+    <!-- Step 4 -->
+    <path d="M 290 290 L 180 290" stroke="#66ff99" stroke-width="2" marker-end="url(#arrow-reg-proc)"/>
+    <text x="235" y="280" text-anchor="middle" font-family="monospace" font-size="10" fill="#66ff99">4. Return uuid</text>
+  </g>
+  
+  <!-- Discovery Process -->
+  <g id="discovery-process">
+    <rect x="50" y="370" width="900" height="140" rx="10" fill="#2a2a3e" stroke="#66b3ff" stroke-width="2" stroke-dasharray="5,3" opacity="0.1"/>
+    <text x="70" y="390" font-family="monospace" font-size="14" fill="#66b3ff" font-weight="bold">Discovery Process</text>
+    
+    <!-- Step 5 -->
+    <path d="M 170 420 L 290 420" stroke="#66b3ff" stroke-width="2" marker-end="url(#arrow-reg-proc)"/>
+    <text x="230" y="410" text-anchor="middle" font-family="monospace" font-size="9" fill="#66b3ff">5. discover(capability)</text>
+    
+    <!-- Step 6 -->
+    <path d="M 440 420 L 590 420" stroke="#66b3ff" stroke-width="2" marker-end="url(#arrow-reg-proc)"/>
+    <text x="515" y="405" text-anchor="middle" font-family="monospace" font-size="8" fill="#66b3ff">6. GET /discover</text>
+    <text x="515" y="420" text-anchor="middle" font-family="monospace" font-size="8" fill="#99ccff">?capability=...</text>
+    
+    <!-- Step 7 -->
+    <path d="M 590 460 L 450 460" stroke="#66b3ff" stroke-width="2" marker-end="url(#arrow-reg-proc)"/>
+    <text x="520" y="445" text-anchor="middle" font-family="monospace" font-size="8" fill="#66b3ff">7. 200 OK</text>
+    <text x="520" y="460" text-anchor="middle" font-family="monospace" font-size="8" fill="#99ccff">[matching agents]</text>
+    
+    <!-- Step 8 -->
+    <path d="M 290 460 L 180 460" stroke="#66b3ff" stroke-width="2" marker-end="url(#arrow-reg-proc)"/>
+    <text x="235" y="445" text-anchor="middle" font-family="monospace" font-size="8" fill="#66b3ff">8. Return matching</text>
+    <text x="235" y="460" text-anchor="middle" font-family="monospace" font-size="8" fill="#99ccff">agents</text>
+  </g>
+  
+  <!-- Withdrawal Process -->
+  <g id="withdrawal-process">
+    <rect x="50" y="540" width="900" height="140" rx="10" fill="#2a2a3e" stroke="#ff99ff" stroke-width="2" stroke-dasharray="5,3" opacity="0.1"/>
+    <text x="70" y="560" font-family="monospace" font-size="14" fill="#ff99ff" font-weight="bold">Withdrawal Process</text>
+    
+    <!-- Step 9 -->
+    <path d="M 170 590 L 290 590" stroke="#ff99ff" stroke-width="2" marker-end="url(#arrow-reg-proc)"/>
+    <text x="230" y="580" text-anchor="middle" font-family="monospace" font-size="9" fill="#ff99ff">9. withdraw(uuid)</text>
+    
+    <!-- Step 10 -->
+    <path d="M 440 590 L 590 590" stroke="#ff99ff" stroke-width="2" marker-end="url(#arrow-reg-proc)"/>
+    <text x="515" y="580" text-anchor="middle" font-family="monospace" font-size="8" fill="#ff99ff">10. DELETE</text>
+    <text x="515" y="595" text-anchor="middle" font-family="monospace" font-size="8" fill="#ffccff">/withdraw/:uuid</text>
+    
+    <!-- Step 11 -->
+    <path d="M 590 630 L 450 630" stroke="#ff99ff" stroke-width="2" marker-end="url(#arrow-reg-proc)"/>
+    <text x="520" y="620" text-anchor="middle" font-family="monospace" font-size="8" fill="#ff99ff">11. 204 No Content</text>
+    
+    <!-- Step 12 -->
+    <path d="M 290 630 L 180 630" stroke="#ff99ff" stroke-width="2" marker-end="url(#arrow-reg-proc)"/>
+    <text x="235" y="620" text-anchor="middle" font-family="monospace" font-size="8" fill="#ff99ff">12. Confirm</text>
+    <text x="235" y="635" text-anchor="middle" font-family="monospace" font-size="8" fill="#ffccff">withdrawal</text>
+  </g>
+  
+  <!-- Vertical connecting lines -->
+  <path d="M 110 140 L 110 540" stroke="#666" stroke-width="1" stroke-dasharray="3,2" opacity="0.5"/>
+  <path d="M 370 140 L 370 540" stroke="#666" stroke-width="1" stroke-dasharray="3,2" opacity="0.5"/>
+  <path d="M 680 160 L 680 540" stroke="#666" stroke-width="1" stroke-dasharray="3,2" opacity="0.5"/>
+</svg>

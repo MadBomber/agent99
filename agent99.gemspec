@@ -51,4 +51,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "hashdiff"
   spec.add_development_dependency "mocha"
   spec.add_development_dependency "tocer"
+  spec.add_development_dependency "webrick"
 end

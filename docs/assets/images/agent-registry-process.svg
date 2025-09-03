@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 500" style="background: transparent;">
+  <defs>
+    <marker id="arrow-reg" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
+      <path d="M0,0 L10,5 L0,10" fill="none" stroke="#66b3ff" stroke-width="1.5"/>
+    </marker>
+  </defs>
+  
+  <!-- Title -->
+  <text x="450" y="30" text-anchor="middle" font-family="monospace" font-size="18" fill="#e0e0e0" font-weight="bold">Central Registry Operations</text>
+  
+  <!-- Registration Flow -->
+  <g id="registration">
+    <text x="150" y="70" text-anchor="middle" font-family="monospace" font-size="14" fill="#66ff99" font-weight="bold">1. Registration</text>
+    
+    <rect x="50" y="90" width="100" height="40" rx="5" fill="#2a2a3e" stroke="#66ff99" stroke-width="2"/>
+    <text x="100" y="115" text-anchor="middle" font-family="monospace" font-size="12" fill="#e0e0e0">Agent</text>
+    
+    <rect x="150" y="90" width="100" height="40" rx="5" fill="#2a2a3e" stroke="#9966ff" stroke-width="2"/>
+    <text x="200" y="115" text-anchor="middle" font-family="monospace" font-size="12" fill="#e0e0e0">Registry</text>
+    
+    <path d="M 100 130 L 100 160" stroke="#444" stroke-width="1" stroke-dasharray="3,2"/>
+    <path d="M 200 130 L 200 160" stroke="#444" stroke-width="1" stroke-dasharray="3,2"/>
+    
+    <path d="M 100 170 L 190 170" stroke="#66ff99" stroke-width="2" marker-end="url(#arrow-reg)"/>
+    <text x="145" y="165" text-anchor="middle" font-family="monospace" font-size="9" fill="#99ffcc">POST /register</text>
+    <text x="145" y="185" text-anchor="middle" font-family="monospace" font-size="8" fill="#66ff99">{name, capabilities}</text>
+    
+    <path d="M 200 210 L 110 210" stroke="#66b3ff" stroke-width="2" marker-end="url(#arrow-reg)"/>
+    <text x="155" y="205" text-anchor="middle" font-family="monospace" font-size="9" fill="#99ccff">agent_id</text>
+  </g>
+  
+  <!-- Discovery Flow -->
+  <g id="discovery" transform="translate(300, 0)">
+    <text x="150" y="70" text-anchor="middle" font-family="monospace" font-size="14" fill="#66b3ff" font-weight="bold">2. Discovery</text>
+    
+    <rect x="50" y="90" width="100" height="40" rx="5" fill="#2a2a3e" stroke="#66b3ff" stroke-width="2"/>
+    <text x="100" y="115" text-anchor="middle" font-family="monospace" font-size="12" fill="#e0e0e0">Client</text>
+    
+    <rect x="150" y="90" width="100" height="40" rx="5" fill="#2a2a3e" stroke="#9966ff" stroke-width="2"/>
+    <text x="200" y="115" text-anchor="middle" font-family="monospace" font-size="12" fill="#e0e0e0">Registry</text>
+    
+    <path d="M 100 130 L 100 160" stroke="#444" stroke-width="1" stroke-dasharray="3,2"/>
+    <path d="M 200 130 L 200 160" stroke="#444" stroke-width="1" stroke-dasharray="3,2"/>
+    
+    <path d="M 100 170 L 190 170" stroke="#66b3ff" stroke-width="2" marker-end="url(#arrow-reg)"/>
+    <text x="145" y="165" text-anchor="middle" font-family="monospace" font-size="9" fill="#99ccff">GET /discover</text>
+    <text x="145" y="185" text-anchor="middle" font-family="monospace" font-size="8" fill="#66b3ff">?capabilities=weather</text>
+    
+    <path d="M 200 210 L 110 210" stroke="#66ff99" stroke-width="2" marker-end="url(#arrow-reg)"/>
+    <text x="155" y="205" text-anchor="middle" font-family="monospace" font-size="9" fill="#99ffcc">[agents]</text>
+  </g>
+  
+  <!-- Withdrawal Flow -->
+  <g id="withdrawal" transform="translate(600, 0)">
+    <text x="150" y="70" text-anchor="middle" font-family="monospace" font-size="14" fill="#ff9966" font-weight="bold">3. Withdrawal</text>
+    
+    <rect x="50" y="90" width="100" height="40" rx="5" fill="#2a2a3e" stroke="#ff9966" stroke-width="2"/>
+    <text x="100" y="115" text-anchor="middle" font-family="monospace" font-size="12" fill="#e0e0e0">Agent</text>
+    
+    <rect x="150" y="90" width="100" height="40" rx="5" fill="#2a2a3e" stroke="#9966ff" stroke-width="2"/>
+    <text x="200" y="115" text-anchor="middle" font-family="monospace" font-size="12" fill="#e0e0e0">Registry</text>
+    
+    <path d="M 100 130 L 100 160" stroke="#444" stroke-width="1" stroke-dasharray="3,2"/>
+    <path d="M 200 130 L 200 160" stroke="#444" stroke-width="1" stroke-dasharray="3,2"/>
+    
+    <path d="M 100 170 L 190 170" stroke="#ff9966" stroke-width="2" marker-end="url(#arrow-reg)"/>
+    <text x="145" y="165" text-anchor="middle" font-family="monospace" font-size="9" fill="#ffcc99">DELETE /withdraw</text>
+    <text x="145" y="185" text-anchor="middle" font-family="monospace" font-size="8" fill="#ff9966">/{agent_id}</text>
+    
+    <path d="M 200 210 L 110 210" stroke="#66ff99" stroke-width="2" marker-end="url(#arrow-reg)"/>
+    <text x="155" y="205" text-anchor="middle" font-family="monospace" font-size="9" fill="#99ffcc">success</text>
+  </g>
+  
+  <!-- Data Store -->
+  <rect x="300" y="320" width="300" height="120" rx="10" fill="#1a1a2e" stroke="#9966ff" stroke-width="3"/>
+  <text x="450" y="350" text-anchor="middle" font-family="monospace" font-size="16" fill="#cc99ff" font-weight="bold">Registry Data Store</text>
+  
+  <rect x="330" y="370" width="240" height="50" rx="5" fill="#2a2a3e" stroke="#666" stroke-width="1"/>
+  <text x="450" y="390" text-anchor="middle" font-family="monospace" font-size="11" fill="#999">agent_id → {name, capabilities,</text>
+  <text x="450" y="408" text-anchor="middle" font-family="monospace" font-size="11" fill="#999">timestamp, status, metadata}</text>
+  
+  <!-- Connections to data store -->
+  <path d="M 200 240 L 400 320" stroke="#9966ff" stroke-width="1" stroke-dasharray="3,2" opacity="0.5"/>
+  <path d="M 500 240 L 450 320" stroke="#9966ff" stroke-width="1" stroke-dasharray="3,2" opacity="0.5"/>
+  <path d="M 800 240 L 500 320" stroke="#9966ff" stroke-width="1" stroke-dasharray="3,2" opacity="0.5"/>
+</svg>

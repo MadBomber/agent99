@@ -2,11 +2,38 @@
 
 ## [Unreleased]
 
-### extract examples into their own repo
-- MadBomber/agent99_examples has/will have two to main directories named `simple` and `smarter` where the simple has the Sinatra app as a registry and simple agents that illustrate the use of the AMQP message broker for request, respose and control messages.
-- The `smarter` directory will use a rails v8 application with postgresql and LLM access to implement the centra registry along with smarter agents that run in seperate processes as well as the rails process.
 
 ## Released
+
+### [0.0.5] 2025-09-03
+
+#### Added
+- Comprehensive demo runner (`examples/run_demo.rb`) for Agent99 framework with multiple scenarios
+- Agent2Agent (A2A) protocol specification and documentation
+- Model Context Protocol (MCP) documentation
+- Hierarchical Temporal Memory (HTM) simulation and documentation
+- GitHub Actions workflow for documentation deployment
+- SQLite-based registry implementation
+- Bad agent example for testing and security demonstrations
+- HTM simulation script using SQLite database
+
+#### Changed
+- Updated README.md for improved clarity and structural improvements
+- Improved control command handling in Control agent example
+- Enhanced examples with better error handling and user experience
+- Updated Gemfile.lock to reflect dependency upgrades
+
+#### Fixed
+- **[BREAKING FIX]** Disabled broken JsonSchema validation to prevent runtime crashes
+  - Schema validation now returns empty array instead of crashing with `NameError: uninitialized constant Agent99::MessageProcessing::JsonSchema`
+  - Added TODO comment for future proper schema validation implementation
+- Fixed RabbitMQ dependency check hanging in demo runner
+  - Changed from `rabbitmq-server --help` to `which rabbitmq-server` for faster, non-blocking check
+- Demo runner now properly handles infrastructure startup and cleanup
+
+#### Removed
+- Removed SQLite registry implementation (replaced with improved Sinatra-based registry)
+- Removed debug statements from various components
 
 ### [0.0.4] 2024-12-14
 

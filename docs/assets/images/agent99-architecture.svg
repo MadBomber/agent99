@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 600" style="background: transparent;">
+  <defs>
+    <linearGradient id="grad-arch" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#2a2a3e;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1a1a2e;stop-opacity:1" />
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <marker id="arrow-arch" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
+      <path d="M0,0 L10,5 L0,10 L5,5 z" fill="#66b3ff"/>
+    </marker>
+  </defs>
+  
+  <!-- Title -->
+  <text x="450" y="30" text-anchor="middle" font-family="monospace" font-size="20" fill="#e0e0e0" font-weight="bold">Agent99 Framework Architecture</text>
+  
+  <!-- Central Registry -->
+  <rect x="350" y="80" width="200" height="100" rx="10" fill="url(#grad-arch)" stroke="#9966ff" stroke-width="3" filter="url(#glow)"/>
+  <text x="450" y="110" text-anchor="middle" font-family="monospace" font-size="16" fill="#cc99ff" font-weight="bold">Central Registry</text>
+  <text x="450" y="135" text-anchor="middle" font-family="monospace" font-size="11" fill="#b388ff">• Agent Registration</text>
+  <text x="450" y="155" text-anchor="middle" font-family="monospace" font-size="11" fill="#b388ff">• Service Discovery</text>
+  <text x="450" y="175" text-anchor="middle" font-family="monospace" font-size="11" fill="#b388ff">• Capability Tracking</text>
+  
+  <!-- Message Broker -->
+  <rect x="350" y="250" width="200" height="100" rx="10" fill="url(#grad-arch)" stroke="#ff9966" stroke-width="3" filter="url(#glow)"/>
+  <text x="450" y="280" text-anchor="middle" font-family="monospace" font-size="16" fill="#ffcc99" font-weight="bold">Message Broker</text>
+  <text x="450" y="305" text-anchor="middle" font-family="monospace" font-size="11" fill="#ffb380">• AMQP/NATS</text>
+  <text x="450" y="325" text-anchor="middle" font-family="monospace" font-size="11" fill="#ffb380">• Request Routing</text>
+  <text x="450" y="345" text-anchor="middle" font-family="monospace" font-size="11" fill="#ffb380">• Response Delivery</text>
+  
+  <!-- Server Agent -->
+  <rect x="50" y="420" width="150" height="120" rx="8" fill="#2a2a3e" stroke="#66ff99" stroke-width="2"/>
+  <text x="125" y="450" text-anchor="middle" font-family="monospace" font-size="14" fill="#99ffcc" font-weight="bold">Server Agent</text>
+  <text x="125" y="475" text-anchor="middle" font-family="monospace" font-size="10" fill="#66ff99">• Process Requests</text>
+  <text x="125" y="495" text-anchor="middle" font-family="monospace" font-size="10" fill="#66ff99">• Send Responses</text>
+  <text x="125" y="515" text-anchor="middle" font-family="monospace" font-size="10" fill="#66ff99">• Register Capabilities</text>
+  
+  <!-- Client Agent -->
+  <rect x="250" y="420" width="150" height="120" rx="8" fill="#2a2a3e" stroke="#66b3ff" stroke-width="2"/>
+  <text x="325" y="450" text-anchor="middle" font-family="monospace" font-size="14" fill="#99ccff" font-weight="bold">Client Agent</text>
+  <text x="325" y="475" text-anchor="middle" font-family="monospace" font-size="10" fill="#66b3ff">• Send Requests</text>
+  <text x="325" y="495" text-anchor="middle" font-family="monospace" font-size="10" fill="#66b3ff">• Handle Responses</text>
+  <text x="325" y="515" text-anchor="middle" font-family="monospace" font-size="10" fill="#66b3ff">• Discover Services</text>
+  
+  <!-- Hybrid Agent -->
+  <rect x="500" y="420" width="150" height="120" rx="8" fill="#2a2a3e" stroke="#ff66ff" stroke-width="2"/>
+  <text x="575" y="450" text-anchor="middle" font-family="monospace" font-size="14" fill="#ff99ff" font-weight="bold">Hybrid Agent</text>
+  <text x="575" y="475" text-anchor="middle" font-family="monospace" font-size="10" fill="#ff66ff">• Proxy Requests</text>
+  <text x="575" y="495" text-anchor="middle" font-family="monospace" font-size="10" fill="#ff66ff">• Cache Responses</text>
+  <text x="575" y="515" text-anchor="middle" font-family="monospace" font-size="10" fill="#ff66ff">• Load Balance</text>
+  
+  <!-- External Service -->
+  <rect x="700" y="420" width="150" height="120" rx="8" fill="#2a2a3e" stroke="#ffcc66" stroke-width="2"/>
+  <text x="775" y="450" text-anchor="middle" font-family="monospace" font-size="14" fill="#ffdd99" font-weight="bold">External Service</text>
+  <text x="775" y="475" text-anchor="middle" font-family="monospace" font-size="10" fill="#ffcc66">• REST APIs</text>
+  <text x="775" y="495" text-anchor="middle" font-family="monospace" font-size="10" fill="#ffcc66">• Databases</text>
+  <text x="775" y="515" text-anchor="middle" font-family="monospace" font-size="10" fill="#ffcc66">• Third-party APIs</text>
+  
+  <!-- Connections -->
+  <!-- Registry connections -->
+  <path d="M 350 130 L 200 420" stroke="#9966ff" stroke-width="1.5" stroke-dasharray="3,2" opacity="0.7" marker-end="url(#arrow-arch)"/>
+  <path d="M 400 180 L 325 420" stroke="#9966ff" stroke-width="1.5" stroke-dasharray="3,2" opacity="0.7" marker-end="url(#arrow-arch)"/>
+  <path d="M 500 180 L 575 420" stroke="#9966ff" stroke-width="1.5" stroke-dasharray="3,2" opacity="0.7" marker-end="url(#arrow-arch)"/>
+  
+  <!-- Broker connections -->
+  <path d="M 350 300 L 200 420" stroke="#ff9966" stroke-width="1.5" opacity="0.7" marker-end="url(#arrow-arch)"/>
+  <path d="M 400 350 L 325 420" stroke="#ff9966" stroke-width="1.5" opacity="0.7" marker-end="url(#arrow-arch)"/>
+  <path d="M 500 350 L 575 420" stroke="#ff9966" stroke-width="1.5" opacity="0.7" marker-end="url(#arrow-arch)"/>
+  
+  <!-- Hybrid to External -->
+  <path d="M 650 480 L 700 480" stroke="#ffcc66" stroke-width="2" marker-end="url(#arrow-arch)"/>
+  
+  <!-- Registry to Broker -->
+  <path d="M 450 180 L 450 250" stroke="#ccccff" stroke-width="2" stroke-dasharray="5,3" marker-end="url(#arrow-arch)"/>
+  
+  <!-- Labels -->
+  <text x="280" y="250" font-family="monospace" font-size="9" fill="#9966ff">Register</text>
+  <text x="280" y="380" font-family="monospace" font-size="9" fill="#ff9966">Messaging</text>
+  <text x="675" y="475" font-family="monospace" font-size="9" fill="#ffcc66">API</text>
+</svg>

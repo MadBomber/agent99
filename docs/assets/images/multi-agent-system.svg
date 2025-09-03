@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" style="background: transparent;">
+  <defs>
+    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#2a2a3e;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1a1a2e;stop-opacity:1" />
+    </linearGradient>
+    <filter id="shadow">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
+      <feOffset dx="2" dy="2" result="offsetblur"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.3"/>
+      </feComponentTransfer>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Process 1 Container -->
+  <rect x="50" y="50" width="280" height="180" rx="10" fill="url(#grad1)" stroke="#66b3ff" stroke-width="2" stroke-dasharray="5,3" filter="url(#shadow)"/>
+  <text x="190" y="75" text-anchor="middle" font-family="monospace" font-size="14" fill="#99ccff" font-weight="bold">Process 1</text>
+  
+  <!-- Agents in Process 1 -->
+  <rect x="80" y="100" width="70" height="40" rx="5" fill="#2a2a3e" stroke="#66ff99" stroke-width="2"/>
+  <text x="115" y="125" text-anchor="middle" font-family="monospace" font-size="12" fill="#e0e0e0">Agent A</text>
+  
+  <rect x="170" y="100" width="70" height="40" rx="5" fill="#2a2a3e" stroke="#66ff99" stroke-width="2"/>
+  <text x="205" y="125" text-anchor="middle" font-family="monospace" font-size="12" fill="#e0e0e0">Agent B</text>
+  
+  <rect x="125" y="160" width="70" height="40" rx="5" fill="#2a2a3e" stroke="#66ff99" stroke-width="2"/>
+  <text x="160" y="185" text-anchor="middle" font-family="monospace" font-size="12" fill="#e0e0e0">Agent C</text>
+  
+  <!-- Process 2 Container -->
+  <rect x="470" y="50" width="280" height="180" rx="10" fill="url(#grad1)" stroke="#ff9966" stroke-width="2" stroke-dasharray="5,3" filter="url(#shadow)"/>
+  <text x="610" y="75" text-anchor="middle" font-family="monospace" font-size="14" fill="#ffcc99" font-weight="bold">Process 2</text>
+  
+  <!-- Agents in Process 2 -->
+  <rect x="530" y="100" width="70" height="40" rx="5" fill="#2a2a3e" stroke="#ff66ff" stroke-width="2"/>
+  <text x="565" y="125" text-anchor="middle" font-family="monospace" font-size="12" fill="#e0e0e0">Agent D</text>
+  
+  <rect x="620" y="100" width="70" height="40" rx="5" fill="#2a2a3e" stroke="#ff66ff" stroke-width="2"/>
+  <text x="655" y="125" text-anchor="middle" font-family="monospace" font-size="12" fill="#e0e0e0">Agent E</text>
+  
+  <!-- Message Broker Container -->
+  <rect x="250" y="320" width="300" height="100" rx="10" fill="#1a1a2e" stroke="#9966ff" stroke-width="3" filter="url(#shadow)"/>
+  <text x="400" y="350" text-anchor="middle" font-family="monospace" font-size="16" fill="#cc99ff" font-weight="bold">Message Broker</text>
+  <text x="400" y="380" text-anchor="middle" font-family="monospace" font-size="14" fill="#b388ff">NATS/AMQP</text>
+  
+  <!-- Connection lines -->
+  <!-- From Process 1 agents to Message Broker -->
+  <path d="M 115 140 L 350 320" stroke="#66ff99" stroke-width="1.5" stroke-dasharray="3,2" opacity="0.7"/>
+  <path d="M 205 140 L 380 320" stroke="#66ff99" stroke-width="1.5" stroke-dasharray="3,2" opacity="0.7"/>
+  <path d="M 160 200 L 340 320" stroke="#66ff99" stroke-width="1.5" stroke-dasharray="3,2" opacity="0.7"/>
+  
+  <!-- From Process 2 agents to Message Broker -->
+  <path d="M 565 140 L 450 320" stroke="#ff66ff" stroke-width="1.5" stroke-dasharray="3,2" opacity="0.7"/>
+  <path d="M 655 140 L 480 320" stroke="#ff66ff" stroke-width="1.5" stroke-dasharray="3,2" opacity="0.7"/>
+  
+  <!-- Connection dots -->
+  <circle cx="350" cy="320" r="4" fill="#66ff99"/>
+  <circle cx="380" cy="320" r="4" fill="#66ff99"/>
+  <circle cx="340" cy="320" r="4" fill="#66ff99"/>
+  <circle cx="450" cy="320" r="4" fill="#ff66ff"/>
+  <circle cx="480" cy="320" r="4" fill="#ff66ff"/>
+</svg>

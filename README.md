@@ -1,64 +1,102 @@
 # Agent99
+<br/>
 
-**Under Development**  Initial release has no AI components - its just a generic client-server / request-response micro-services system using a peer-to-peer messaging broker and a centralized agent registry.  To keep up with the version changes review [The Changelog](./CHANGELOG.md) file.
+> [!CAUTION]
+> ## ⚠️ Under Development ⚠️
+> Initial release has no AI components - it's a generic client-server / request-response micro-services system using peer-to-peer messaging and centralized agent registry. Review [The Changelog](./CHANGELOG.md) for version changes.
+<br /><br />
 
-v0.0.4 has a [breaking_change.](docs/breaking_change_v0.0.4.md)
+<div align="center">
+  <table>
+    <tr>
+      <td width="40%" align="center" valign="top">
+        <img src="docs/assets/images/agent99_logo.png" alt="Agent99 - Ruby Framework for Intelligent Software Agents" width="1200">
+        <br /><br />
+        [Comprehensive Documentation Website](https://madbomber.github.io/agent99/)
+      </td>
+      <td width="60%" align="left" valign="top">
+        Agent99 is a Ruby-based framework for building and managing intelligent software agents in a distributed system. Like the clever Agent 99 from Get Smart, your agents will be smart, adaptable, and ready to tackle any challenge through seamless peer-to-peer communication and centralized discovery.
+        <br/><br/>
+        <h3>Key Features</h3>
+        <ul>
+            <li><strong>🌐 <a href="#agent-discovery">Agent Discovery</a></strong> - Find agents by capabilities</li>
+            <li><strong>📡 <a href="#flexible-communication">Peer-to-Peer Messaging</a></strong> - AMQP & NATS support</li>
+            <li><strong>🔄 <a href="#message-processing">Message Processing</a></strong> - Requests, responses & control</li>
+            <li><strong>📋 <a href="#registry-integration">Registry Integration</a></strong> - Centralized agent registry</li>
+            <li><strong>⚡ <a href="#control-actions">Control Actions</a></strong> - Pause, resume, update agents</li>
+            <li><strong>🔧 <a href="#agent-lifecycle-management">Lifecycle Management</a></strong> - Easy setup & teardown</li>
+            <li><strong>🚀 <a href="#multi-agent-processing">Multi-Agent Processing</a></strong> - Thread isolation support</li>
+            <li><strong>📊 <a href="#error-handling-and-logging">Error Handling & Logging</a></strong> - Built-in management</li>
+        </ul>
+      </td>
+    </tr>
+  </table>
+</div>
 
-Agent99 is a Ruby-based framework for building and managing AI agents in a distributed system. It provides a robust foundation for creating intelligent agents that can communicate, discover each other, and perform various tasks.
+## Table of Contents
 
-## Hype!
+* [Quick Start](#quick-start)
+* [Prerequisites](#prerequisites)
+* [Architecture Overview](#architecture-overview)
+* [Installation](#installation)
+* [Usage](#usage)
+* [Configuration](#configuration)
+* [Agent Lifecycle](#agent-lifecycle)
+* [Message Processing](#message-processing)
+* [Registry Integration](#registry-integration)
+* [Examples](#examples)
+* [Evolving Standards](#evolving-standards)
+* [Contributing](#contributing)
+* [Roadmap](#roadmap)
+* [License](#license)
 
-🌟 **Introducing Agent99**: Your Friendly Ruby Sidekick for Building Intelligent Software Agents! 🌟
+## Quick Start
 
-Do you ever miss the charm and wit of Barbara Feldon's iconic character from *Get Smart*? Just as Agent 99 was always ready to tackle mischief and save the day, **Agent99** is here to help you create your very own software agents that can communicate, collaborate, and conquer tasks in a smart and efficient way!
+Jump right in with our step-by-step guide:
 
-### Why Choose Agent99?
+1. **Prerequisites**: [Install message broker](#prerequisites) (NATS or RabbitMQ)
+2. **Install Agent99**: Add to Gemfile and bundle install
+3. **Start Registry**: Launch the central agent registry
+4. **Create Your First Agent**: Build a simple greeter agent
+5. **Test Communication**: Verify agents can discover and communicate
 
-🔍 **Independent Agents, Unified Communication**: Say goodbye to complex service orchestration! Agent99 empowers you to build micro-services that communicate seamlessly through a robust peer-to-peer messaging network. Each agent operates independently while working together like a well-oiled machine!
+📖 **Detailed walkthrough**: [Getting Started Guide](docs/getting-started/quick-start.md)
 
-🤖 **Smart Automation for the Modern Age**: In the era of AI, why settle for less? With Agent99, you can develop software agents that respond intelligently to incoming requests—just like a secret agent reacting to their next mission! Deploy your own digital spies to gather data, complete tasks, and more.
+## Prerequisites
 
-📦 **Quick Setup & Easy Integration**: Just like Agent 99’s quick thinking, our library is designed for rapid development. Get up and running in no time, whether you’re building a small project or an enterprise-level solution!
+Agent99 requires a message broker for inter-agent communication. Choose one:
 
+### NATS (Recommended)
+```bash
+# macOS
+brew install nats-server
 
-### Features that Make Agent99 a Must-Have:
+# Start NATS
+nats-server
+```
 
-- 🌐 **Peer-to-Peer Messaging**: Ensure that your agents can communicate effortlessly, just like Agent 99 and Max.
-- 🚀 **Agile Development**: Design and deploy agents at lightning speed, giving you the freedom to innovate.
-- 🔒 **Secure Communication**: Built with security in mind, because even our agents deserve to keep their secrets safe.
-- 📊 **Scalability**: Expand your network of agents as your needs grow—no mission is too big!
+### RabbitMQ  
+```bash
+# macOS
+brew install rabbitmq
 
-### Get Smart! Join the Revolution!
+# Start RabbitMQ
+brew services start rabbitmq
+```
 
-Whether you’re a seasoned Ruby developer or just getting started, Agent99 provides the tools you need to build your very own quirky, intelligent agents. Just like Agent 99, your agents will be clever, adaptable, and ready to tackle any challenge!
+📋 **More installation options**: [Installation Guide](docs/getting-started/installation.md)
 
-### How to Get Started:
+## Architecture Overview
 
-1. **Install**: Simply add Agent99 to your Gemfile and run `bundle install`.
-2. **Create an Agent**: Use our simple API to define and deploy your first agent.
-3. **Watch Them Work**: Sit back and relax as your agents spring into action, communicating with one another to accomplish tasks that would impress even the chief of CONTROL!
+![Agent99 Architecture](docs/assets/images/agent99-architecture.svg)
 
-### Spread the Word!
+Agent99 follows a distributed architecture with three core components:
 
-**Join the Agent99 community** on GitHub and share your experiences, tips, and feedback. Let’s build a world of smart agents together! And remember, just like Agent 99 always had Max’s back, we’ve got yours during your development journey.
+- **🏛️ Central Registry**: Service discovery and agent registration
+- **📡 Message Broker**: Peer-to-peer communication backbone (NATS/AMQP)
+- **🤖 Agents**: Independent services with specific capabilities
 
-🕵️‍♂️ **Become an Agent!** Dive into the world of Agent99 today: [GitHub Repository](#) 📖
-
-**Agent99** – Because when it comes to building software agents, it's all about being smart!
-
-... end of the Hype; now back to normal.
-
-## Features
-
-- Agent Lifecycle Management: Easy setup and teardown of agents
-- Message Processing: Handle requests, responses, and control messages
-- Agent Discovery: Find other agents based on capabilities
-- Flexible Communication: Support for both AMQP and NATS messaging systems
-- Registry Integration: Register and discover agents through a central registry
-- Error Handling and Logging: Built-in error management and logging capabilities
-- Control Actions: Pause, resume, update configuration, and request status of agents
-- Dynamic Agent Loading: Support for runtime loading and deployment of new agents
-- Multi-Agent Processing: Run multiple agents within the same process using thread isolation
+📚 **Deep dive**: [Architecture Documentation](docs/core-concepts/architecture.md)
 
 ## Installation
 
@@ -82,67 +120,151 @@ $ gem install agent99
 
 ## Usage
 
-Here's a basic example of how to create an AI agent:
+Create your first agent in three simple steps:
 
+### 1. Define Request Schema
 ```ruby
-require 'agent99'
-
 class GreeterRequest < SimpleJsonSchemaBuilder::Base
   object do
     object :header, schema: Agent99::HeaderSchema
     string :name, required: true, examples: ["World"]
   end
 end
+```
 
+### 2. Implement Agent Class
+```ruby
 class GreeterAgent < Agent99::Base
   def info
     {
-      name:             self.class.to_s,
-      type:             :server,
-      capabilities:     ['greeter', 'hello_world'],
-      request_schema:   GreeterRequest.schema,
-      # Uncomment and define these schemas as needed:
-      # response_schema:  {}, # Agent99::RESPONSE.schema
-      # control_schema:   {}, # Agent99::CONTROL.schema
-      # error_schema:     {}, # Agent99::ERROR.schema
+      name: self.class.to_s,
+      type: :server,
+      capabilities: ['greeter', 'hello_world'],
+      request_schema: GreeterRequest.schema
     }
   end
 
   def process_request(payload)
-    name      = payload.dig(:name)
-    response  = { result: "Hello, #{name}!" }
-    send_response(response)
+    name = payload.dig(:name)
+    send_response(result: "Hello, #{name}!")
   end
 end
+```
 
-# Create and run the agent
+### 3. Run Your Agent
+```ruby
+require 'agent99'
 agent = GreeterAgent.new
 agent.run
 ```
 
+🎯 **More examples**: [Usage Examples](docs/examples/)
+
 ## Configuration
 
-The framework can be configured through environment variables:
+Configure Agent99 through environment variables:
 
-- `AGENT99_REGISTRY_URL`: URL of the agent registry service (default: 'http://localhost:4567')
+### Core Settings
+- `AGENT99_REGISTRY_URL`: Registry service URL (default: `http://localhost:4567`)
+- `AGENT99_LOG_LEVEL`: Logging verbosity (default: `INFO`)
 
-Depending on which messaging client you are using, additional environment variables may be used.
+### NATS Configuration
+- `NATS_URL`: NATS server URL (default: `nats://localhost:4222`)
+- `NATS_USER`: Username for authentication
+- `NATS_PASS`: Password for authentication
 
-TODO: show envars for AMQP via Bunny
-TODO: show envars for NATS via nats0server
+### AMQP/RabbitMQ Configuration
+- `RABBITMQ_URL`: RabbitMQ server URL (default: `amqp://localhost:5672`)
+- `RABBITMQ_USER`: Username (default: `guest`)
+- `RABBITMQ_PASS`: Password (default: `guest`)
 
-See the examples folder for a default registry service implementation.
+📚 **Complete configuration guide**: [Configuration Documentation](docs/configuration/)
+
+## Agent Lifecycle
+
+![Agent Lifecycle](docs/assets/images/agent-lifecycle.svg)
+
+Agent99 manages the complete lifecycle of your agents:
+
+- **🎬 Initialization**: Agent registers with the central registry
+- **⚡ Running**: Agent processes requests and sends responses
+- **⏸️ Paused**: Agent temporarily stops processing (control action)
+- **🔄 Updated**: Agent receives new configuration or capabilities
+- **🛑 Shutdown**: Agent gracefully disconnects and cleans up
+
+🔄 **Detailed lifecycle management**: [Agent Lifecycle Guide](docs/core-concepts/agent-lifecycle.md)
+
+## Message Processing
+
+![Message Processing Flow](docs/assets/images/message-processing-flow.svg)
+
+Agent99 handles three types of messages:
+
+- **📨 Requests**: Incoming work for agents to process
+- **📤 Responses**: Results sent back to requesters
+- **🎛️ Control**: Management commands (pause, resume, update)
+
+Each message is validated, routed, and processed with full error handling and logging.
+
+⚙️ **Message processing details**: [Message Processing Guide](docs/framework-components/message-processing.md)
+
+## Registry Integration
+
+![Agent Registry Process](docs/assets/images/agent-registry-processes.svg)
+
+The central registry enables dynamic service discovery:
+
+1. **📝 Registration**: Agents announce their capabilities
+2. **🔍 Discovery**: Find agents by capability or name
+3. **📋 Management**: Monitor and control registered agents
+4. **🚪 Withdrawal**: Clean removal from registry
+
+The registry supports both HTTP REST API and direct client integration.
+
+🏛️ **Registry implementation**: [Registry Documentation](docs/framework-components/agent-registry.md)
+
+## Examples
+
+Explore real-world implementations:
+
+- **🚀 [Demo Runner](examples/run_demo.rb)**: Complete working system
+- **👋 [Greeter Agent](examples/greeter_agent.rb)**: Simple request-response
+- **🔄 [Multi-Agent System](examples/multi_agent/)**: Coordinated agents
+- **📊 [Monitoring Dashboard](examples/dashboard/)**: Agent status monitoring
+
+💡 **All examples**: [Examples Directory](docs/examples/)
+
+## Evolving Standards
+
+- [agntcy.org](https://agntcy.org) - Agency protocol initiative
+- [Agent2Agent](https://a2a-protocol.org/latest/) - Linux Foundation protocol
+
 
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/MadBomber/agent99.
 
-## Short-term Roadmap
+## Roadmap
 
-- In the example registry, replace the Array(Hash) datastore with sqlite3 with a vector table to support discovery using semantic search.
-- Treat the agent like a Tool w/r/t RAG for prompts.
-- Add AgentRequest schema to agent's info in the registry.
-- Add AgentResponse schema to define the `result` element in the response JSON payload
+### Short-term (v0.1.x)
+- **🔍 Enhanced Discovery**: Semantic search with vector database (SQLite + embeddings)
+- **📋 Schema Validation**: Complete request/response schema definitions
+- **🤖 AI Integration**: RAG-enabled agents using prompts as tools
+- **📊 Monitoring**: Built-in metrics and health checks
+
+### Medium-term (v0.2.x)
+- **🔐 Security**: Authentication and authorization framework
+- **⚡ Performance**: Connection pooling and message batching
+- **🌍 Multi-broker**: Support for multiple message brokers simultaneously
+- **📈 Scaling**: Load balancing and auto-scaling capabilities
+
+### Long-term (v1.0+)
+- **🧠 Intelligence**: Built-in ML/AI capabilities
+- **🔗 Interoperability**: Full Agent2Agent protocol compliance
+- **☁️ Cloud-native**: Kubernetes operators and cloud integrations
+
+⚠️ **Breaking changes**: [Migration Guide v0.0.4](docs/breaking_change_v0.0.4.md)
+
 
 ## License
 
