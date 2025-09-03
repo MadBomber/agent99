@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 500" style="background: transparent;">
+  <defs>
+    <marker id="arrow-prx" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
+      <path d="M0,0 L10,5 L0,10" fill="none" stroke="#66b3ff" stroke-width="1.5"/>
+    </marker>
+  </defs>
+  
+  <!-- Client -->
+  <rect x="50" y="40" width="100" height="40" rx="5" fill="#2a2a3e" stroke="#66b3ff" stroke-width="2"/>
+  <text x="100" y="65" text-anchor="middle" font-family="monospace" font-size="14" fill="#e0e0e0">Client</text>
+  <line x1="100" y1="80" x2="100" y2="460" stroke="#444" stroke-width="1" stroke-dasharray="5,5"/>
+  
+  <!-- Hybrid Agent -->
+  <rect x="280" y="40" width="120" height="40" rx="5" fill="#2a2a3e" stroke="#ff9966" stroke-width="2"/>
+  <text x="340" y="65" text-anchor="middle" font-family="monospace" font-size="14" fill="#e0e0e0">Hybrid Agent</text>
+  <line x1="340" y1="80" x2="340" y2="460" stroke="#444" stroke-width="1" stroke-dasharray="5,5"/>
+  
+  <!-- Server -->
+  <rect x="530" y="40" width="100" height="40" rx="5" fill="#2a2a3e" stroke="#66b3ff" stroke-width="2"/>
+  <text x="580" y="65" text-anchor="middle" font-family="monospace" font-size="14" fill="#e0e0e0">Server</text>
+  <line x1="580" y1="80" x2="580" y2="460" stroke="#444" stroke-width="1" stroke-dasharray="5,5"/>
+  
+  <!-- Request from Client -->
+  <path d="M 100 120 L 330 120" stroke="#66b3ff" stroke-width="2" marker-end="url(#arrow-prx)"/>
+  <text x="215" y="110" text-anchor="middle" font-family="monospace" font-size="11" fill="#99ccff">Request</text>
+  
+  <!-- Check cache/policy -->
+  <rect x="325" y="140" width="30" height="50" rx="3" fill="#3a3a5e" stroke="#ff9966" stroke-width="1"/>
+  <text x="370" y="160" font-family="monospace" font-size="10" fill="#ffcc99">Check cache/</text>
+  <text x="370" y="175" font-family="monospace" font-size="10" fill="#ffcc99">policy</text>
+  
+  <!-- Forward request -->
+  <path d="M 340 220 L 570 220" stroke="#66b3ff" stroke-width="2" marker-end="url(#arrow-prx)"/>
+  <text x="455" y="210" text-anchor="middle" font-family="monospace" font-size="11" fill="#99ccff">Forward request</text>
+  
+  <!-- Response from Server -->
+  <path d="M 580 280 L 350 280" stroke="#66ff99" stroke-width="2" marker-end="url(#arrow-prx)"/>
+  <text x="465" y="270" text-anchor="middle" font-family="monospace" font-size="11" fill="#99ffcc">Response</text>
+  
+  <!-- Update cache/stats -->
+  <rect x="325" y="300" width="30" height="50" rx="3" fill="#3a3a5e" stroke="#ff9966" stroke-width="1"/>
+  <text x="370" y="320" font-family="monospace" font-size="10" fill="#ffcc99">Update cache/</text>
+  <text x="370" y="335" font-family="monospace" font-size="10" fill="#ffcc99">stats</text>
+  
+  <!-- Forward response -->
+  <path d="M 340 380 L 110 380" stroke="#66ff99" stroke-width="2" marker-end="url(#arrow-prx)"/>
+  <text x="225" y="370" text-anchor="middle" font-family="monospace" font-size="11" fill="#99ffcc">Forward response</text>
+</svg>

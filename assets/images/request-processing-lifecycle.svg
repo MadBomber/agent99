@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 500" style="background: transparent;">
+  <defs>
+    <marker id="arrow-lc" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
+      <path d="M0,0 L10,5 L0,10" fill="none" stroke="#66b3ff" stroke-width="1.5"/>
+    </marker>
+  </defs>
+  
+  <!-- Message Broker -->
+  <rect x="50" y="40" width="140" height="40" rx="5" fill="#2a2a3e" stroke="#9966ff" stroke-width="2"/>
+  <text x="120" y="65" text-anchor="middle" font-family="monospace" font-size="14" fill="#e0e0e0">Message Broker</text>
+  <line x1="120" y1="80" x2="120" y2="460" stroke="#444" stroke-width="1" stroke-dasharray="5,5"/>
+  
+  <!-- Agent -->
+  <rect x="280" y="40" width="100" height="40" rx="5" fill="#2a2a3e" stroke="#66b3ff" stroke-width="2"/>
+  <text x="330" y="65" text-anchor="middle" font-family="monospace" font-size="14" fill="#e0e0e0">Agent</text>
+  <line x1="330" y1="80" x2="330" y2="460" stroke="#444" stroke-width="1" stroke-dasharray="5,5"/>
+  
+  <!-- process_request -->
+  <rect x="480" y="40" width="140" height="40" rx="5" fill="#2a2a3e" stroke="#66ff99" stroke-width="2"/>
+  <text x="550" y="65" text-anchor="middle" font-family="monospace" font-size="14" fill="#e0e0e0">process_request</text>
+  <line x1="550" y1="80" x2="550" y2="460" stroke="#444" stroke-width="1" stroke-dasharray="5,5"/>
+  
+  <!-- Incoming message -->
+  <path d="M 120 110 L 320 110" stroke="#9966ff" stroke-width="2" marker-end="url(#arrow-lc)"/>
+  <text x="220" y="100" text-anchor="middle" font-family="monospace" font-size="11" fill="#cc99ff">Incoming message</text>
+  
+  <!-- Validate headers -->
+  <rect x="315" y="130" width="30" height="35" rx="3" fill="#3a3a5e" stroke="#66b3ff" stroke-width="1"/>
+  <text x="360" y="152" font-family="monospace" font-size="10" fill="#99ccff">Validate headers</text>
+  
+  <!-- Parse payload -->
+  <rect x="315" y="180" width="30" height="35" rx="3" fill="#3a3a5e" stroke="#66b3ff" stroke-width="1"/>
+  <text x="360" y="202" font-family="monospace" font-size="10" fill="#99ccff">Parse payload</text>
+  
+  <!-- Call process_request -->
+  <path d="M 330 240 L 540 240" stroke="#66b3ff" stroke-width="2" marker-end="url(#arrow-lc)"/>
+  <text x="435" y="230" text-anchor="middle" font-family="monospace" font-size="11" fill="#99ccff">Call process_request(payload)</text>
+  
+  <!-- Business logic -->
+  <rect x="535" y="260" width="30" height="35" rx="3" fill="#3a3a5e" stroke="#66ff99" stroke-width="1"/>
+  <text x="580" y="282" font-family="monospace" font-size="10" fill="#99ffcc">Business logic</text>
+  
+  <!-- send_response/error -->
+  <path d="M 550 320 L 340 320" stroke="#66ff99" stroke-width="2" marker-end="url(#arrow-lc)"/>
+  <text x="445" y="310" text-anchor="middle" font-family="monospace" font-size="11" fill="#99ffcc">send_response() or send_error()</text>
+  
+  <!-- Outgoing response -->
+  <path d="M 330 380 L 130 380" stroke="#9966ff" stroke-width="2" marker-end="url(#arrow-lc)"/>
+  <text x="230" y="370" text-anchor="middle" font-family="monospace" font-size="11" fill="#cc99ff">Outgoing response</text>
+</svg>
