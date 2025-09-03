@@ -92,6 +92,40 @@ Note: To use the example_agent.rb, first run the AgentWatcher, then copy example
 
 ## Usage
 
+There are two ways to run the Agent99 examples:
+
+### 🚀 Automated Demo Runner (Recommended)
+
+The easiest way to run examples is with the comprehensive demo runner:
+
+```bash
+./run_demo.rb --list                    # List all available scenarios
+./run_demo.rb                          # Run default 'basic' scenario  
+./run_demo.rb -s basic                  # Basic Maxwell/Chief interaction
+./run_demo.rb -s control                # Control agent demonstration  
+./run_demo.rb -s watcher                # Dynamic agent loading demo
+./run_demo.rb -s security               # Security demonstration (KAOS spy)
+./run_demo.rb -s all                    # Run multiple scenarios in sequence
+./run_demo.rb -v -s basic               # Verbose output
+./run_demo.rb --help                    # Show all options
+```
+
+The demo runner automatically:
+- ✅ Checks dependencies (RabbitMQ, boxes command, etc.)
+- 🏗️ Starts infrastructure (registry service, RabbitMQ if available)
+- 🎬 Orchestrates multiple agents with proper timing
+- 🧹 Handles cleanup on exit or interrupt
+- 📊 Provides progress feedback and duration estimates
+
+**Available Scenarios:**
+- **basic** (~10s): Maxwell Agent86 and Chief interaction
+- **control** (~15s): Control agent managing other agents  
+- **watcher** (~20s): Agent watcher dynamically loading new agents
+- **security** (~10s): KAOS spy demonstration (educational security example)
+- **all** (~60s): Run multiple scenarios in sequence
+
+### 📋 Manual Setup (Original Method)
+
 From the examples directory you will need to start three different processes.  You will want to keep them all in the forgound so it would be best to start them in different terminal windows.
 
 Start the sample registry first: `./registry.rb`
@@ -105,6 +139,20 @@ The Chief also registers itself but no other agent can give the Chief missions. 
 But first the Chief asks the registry for the UUIDs of all agents who can handle a "greeter" request.  The Chief selects one of those agents and sends the agent a greet request.  The Chief then waits for a response to the request.  When it comes in, the chiefs displays the response and terminates.
 
 Run the chief a few times in a roll.  Some times the agent to whom the Chief issues his requests does not always respond the you would expect.
+
+### 🔧 Optional Dependencies
+
+For the best experience, install these optional dependencies:
+
+```bash
+# For message broker (recommended)
+brew install rabbitmq-server
+
+# For enhanced chief agent output
+brew install boxes
+```
+
+**Note:** The framework works without these dependencies using fallback implementations.
 
 ![Agent99 Framework Diagram](diagram.png)
 
