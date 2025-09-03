@@ -2,7 +2,7 @@
 
 require 'logger'
 require 'json'
-require 'json_schema'
+require 'simple_json_schema_builder'
 
 require_relative 'timestamp'
 require_relative 'registry_client'

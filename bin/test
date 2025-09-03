@@ -1,0 +1,212 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require 'optparse'
+require 'fileutils'
+
+class TestRunner
+  attr_reader :options
+
+  def initialize
+    @options = {
+      pattern: nil,
+      verbose: false,
+      categories: []
+    }
+    parse_options
+  end
+
+  def run
+    if options[:categories].empty? && options[:pattern].nil?
+      puts "Running all tests..."
+      run_all_tests
+    elsif options[:pattern]
+      puts "Running tests matching pattern: #{options[:pattern]}"
+      run_pattern_tests
+    else
+      options[:categories].each do |category|
+        puts "Running #{category} tests..."
+        run_category_tests(category)
+      end
+    end
+  end
+
+  private
+
+  def parse_options
+    OptionParser.new do |opts|
+      opts.banner = "Usage: bin/test [options]"
+      
+      opts.separator ""
+      opts.separator "Options:"
+
+      opts.on("-u", "--unit", "Run unit tests") do
+        options[:categories] << "unit"
+      end
+
+      opts.on("-i", "--integration", "Run integration tests") do
+        options[:categories] << "integration"
+      end
+
+      opts.on("-s", "--system", "Run system tests") do
+        options[:categories] << "system"
+      end
+
+      opts.on("-p", "--pattern PATTERN", "Run tests matching pattern") do |pattern|
+        options[:pattern] = pattern
+      end
+
+      opts.on("-v", "--verbose", "Verbose output") do
+        options[:verbose] = true
+      end
+
+      opts.on("-h", "--help", "Show this help") do
+        puts opts
+        exit
+      end
+    end.parse!
+  end
+
+  def run_all_tests
+    test_files = Dir.glob("test/**/*test*.rb").sort
+    run_test_files(test_files)
+  end
+
+  def run_category_tests(category)
+    case category
+    when "unit"
+      test_files = Dir.glob("test/agent99/*test*.rb").sort
+    when "integration" 
+      test_files = Dir.glob("test/integration/*test*.rb").sort
+    when "system"
+      test_files = Dir.glob("test/system/*test*.rb").sort
+    else
+      puts "Unknown category: #{category}"
+      return
+    end
+    
+    if test_files.empty?
+      puts "No tests found for category: #{category}"
+      return
+    end
+
+    run_test_files(test_files)
+  end
+
+  def run_pattern_tests
+    test_files = Dir.glob("test/**/*test*.rb").select do |file|
+      File.basename(file).include?(options[:pattern]) ||
+        File.read(file).include?(options[:pattern])
+    end
+
+    if test_files.empty?
+      puts "No tests found matching pattern: #{options[:pattern]}"
+      return
+    end
+
+    run_test_files(test_files)
+  end
+
+  def run_test_files(files)
+    puts "Found #{files.size} test file(s)"
+    puts
+
+    total_tests = 0
+    total_assertions = 0
+    total_failures = 0
+    total_errors = 0
+    total_skips = 0
+
+    files.each do |file|
+      puts "Running #{file}..." if options[:verbose]
+      
+      # Run the test file and capture output
+      result = run_single_test(file)
+      
+      if result[:success]
+        total_tests += result[:tests]
+        total_assertions += result[:assertions]
+        total_failures += result[:failures]
+        total_errors += result[:errors]
+        total_skips += result[:skips]
+        
+        puts "✓ #{File.basename(file)}" unless options[:verbose]
+      else
+        puts "✗ #{File.basename(file)}: #{result[:error]}"
+      end
+    end
+
+    puts
+    puts "=" * 60
+    puts "Test Summary:"
+    puts "  Files: #{files.size}"
+    puts "  Tests: #{total_tests}"
+    puts "  Assertions: #{total_assertions}"
+    puts "  Failures: #{total_failures}"
+    puts "  Errors: #{total_errors}"
+    puts "  Skips: #{total_skips}"
+    
+    if total_failures > 0 || total_errors > 0
+      puts
+      puts "❌ Tests FAILED"
+      exit 1
+    else
+      puts
+      puts "✅ All tests PASSED"
+    end
+  end
+
+  def run_single_test(file)
+    cmd = "ruby -I lib -I test #{file}"
+    output = `#{cmd} 2>&1`
+    success = $?.success?
+    
+    result = {
+      success: success,
+      tests: 0,
+      assertions: 0,
+      failures: 0,
+      errors: 0,
+      skips: 0,
+      error: nil
+    }
+    
+    if success
+      # Parse Minitest output to extract statistics
+      if output =~ /(\d+) runs?, (\d+) assertions?, (\d+) failures?, (\d+) errors?, (\d+) skips?/
+        result[:tests] = $1.to_i
+        result[:assertions] = $2.to_i
+        result[:failures] = $3.to_i
+        result[:errors] = $4.to_i
+        result[:skips] = $5.to_i
+      elsif output =~ /(\d+) runs?, (\d+) assertions?, (\d+) failures?, (\d+) errors?/
+        result[:tests] = $1.to_i
+        result[:assertions] = $2.to_i 
+        result[:failures] = $3.to_i
+        result[:errors] = $4.to_i
+      end
+    else
+      result[:error] = output.split("\n").first || "Unknown error"
+    end
+    
+    if options[:verbose]
+      puts output
+      puts "-" * 40
+    end
+    
+    result
+  end
+end
+
+if __FILE__ == $0
+  # Ensure we're in the right directory
+  project_root = File.expand_path('..', __dir__)
+  Dir.chdir(project_root)
+  
+  unless File.exist?('test/test_helper.rb')
+    puts "Error: test/test_helper.rb not found. Are you in the Agent99 project directory?"
+    exit 1
+  end
+
+  TestRunner.new.run
+end
