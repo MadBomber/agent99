@@ -16,13 +16,17 @@ class TestGemspec < Minitest::Test
   end
 
   def test_ships_every_lib_file
-    lib_files = Dir.glob("lib/**/*", base: ROOT).reject { File.directory?(File.join(ROOT, it)) }
+    lib_files = Dir.glob("lib/**/*", base: ROOT).reject { |f| File.directory?(File.join(ROOT, f)) }
 
     assert_empty lib_files - spec_files
   end
 
   def test_ships_readme_changelog_and_license
     assert_empty SHIPPED_ROOT_FILES - spec_files
+  end
+
+  def test_ships_type_signatures
+    assert_includes spec_files, "sig/ai_agent.rbs"
   end
 
   def test_ships_examples_because_they_are_on_the_load_path
