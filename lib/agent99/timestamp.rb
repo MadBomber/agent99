@@ -9,8 +9,8 @@ class Agent99::Timestamp
   #
   def initialize(now=Time.now)
     if now.is_a? Time
-      @ts   = self.class.utc2ts(now.utc)
-      @utc  = now.utc
+      @ts   = self.class.utc2ts(now)
+      @utc  = self.class.ts2utc(@ts)
     elsif now.is_a? Integer
       @utc  = self.class.ts2utc(now)
       @ts   = now

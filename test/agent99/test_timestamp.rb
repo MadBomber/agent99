@@ -15,10 +15,22 @@ class TestTimestamp < Minitest::Test
   end
 
   def test_round_trip_preserves_microseconds
-    now = Time.now.floor(6)
-    ts  = Agent99::Timestamp.new(now).to_i
+    stamp = Agent99::Timestamp.new(Time.now)
 
-    assert_equal now.utc, Agent99::Timestamp.new(ts).to_utc
+    assert_equal stamp.to_utc, Agent99::Timestamp.new(stamp.to_i).to_utc
+  end
+
+  def test_time_constructor_truncates_to_microseconds
+    stamp = Agent99::Timestamp.new(Time.at(1_700_000_000, 123_456_789, :nsec))
+
+    assert_equal Time.at(1_700_000_000, 123_456).utc, stamp.to_utc
+  end
+
+  def test_time_constructor_leaves_callers_time_alone
+    local = Time.new(2026, 11, 9, 6, 34, 56, "-06:00")
+    Agent99::Timestamp.new(local)
+
+    refute_predicate local, :utc?
   end
 
   def test_time_constructor_converts_local_time_to_utc
