@@ -1,10 +1,11 @@
 # frozen_string_literal: true
 
 require "minitest/autorun"
-require "rubygems"
 
 class TestGemspec < Minitest::Test
   ROOT = File.expand_path("../..", __dir__)
+  SHIPPED_DIRS = %w[lib/ sig/ examples/].freeze
+  SHIPPED_ROOT_FILES = %w[README.md CHANGELOG.md LICENSE].freeze
 
   def spec_files
     @spec_files ||= Gem::Specification.load(File.join(ROOT, "agent99.gemspec")).files
@@ -20,14 +21,11 @@ class TestGemspec < Minitest::Test
     assert_includes spec_files, "examples/example_agent.rb"
   end
 
-  def test_leaves_out_docs_and_development_files
-    unwanted = spec_files.select do |f|
-      f.start_with?("docs/", "test/", "bin/", ".") ||
-        f.end_with?(".db") ||
-        %w[Rakefile mkdocs.yml COMMITS.md DOCS.md agent99.gemspec].include?(f) ||
-        File.basename(f) == ".irbrc"
+  def test_ships_nothing_outside_the_allowlist
+    stray = spec_files.reject do |f|
+      f.start_with?(*SHIPPED_DIRS) || SHIPPED_ROOT_FILES.include?(f)
     end
 
-    assert_empty unwanted
+    assert_empty stray
   end
 end
