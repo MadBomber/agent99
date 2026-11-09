@@ -33,7 +33,7 @@ Gem::Specification.new do |spec|
 
   # Ship only what users need: the library, its signatures, and the
   # examples (they are on require_paths). Docs, plans, and dev files stay out.
-  shipped = Dir.glob(%w[lib/**/*.rb sig/**/*.rbs examples/**/* README.md CHANGELOG.md LICENSE], base: __dir__)
+  shipped = Dir.glob(%w[lib/**/* sig/**/*.rbs examples/**/* README.md CHANGELOG.md LICENSE], base: __dir__)
   spec.files = IO.popen(%w[git ls-files -z], chdir: __dir__, err: IO::NULL) do |ls|
     ls.readlines("\x0", chomp: true) & shipped
   end
