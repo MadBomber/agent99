@@ -18,8 +18,8 @@ class Agent99::Timestamp
   end
 
   def to_i    = @ts
-  def to_utc  = @utc ||= self.class.ts2utc(@ts)
-  alias utc to_utc
+  def to_utc  = self.class.ts2utc(@ts)
+  def utc     = to_utc
 
   class << self
     def utc2ts(now=Time.now)

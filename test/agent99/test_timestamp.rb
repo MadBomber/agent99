@@ -40,7 +40,8 @@ class TestTimestamp < Minitest::Test
 
     assert_equal KNOWN_TS, stamp.to_i
     assert_equal KNOWN_TIME, stamp.to_utc
-    assert_same stamp.to_utc, stamp.utc
+    assert_predicate stamp.to_utc, :utc?
+    assert_equal stamp.to_utc, stamp.utc
   end
 
   def test_integer_constructor
