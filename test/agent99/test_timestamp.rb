@@ -15,9 +15,10 @@ class TestTimestamp < Minitest::Test
   end
 
   def test_round_trip_preserves_microseconds
-    stamp = Agent99::Timestamp.new(Time.now)
+    now = Time.now.floor(6)
+    ts  = Agent99::Timestamp.new(now).to_i
 
-    assert_equal stamp.to_utc, Agent99::Timestamp.new(stamp.to_i).to_utc
+    assert_equal now.getutc, Agent99::Timestamp.new(ts).to_utc
   end
 
   def test_time_constructor_truncates_to_microseconds
@@ -39,6 +40,7 @@ class TestTimestamp < Minitest::Test
 
     assert_equal KNOWN_TS, stamp.to_i
     assert_equal KNOWN_TIME, stamp.to_utc
+    assert_same stamp.to_utc, stamp.utc
   end
 
   def test_integer_constructor
@@ -49,7 +51,8 @@ class TestTimestamp < Minitest::Test
   end
 
   def test_rejects_other_types
-    assert_raises(ArgumentError) { Agent99::Timestamp.new("2026-11-09") }
+    error = assert_raises(ArgumentError) { Agent99::Timestamp.new("2026-11-09") }
+    assert_match(/got String/, error.message)
     assert_raises(ArgumentError) { Agent99::Timestamp.new(1.5) }
   end
 end
