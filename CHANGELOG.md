@@ -4,7 +4,7 @@
 
 #### Fixed
 - Fixed `Agent99::Timestamp.ts2utc` decoding timestamps ~2.6 years early with garbled sub-second values; it now inverts `utc2ts` exactly, and `Timestamp.new(time)` no longer converts the caller's Time to UTC in place (#4)
-- `require "agent99"` no longer raises `LoadError` for `debug_me` on a clean install; the library no longer requires the development-only `debug_me` gem or includes `DebugMe` into `Object` (#3)
+- `require "agent99"` no longer fails on a clean install: the development-only `debug_me` gem is no longer required and `DebugMe` is no longer mixed into `Object` (#3)
 
 
 ## Released
