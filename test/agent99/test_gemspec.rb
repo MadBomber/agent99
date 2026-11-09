@@ -9,6 +9,7 @@ class TestGemspec < Minitest::Test
 
   # Skip the mock registry server test_helper starts for every test.
   def setup; end
+
   def teardown; end
 
   def spec_files
