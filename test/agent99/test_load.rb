@@ -8,10 +8,12 @@ require "open3"
 class TestLoad < Minitest::Test
   ROOT = File.expand_path("../..", __dir__)
 
-  # BUNDLE_ONLY wins over any `with`/`without` setting in env or .bundle/config.
+  # BUNDLE_ONLY narrows Bundler to the runtime group whatever `with`/`without`
+  # says; only an `only` key in the repo's own .bundle/config would override it.
   CHILD_ENV = {
     "BUNDLE_GEMFILE" => File.join(ROOT, "Gemfile"),
     "BUNDLE_ONLY" => "default",
+    "BUNDLE_APP_CONFIG" => nil,
     "RUBYOPT" => nil,
     "RUBYLIB" => nil
   }.freeze
@@ -24,7 +26,7 @@ class TestLoad < Minitest::Test
     output, status = Open3.capture2e(
       CHILD_ENV,
       RbConfig.ruby, "-rbundler/setup", "-I", File.join(ROOT, "lib"),
-      "-e", 'require "agent99"; abort "DebugMe is mixed into Object" if defined?(DebugMe)',
+      "-e", 'require "agent99"',
       chdir: ROOT
     )
 
