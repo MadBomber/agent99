@@ -14,12 +14,16 @@ class TestLoad < Minitest::Test
 
   def test_require_succeeds_without_development_dependencies
     output, status = Open3.capture2e(
-      { "BUNDLE_GEMFILE" => File.join(ROOT, "Gemfile"), "BUNDLE_WITHOUT" => "development" },
+      {
+        "BUNDLE_GEMFILE" => File.join(ROOT, "Gemfile"),
+        "BUNDLE_WITHOUT" => "development",
+        "BUNDLE_WITH" => nil, "RUBYOPT" => nil, "RUBYLIB" => nil
+      },
       RbConfig.ruby, "-rbundler/setup", "-I", File.join(ROOT, "lib"),
       "-e", 'require "agent99"',
       chdir: ROOT
     )
 
-    assert status.success?, "require \"agent99\" failed without development dependencies:\n#{output}"
+    assert status.success?, "child process failed loading agent99 with BUNDLE_WITHOUT=development:\n#{output}"
   end
 end
