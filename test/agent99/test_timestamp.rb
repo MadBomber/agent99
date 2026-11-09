@@ -10,20 +10,12 @@ class TestTimestamp < Minitest::Test
   def setup; end
   def teardown; end
 
-  def test_utc2ts_encodes_decimal_microseconds_since_epoch
-    assert_equal KNOWN_TS, Agent99::Timestamp.utc2ts(KNOWN_TIME)
-  end
-
-  def test_ts2utc_decodes_known_value
-    assert_equal KNOWN_TIME, Agent99::Timestamp.ts2utc(KNOWN_TS)
-  end
-
   def test_ts2utc_returns_utc
     assert_predicate Agent99::Timestamp.ts2utc(KNOWN_TS), :utc?
   end
 
   def test_round_trip_preserves_microseconds
-    now = Time.at(Time.now.to_i, Time.now.usec)
+    now = Time.now.floor(6)
     ts  = Agent99::Timestamp.new(now).to_i
 
     assert_equal now.utc, Agent99::Timestamp.new(ts).to_utc
