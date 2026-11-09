@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+- Fixed `Agent99::Timestamp.ts2utc` decoding timestamps ~2 years in the past; it now inverts `utc2ts` exactly (#4)
+
 
 ## Released
 

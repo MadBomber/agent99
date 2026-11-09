@@ -24,13 +24,12 @@ class Agent99::Timestamp
 
   class << self
     def utc2ts(now=Time.now.utc)
-      # NOTE: This is faster that bit shifting by the smallest of measures
       now.to_i * 1_000_000 + now.usec
     end
 
     def ts2utc(microseconds)
-      # NOTE: This is an order of magitude faster than not bit shifting
-      Time.at(microseconds >> 20, microseconds & 0xFFFFF).utc # Masking to get the last 20 bits  
+      # Inverse of utc2ts: split into whole seconds and leftover microseconds
+      Time.at(*microseconds.divmod(1_000_000)).utc
     end
   end
 end
