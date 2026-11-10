@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+- Fixed `Agent99::Timestamp.ts2utc` decoding timestamps ~2.6 years early with garbled sub-second values; it now inverts `utc2ts` exactly, and `Timestamp.new(time)` no longer converts the caller's Time to UTC in place (#4)
+
 
 ## Released
 
