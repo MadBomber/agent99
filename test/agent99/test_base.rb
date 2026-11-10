@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 require "test_helper"
-require "prism"
+require "open3"
+require "rbconfig"
 
 class TestBase < Minitest::Test
   def test_agent_creation_and_basic_properties
@@ -131,12 +132,13 @@ class TestBase < Minitest::Test
     agent.message_client = original_message_client
   end
 
-  def test_base_source_parses_without_warnings
+  def test_base_source_compiles_without_warnings
     base_rb = File.expand_path("../../lib/agent99/base.rb", __dir__)
 
-    warnings = Prism.parse_file(base_rb).warnings.map { |w| "#{w.location.start_line}: #{w.message}" }
+    _stdout, stderr, status = Open3.capture3({ "RUBYOPT" => nil }, RbConfig.ruby, "-wc", base_rb)
 
-    assert_empty warnings
+    assert status.success?, stderr
+    assert_empty stderr
   end
 
   def test_agent_info_method_requirement
