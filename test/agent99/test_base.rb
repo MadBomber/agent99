@@ -132,7 +132,7 @@ class TestBase < Minitest::Test
 
   def test_base_source_parses_without_warnings
     require "prism"
-    base_rb = File.expand_path("../../lib/agent99/base.rb", __dir__)
+    base_rb, _line = Object.const_source_location("Agent99::Base")
 
     warnings = Prism.parse_file(base_rb).warnings.map { "#{it.location.start_line}: #{it.message}" }
 
