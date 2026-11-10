@@ -33,37 +33,36 @@ class TestBase < Minitest::Test
     assert_equal %w[request response control], Agent99::Base::MESSAGE_TYPES
   end
 
-  def test_agent_responds_to_lifecycle_methods
-    agent = create_test_agent(name: "LifecycleAgent", capabilities: ["test"])
-    
-    assert_respond_to agent, :register
-    assert_respond_to agent, :withdraw
-    assert_respond_to agent, :fini
+
+  # These check the real Agent99 code, not the TestInfrastructure::TestAgent
+  # double, which adds public methods Base does not have. Each assertion
+  # fails naming what is missing. The message hooks are pinned as
+  # private because that is how Base defines them today.
+
+  def test_base_public_lifecycle_and_run_methods
+    assert_empty %i[register withdraw fini run] - Agent99::Base.public_instance_methods
   end
 
-  def test_agent_responds_to_message_methods
-    agent = create_test_agent(name: "MessageAgent", capabilities: ["test"])
-    
-    assert_respond_to agent, :receive_request
-    assert_respond_to agent, :receive_response
-    assert_respond_to agent, :receive_control
-    assert_respond_to agent, :send_request
-    assert_respond_to agent, :send_response
+
+  def test_base_private_message_methods
+    expected = %i[receive_request receive_response receive_control send_response send_control_response]
+    assert_empty expected - Agent99::Base.private_instance_methods
   end
 
-  def test_agent_responds_to_discovery_methods
-    agent = create_test_agent(name: "DiscoveryAgent", capabilities: ["test"])
-    
-    assert_respond_to agent, :discover_agents
-    assert_respond_to agent, :get_all_agents
+
+  def test_base_private_discovery_method
+    assert_empty %i[discover_agent] - Agent99::Base.private_instance_methods
   end
 
-  def test_agent_responds_to_header_methods
-    agent = create_test_agent(name: "HeaderAgent", capabilities: ["test"])
-    
-    assert_respond_to agent, :create_header
-    assert_respond_to agent, :validate_header
+
+  # Base's own attr_reader :header shadows HeaderManagement#header, so
+  # also check the module that defines the header helpers.
+  def test_base_public_header_methods
+    expected = %i[header to_uuid from_uuid event_uuid timestamp type return_address]
+    assert_empty expected - Agent99::Base.public_instance_methods
+    assert_empty expected - Agent99::HeaderManagement.public_instance_methods(false)
   end
+
 
   def test_error_handling_method
     agent = create_test_agent(name: "ErrorAgent", capabilities: ["test"])

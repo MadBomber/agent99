@@ -362,21 +362,6 @@ module TestInfrastructure
       registry_client.fetch_all_agents
     end
 
-    def create_header(type:, to_uuid:)
-      {
-        from_uuid: id,
-        to_uuid: to_uuid,
-        event_uuid: SecureRandom.uuid,
-        type: type,
-        timestamp: Time.now.to_i
-      }
-    end
-
-    def validate_header(header)
-      required_keys = [:from_uuid, :to_uuid, :event_uuid, :type, :timestamp]
-      required_keys.all? { |key| header.key?(key) }
-    end
-
     def clear_received_messages
       @received_requests.clear
       @received_responses.clear
