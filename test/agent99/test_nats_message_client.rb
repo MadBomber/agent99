@@ -26,7 +26,7 @@ class TestNatsMessageClient < Minitest::Test
     end
 
     assert_match "NATS Connection Error: #{connect_error.message}", error.message
-    assert_match "Failed to connect to NATS: #{connect_error.message}", log.string
+    assert_match "Failed to connect to NATS: #{connect_error.class}: #{connect_error.message}", log.string
     assert_same connect_error, error.cause
   end
 

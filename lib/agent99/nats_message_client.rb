@@ -94,7 +94,7 @@ class Agent99::NatsMessageClient
   def create_nats_connection
     NATS.connect
   rescue StandardError => e
-    logger.error "Failed to connect to NATS: #{e.message}"
+    logger.error "Failed to connect to NATS: #{e.class}: #{e.message}"
     raise "NATS Connection Error: #{e.message}. Please check your NATS server and try again."
   end
 end
