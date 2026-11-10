@@ -93,7 +93,7 @@ class Agent99::NatsMessageClient
   
   def create_nats_connection
     NATS.connect
-  rescue NATS::IO::ConnectError => e
+  rescue NATS::IO::ConnectError, NATS::IO::SocketTimeoutError, SystemCallError => e
     logger.error "Failed to connect to NATS: #{e.message}"
     raise "NATS Connection Error: #{e.message}. Please check your NATS server and try again."
   end
