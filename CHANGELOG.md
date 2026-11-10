@@ -9,6 +9,7 @@
   - Code that called `debug_me` without requiring it, relying on agent99 to mix it in, must now `require "debug_me"` and `include DebugMe` itself
 - Gem package now ships only lib, sig, examples, README, CHANGELOG, and LICENSE (about 1.5 MB down to 80 KB); added `documentation_uri` metadata (#5)
 - Removed the class-body `rescue` at the end of `Agent99::Base`; it only covered load-time evaluation of the class, would have raised `NoMethodError` if it ever ran, and made `ruby -w` warn about mismatched indentation (#8)
+- Fixed `Agent99::NatsMessageClient.new` raising `NoMethodError` instead of the NATS connection error when the NATS server is unreachable; the logger is now set before connecting, so the failure is logged and re-raised as intended (#6)
 
 
 ## Released

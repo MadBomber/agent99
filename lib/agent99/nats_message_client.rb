@@ -16,8 +16,8 @@ class Agent99::NatsMessageClient
   attr_accessor :logger, :nats
 
   def initialize(logger: Logger.new($stdout))
-    @nats = create_nats_connection
     @logger = logger
+    @nats = create_nats_connection
   end
 
   def setup(agent_id:, logger:)
