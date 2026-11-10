@@ -1,8 +1,5 @@
 # ./lib/agent99.rb
 
-require 'debug_me'
-include DebugMe
-
 require 'json'
 require 'simple_json_schema_builder'
 require 'securerandom'
