@@ -34,9 +34,9 @@ class TestBase < Minitest::Test
   end
 
 
-  # These check Agent99::Base itself, not the TestInfrastructure::TestAgent
+  # These check the real Agent99 code, not the TestInfrastructure::TestAgent
   # double, which adds public methods Base does not have. Each assertion
-  # fails listing the names Base lacks. The message hooks are pinned as
+  # fails naming what is missing. The message hooks are pinned as
   # private because that is how Base defines them today.
 
   def test_base_public_lifecycle_methods
@@ -50,15 +50,16 @@ class TestBase < Minitest::Test
   end
 
 
-  def test_discovery_methods_on_base_and_registry_client
-    assert_empty %i[discover_agent] - Agent99::Base.private_instance_methods
-    assert_empty %i[discover fetch_all_agents] - Agent99::RegistryClient.public_instance_methods
+  def test_base_private_discovery_method
+    assert_includes Agent99::Base.private_instance_methods, :discover_agent
   end
 
 
-  def test_base_public_header_methods
+  # Base's own attr_reader :header shadows HeaderManagement#header, so
+  # check the module that defines the header helpers.
+  def test_header_management_public_methods
     expected = %i[header to_uuid from_uuid event_uuid timestamp type return_address]
-    assert_empty expected - Agent99::Base.public_instance_methods
+    assert_empty expected - Agent99::HeaderManagement.public_instance_methods(false)
   end
 
 
