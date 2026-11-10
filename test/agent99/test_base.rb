@@ -39,7 +39,7 @@ class TestBase < Minitest::Test
   # fails naming what is missing. The message hooks are pinned as
   # private because that is how Base defines them today.
 
-  def test_base_public_lifecycle_methods
+  def test_base_public_lifecycle_and_run_methods
     assert_empty %i[register withdraw fini run] - Agent99::Base.public_instance_methods
   end
 
