@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "test_helper"
+require "prism"
 
 class TestBase < Minitest::Test
   def test_agent_creation_and_basic_properties
@@ -131,10 +132,9 @@ class TestBase < Minitest::Test
   end
 
   def test_base_source_parses_without_warnings
-    require "prism"
-    base_rb, _line = Object.const_source_location("Agent99::Base")
+    base_rb = File.expand_path("../../lib/agent99/base.rb", __dir__)
 
-    warnings = Prism.parse_file(base_rb).warnings.map { "#{it.location.start_line}: #{it.message}" }
+    warnings = Prism.parse_file(base_rb).warnings.map { |w| "#{w.location.start_line}: #{w.message}" }
 
     assert_empty warnings
   end
