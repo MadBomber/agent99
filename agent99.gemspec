@@ -29,14 +29,13 @@ Gem::Specification.new do |spec|
   spec.metadata["homepage_uri"]     = spec.homepage
   spec.metadata["source_code_uri"]  = "https://github.com/MadBomber/agent99"
   spec.metadata["changelog_uri"]    = "https://github.com/MadBomber/agent99/blob/main/CHANGELOG.md"
+  spec.metadata["documentation_uri"] = "https://madbomber.github.io/agent99/"
 
-  # Specify which files should be added to the gem when it is released.
-  gemspec = File.basename(__FILE__)
+  # Ship only what users need: the library, its signatures, and the
+  # examples (they are on require_paths). Docs, plans, and dev files stay out.
+  shipped = Dir.glob(%w[lib/**/* sig/**/*.rbs examples/**/* README.md CHANGELOG.md LICENSE], base: __dir__)
   spec.files = IO.popen(%w[git ls-files -z], chdir: __dir__, err: IO::NULL) do |ls|
-    ls.readlines("\x0", chomp: true).reject do |f|
-      (f == gemspec) ||
-        f.start_with?(*%w[bin/ test/ spec/ features/ .git appveyor Gemfile])
-    end
+    ls.readlines("\x0", chomp: true) & shipped
   end
 
   spec.require_paths  = ["lib", "examples"]

@@ -7,6 +7,7 @@
 - `test/agent99/test_base.rb` now checks method names and visibility on `Agent99::Base` and `Agent99::HeaderManagement` instead of the test double, which defines public methods Base does not have
 - **[BREAKING FIX]** `require "agent99"` no longer fails on a clean install: the development-only `debug_me` gem is no longer required and `DebugMe` is no longer mixed into `Object` (#3)
   - Code that called `debug_me` without requiring it, relying on agent99 to mix it in, must now `require "debug_me"` and `include DebugMe` itself
+- Gem package now ships only lib, sig, examples, README, CHANGELOG, and LICENSE (about 1.5 MB down to 80 KB); added `documentation_uri` metadata (#5)
 
 
 ## Released
