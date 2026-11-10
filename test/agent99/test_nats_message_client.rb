@@ -9,7 +9,7 @@ class TestNatsMessageClient < Minitest::Test
     assert_connect_failure_reported(Errno::ECONNREFUSED.new("connect(2)"))
   end
 
-  # nats-pure raises ConnectError for protocol, TLS, and auth failures
+  # nats-pure raises ConnectError for protocol and auth failures
   def test_initialize_logs_and_raises_when_nats_handshake_fails
     assert_connect_failure_reported(NATS::IO::ConnectError.new("INFO not received"))
   end
