@@ -130,13 +130,13 @@ class TestBase < Minitest::Test
     agent.message_client = original_message_client
   end
 
-  def test_rescue_clause_in_class
-    # The Base class has a rescue clause at the class level
-    # This test verifies that the class can be loaded without issues
-    
-    assert_kind_of Class, Agent99::Base
-    assert Agent99::Base.ancestors.include?(Agent99::AgentLifecycle)
-    assert Agent99::Base.ancestors.include?(Agent99::MessageProcessing)
+  def test_base_source_parses_without_warnings
+    require "prism"
+    base_rb = File.expand_path("../../lib/agent99/base.rb", __dir__)
+
+    warnings = Prism.parse_file(base_rb).warnings.map { "#{it.location.start_line}: #{it.message}" }
+
+    assert_empty warnings
   end
 
   def test_agent_info_method_requirement
