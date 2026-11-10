@@ -51,14 +51,15 @@ class TestBase < Minitest::Test
 
 
   def test_base_private_discovery_method
-    assert_includes Agent99::Base.private_instance_methods, :discover_agent
+    assert_empty %i[discover_agent] - Agent99::Base.private_instance_methods
   end
 
 
   # Base's own attr_reader :header shadows HeaderManagement#header, so
-  # check the module that defines the header helpers.
-  def test_header_management_public_methods
+  # also check the module that defines the header helpers.
+  def test_base_public_header_methods
     expected = %i[header to_uuid from_uuid event_uuid timestamp type return_address]
+    assert_empty expected - Agent99::Base.public_instance_methods
     assert_empty expected - Agent99::HeaderManagement.public_instance_methods(false)
   end
 

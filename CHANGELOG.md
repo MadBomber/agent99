@@ -3,7 +3,7 @@
 ## [Unreleased]
 
 - Fixed `Agent99::Timestamp.ts2utc` decoding timestamps ~2.6 years early with garbled sub-second values; it now inverts `utc2ts` exactly, and `Timestamp.new(time)` no longer converts the caller's Time to UTC in place (#4)
-- `test/agent99/test_base.rb` now checks the method names and visibility on `Agent99::Base` itself instead of the test double, which defines public methods Base does not have
+- `test/agent99/test_base.rb` now checks method names and visibility on `Agent99::Base` and `Agent99::HeaderManagement` instead of the test double, which defines public methods Base does not have
 
 
 ## Released
