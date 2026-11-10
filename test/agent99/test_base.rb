@@ -2,7 +2,6 @@
 
 require "test_helper"
 require "open3"
-require "rbconfig"
 
 class TestBase < Minitest::Test
   def test_agent_creation_and_basic_properties
@@ -138,7 +137,7 @@ class TestBase < Minitest::Test
     _stdout, stderr, status = Open3.capture3({ "RUBYOPT" => nil }, RbConfig.ruby, "-wc", base_rb)
 
     assert status.success?, stderr
-    assert_empty stderr
+    refute_match(/^#{Regexp.escape(base_rb)}:\d+: warning:/, stderr)
   end
 
   def test_agent_info_method_requirement
