@@ -32,4 +32,25 @@ class TestLoad < Minitest::Test
 
     assert status.success?, "child process failed loading agent99 with BUNDLE_ONLY=default:\n#{output}"
   end
+
+  # Issues #15 and #21: README step 1 uses Agent99::HeaderSchema right after `require "agent99"`.
+  # bundler/setup evaluates agent99.gemspec, which loads version.rb; undo that first
+  # so the child sees what a plain `gem install agent99` user sees.
+  def test_require_defines_version_and_header_schema
+    script = <<~RUBY
+      Agent99.send(:remove_const, :VERSION)
+      $LOADED_FEATURES.reject! { |f| f.end_with?("/agent99/version.rb") }
+      require "agent99"
+      p Agent99::VERSION, Agent99::HeaderSchema.schema
+    RUBY
+
+    output, status = Open3.capture2e(
+      CHILD_ENV,
+      RbConfig.ruby, "-rbundler/setup", "-I", File.join(ROOT, "lib"),
+      "-e", script,
+      chdir: ROOT
+    )
+
+    assert status.success?, "constant missing after require \"agent99\":\n#{output}"
+  end
 end

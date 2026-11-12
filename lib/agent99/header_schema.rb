@@ -1,4 +1,4 @@
-# experiments/agents/header_schema.rb
+# lib/agent99/header_schema.rb
 
 require 'simple_json_schema_builder'
 
