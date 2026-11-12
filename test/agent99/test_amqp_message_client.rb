@@ -61,6 +61,38 @@ class TestAmqpMessageClient < Minitest::Test
     assert_includes @message_client.queues.keys, agent_id
   end
 
+  def test_setup_uses_the_given_logger_afterwards
+    Agent99::AmqpMessageClient.class_eval do
+      alias_method :original_create_amqp_connection, :create_amqp_connection
+
+      def create_amqp_connection
+        mock_connection = Object.new
+        def mock_connection.create_channel
+          mock_channel = Object.new
+          def mock_channel.default_exchange = Object.new
+          def mock_channel.queue(name, **) = name
+          mock_channel
+        end
+        mock_connection
+      end
+    end
+
+    client_log = StringIO.new
+    agent_log  = StringIO.new
+    client = Agent99::AmqpMessageClient.new(logger: Logger.new(client_log))
+
+    client.setup(agent_id: "agent-1", logger: Logger.new(agent_log))
+    client.delete_queue(nil)
+
+    assert_includes agent_log.string, "Attempted to delete queue with nil name"
+    refute_includes client_log.string, "Attempted to delete queue with nil name"
+  ensure
+    Agent99::AmqpMessageClient.class_eval do
+      alias_method :create_amqp_connection, :original_create_amqp_connection
+      remove_method :original_create_amqp_connection
+    end
+  end
+
   def test_create_queue
     agent_id = SecureRandom.uuid
     queue = @message_client.create_queue(agent_id)

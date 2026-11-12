@@ -41,6 +41,7 @@ class Agent99::AmqpMessageClient
   end
 
   def setup(agent_id:, logger:)
+    @logger = logger
     queue = create_queue(agent_id)
     
     logger.info "Created queue for agent_id: #{agent_id}"
