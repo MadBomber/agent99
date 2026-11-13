@@ -35,13 +35,40 @@ class TestControlActions < Minitest::Test
     agent.send(:handle_shutdown)
   RUBY
 
+  # nats-pure runs handlers on a concurrent-ruby pool worker, which rescues
+  # Exception, so an exit raised on that thread never reaches the main thread.
+  SHUTDOWN_FROM_WORKER_SCRIPT = SHUTDOWN_SCRIPT.sub('agent.send(:handle_shutdown)', <<~'RUBY')
+    Thread.new do
+      agent.send(:handle_shutdown)
+    rescue Exception # rubocop:disable Lint/RescueException
+      nil
+    end
+    sleep 5
+    $stdout.puts 'still running'
+  RUBY
+
   def test_shutdown_cleans_up_once
-    lib = File.expand_path('../../lib', __dir__)
-    out, status = Open3.capture2e(RbConfig.ruby, '-I', lib, '-e', SHUTDOWN_SCRIPT)
+    out, status = run_script(SHUTDOWN_SCRIPT)
 
     assert status.success?, out
     assert_equal 1, out.scan('withdraw agent-1').size, out
     assert_equal 1, out.scan('delete_queue agent-1').size, out
     refute_includes out, 'fini called with a nil id'
+  end
+
+
+  def test_shutdown_from_worker_thread_ends_the_process
+    out, status = run_script(SHUTDOWN_FROM_WORKER_SCRIPT)
+
+    assert status.success?, out
+    refute_includes out, 'still running'
+    assert_equal 1, out.scan('withdraw agent-1').size, out
+  end
+
+  private
+
+  def run_script(script)
+    lib = File.expand_path('../../lib', __dir__)
+    Open3.capture2e(RbConfig.ruby, '-I', lib, '-e', script)
   end
 end
