@@ -23,13 +23,12 @@ Creates a new instance of the RegistryClient.
 #### register
 
 ```ruby
-def register(name:, capabilities:)
+def register(info:)
 ```
 
 Registers an agent with the Central Registry.
 
-- `name`: The name of the agent
-- `capabilities`: An array of capabilities the agent possesses
+- `info`: The agent's information Hash, as returned by its `info` method. It must include `name` and `capabilities` (an array of capabilities the agent possesses).
 - Returns: The UUID of the registered agent
 
 One of the first improvement that should be considered when registering a new agent is adding its JSON schema for its request and response messages.  This way there should be no question about how to interface with the agent.
@@ -78,7 +77,7 @@ The class includes several private methods for handling HTTP requests and respon
 
 ```ruby
 client = Agent99::RegistryClient.new
-agent_id = client.register(name: "TextAnalyzer", capabilities: ["sentiment analysis", "named entity recognition"])
+agent_id = client.register(info: { name: "TextAnalyzer", capabilities: ["sentiment analysis", "named entity recognition"] })
 matching_agents = client.discover(capability: "sentiment analysis")
 client.withdraw(agent_id)
 ```
