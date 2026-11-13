@@ -35,32 +35,6 @@ class TestAmqpMessageClient < Minitest::Test
     end
   end
 
-  def test_initialize_with_custom_config
-    custom_config = {
-      host: "127.0.0.1",  # Use localhost to avoid connection issues in tests
-      port: 5673,
-      user: "testuser",
-      pass: "testpass"
-    }
-    
-    # Use our mock message client instead of the real one to avoid connection issues
-    client = TestInfrastructure::MockAmqpMessageClient.new
-    
-    # Test that the mock client has the expected interface
-    assert_respond_to client, :setup
-    assert_respond_to client, :publish
-    assert_respond_to client, :delete_queue
-  end
-
-  def test_setup_creates_queue
-    agent_id = SecureRandom.uuid
-    queue = @message_client.setup(agent_id: agent_id, logger: @logger)
-    
-    refute_nil queue
-    assert_equal agent_id, queue.name
-    assert_includes @message_client.queues.keys, agent_id
-  end
-
   def test_setup_uses_the_given_logger_afterwards
     Agent99::AmqpMessageClient.class_eval do
       alias_method :original_create_amqp_connection, :create_amqp_connection
@@ -93,151 +67,223 @@ class TestAmqpMessageClient < Minitest::Test
     end
   end
 
+  # Bunny-free stand-ins for the connection, channel, exchange and queue the
+  # real client gets from create_amqp_connection.
+  class FakeExchange
+    attr_reader :published
+    attr_accessor :error
+
+    def initialize = @published = []
+
+    def publish(payload, routing_key:)
+      raise error if error
+
+      @published << [payload, routing_key]
+    end
+  end
+
+  class FakeQueue
+    attr_reader :name, :subscribe_options
+
+    def initialize(name) = @name = name
+    def deleted? = !!@deleted
+    def delete = @deleted = true
+
+    def subscribe(**options, &block)
+      @subscribe_options = options
+      @on_delivery = block
+    end
+
+    def deliver(body) = @on_delivery.call(nil, nil, body)
+  end
+
+  class FakeChannel
+    attr_reader :default_exchange, :declared, :queues
+    attr_accessor :passive_error
+
+    def initialize
+      @default_exchange = FakeExchange.new
+      @declared = []
+      @queues = {}
+    end
+
+    def queue(name, **options)
+      @declared << [name, options]
+      raise passive_error if options[:passive] && passive_error
+
+      @queues[name] ||= FakeQueue.new(name)
+    end
+  end
+
+  FakeConnection = Struct.new(:channel) do
+    def create_channel = channel
+  end
+
+  # A real AmqpMessageClient wired to a FakeChannel through its
+  # create_amqp_connection seam.
+  def build_client(config: Agent99::AmqpMessageClient::CONFIG, log: StringIO.new)
+    channel = FakeChannel.new
+    client = Agent99::AmqpMessageClient.allocate
+    client.define_singleton_method(:create_amqp_connection) { FakeConnection.new(channel) }
+    client.send(:initialize, config: config, logger: Logger.new(log))
+    [client, channel]
+  end
+
+  def message_to(to_uuid, type: "request")
+    {
+      header: { from_uuid: "sender", to_uuid: to_uuid, event_uuid: "event-1", type: type, timestamp: 1 },
+      payload: { action: "test" }
+    }
+  end
+
+  def test_initialize_with_custom_config
+    custom_config = { host: "10.0.0.1", port: 5673, user: "testuser", pass: "testpass" }
+    client, channel = build_client(config: custom_config)
+
+    assert_equal custom_config, client.instance_variable_get(:@config)
+    assert_same channel, client.channel
+    assert_same channel.default_exchange, client.exchange
+  end
+
+  def test_setup_creates_queue
+    client, channel = build_client
+    queue = client.setup(agent_id: "agent-1", logger: @logger)
+
+    assert_equal "agent-1", queue.name
+    assert_same channel.queues["agent-1"], queue
+  end
+
   def test_create_queue
-    agent_id = SecureRandom.uuid
-    queue = @message_client.create_queue(agent_id)
-    
-    refute_nil queue
-    assert_equal agent_id, queue.name
-    assert_includes @message_client.queues.keys, agent_id
+    client, channel = build_client
+    queue = client.create_queue("agent-2")
+
+    assert_equal "agent-2", queue.name
+    assert_equal ["agent-2"], channel.declared.map(&:first)
   end
 
   def test_publish_message_success
-    message = {
-      header: {
-        from_uuid: SecureRandom.uuid,
-        to_uuid: SecureRandom.uuid,
-        event_uuid: SecureRandom.uuid,
-        type: "request",
-        timestamp: Time.now.to_i
-      },
-      payload: { action: "test" }
-    }
-    
-    result = @message_client.publish(message)
-    
-    assert result[:success]
-    assert_equal "Message published successfully", result[:message]
-    assert_includes @message_client.published_messages, message
+    client, channel = build_client
+    message = message_to("agent-9")
+
+    result = client.publish(message)
+
+    assert_equal({ success: true, message: "Message published successfully" }, result)
+    payload, routing_key = channel.default_exchange.published.first
+    assert_equal "agent-9", routing_key
+    assert_equal message, JSON.parse(payload, symbolize_names: true)
   end
 
   def test_publish_message_with_invalid_json
-    # For our mock client, we'll simulate an error condition
-    # by testing that our mock handles malformed messages gracefully
-    invalid_message = {
-      header: {
-        to_uuid: nil,  # This would cause issues in a real implementation
-        type: "request"
-      },
-      payload: "not properly structured"
-    }
-    
-    # Our mock should still handle this gracefully
-    result = @message_client.publish(invalid_message)
-    
-    assert result[:success]  # Mock always succeeds, real implementation might fail
-    assert_includes @message_client.published_messages, invalid_message
+    client, channel = build_client
+    message = message_to("agent-9").merge(payload: { value: Float::NAN })
+
+    result = client.publish(message)
+
+    refute result[:success]
+    assert_match(/\AJSON conversion error: /, result[:error])
+    assert_empty channel.default_exchange.published
   end
 
-  def test_listen_for_messages_setup
-    agent_id = SecureRandom.uuid
-    queue = @message_client.setup(agent_id: agent_id, logger: @logger)
-    
-    request_handler = ->(msg) { msg }
-    response_handler = ->(msg) { msg }
-    control_handler = ->(msg) { msg }
-    
-    @message_client.listen_for_messages(
-      queue,
-      request_handler: request_handler,
-      response_handler: response_handler,
-      control_handler: control_handler
-    )
-    
-    # Verify handlers are set up
-    handlers = @message_client.instance_variable_get(:@message_handlers)[queue.name]
-    refute_nil handlers
-    assert_equal request_handler, handlers[:request]
-    assert_equal response_handler, handlers[:response]
-    assert_equal control_handler, handlers[:control]
+  def test_publish_on_closed_connection_reports_publishing_error
+    client, channel = build_client
+    channel.default_exchange.error = Bunny::ConnectionClosedError.new("frame")
+
+    result = client.publish(message_to("agent-9"))
+
+    refute result[:success]
+    assert_match(/\APublishing error: /, result[:error])
+  end
+
+  def test_publish_unexpected_error_is_reported
+    client, channel = build_client
+    channel.default_exchange.error = RuntimeError.new("boom")
+
+    result = client.publish(message_to("agent-9"))
+
+    assert_equal({ success: false, error: "Unexpected error: boom" }, result)
+  end
+
+  def test_listen_for_messages_subscribes_blocking
+    client, channel = build_client
+    queue = channel.queue("agent-1")
+    noop = ->(_msg) {}
+
+    client.listen_for_messages(queue, request_handler: noop, response_handler: noop, control_handler: noop)
+
+    assert_equal({ block: true }, queue.subscribe_options)
   end
 
   def test_message_routing
-    agent_id = SecureRandom.uuid
-    queue = @message_client.setup(agent_id: agent_id, logger: @logger)
-    
-    received_requests = []
-    received_responses = []
-    received_controls = []
-    
-    request_handler = ->(msg) { received_requests << msg }
-    response_handler = ->(msg) { received_responses << msg }
-    control_handler = ->(msg) { received_controls << msg }
-    
-    @message_client.listen_for_messages(
+    client, channel = build_client
+    queue = channel.queue("agent-1")
+    received = Hash.new { |hash, key| hash[key] = [] }
+
+    client.listen_for_messages(
       queue,
-      request_handler: request_handler,
-      response_handler: response_handler,
-      control_handler: control_handler
+      request_handler: ->(msg) { received[:request] << msg },
+      response_handler: ->(msg) { received[:response] << msg },
+      control_handler: ->(msg) { received[:control] << msg }
     )
-    
-    # Test request message routing
-    request_message = {
-      header: { type: "request" },
-      payload: { action: "test_request" }
-    }
-    
-    @message_client.deliver_message_to_queue(agent_id, request_message)
-    assert_equal 1, received_requests.size
-    assert_equal request_message, received_requests.first
-    
-    # Test response message routing
-    response_message = {
-      header: { type: "response" },
-      payload: { result: "test_response" }
-    }
-    
-    @message_client.deliver_message_to_queue(agent_id, response_message)
-    assert_equal 1, received_responses.size
-    assert_equal response_message, received_responses.first
-    
-    # Test control message routing
-    control_message = {
-      header: { type: "control" },
-      payload: { command: "test_control" }
-    }
-    
-    @message_client.deliver_message_to_queue(agent_id, control_message)
-    assert_equal 1, received_controls.size
-    assert_equal control_message, received_controls.first
+
+    %w[request response control].each do |type|
+      queue.deliver(JSON.generate(message_to("agent-1", type: type)))
+    end
+
+    %i[request response control].each do |type|
+      assert_equal [message_to("agent-1", type: type.to_s)], received[type], "#{type} handler"
+    end
+  end
+
+  def test_message_with_unknown_type_raises
+    client, channel = build_client
+    queue = channel.queue("agent-1")
+    noop = ->(_msg) { flunk "no handler should run" }
+    client.listen_for_messages(queue, request_handler: noop, response_handler: noop, control_handler: noop)
+
+    error = assert_raises(NotImplementedError) do
+      queue.deliver(JSON.generate(message_to("agent-1", type: "bogus")))
+    end
+    assert_equal "Unsupported message type: bogus", error.message
   end
 
   def test_delete_queue
-    agent_id = SecureRandom.uuid
-    queue = @message_client.create_queue(agent_id)
-    
-    # Verify queue exists
-    assert_includes @message_client.queues.keys, agent_id
-    
-    # Delete queue
-    @message_client.delete_queue(agent_id)
-    
-    # Verify queue is gone
-    refute_includes @message_client.queues.keys, agent_id
+    client, channel = build_client
+    queue = channel.queue("agent-1")
+
+    client.delete_queue("agent-1")
+
+    assert queue.deleted?
+    assert_equal ["agent-1", { passive: true }], channel.declared.last
   end
 
   def test_delete_nonexistent_queue
-    # Should handle gracefully
-    @message_client.delete_queue("nonexistent")
-    
-    # No exception should be raised
+    log = StringIO.new
+    client, channel = build_client(log: log)
+    channel.passive_error = Bunny::NotFound.new("NOT_FOUND", nil, nil)
+
+    client.delete_queue("nonexistent")
+
+    assert_includes log.string, "Queue nonexistent not found"
+  end
+
+  def test_delete_queue_unexpected_error_is_logged
+    log = StringIO.new
+    client, channel = build_client(log: log)
+    channel.passive_error = RuntimeError.new("boom")
+
+    client.delete_queue("agent-1")
+
+    assert_includes log.string, "Error deleting queue agent-1: boom"
   end
 
   def test_delete_queue_with_nil_name
-    # Should handle gracefully and log warning
-    @message_client.delete_queue(nil)
-    
-    # No exception should be raised
+    log = StringIO.new
+    client, channel = build_client(log: log)
+
+    client.delete_queue(nil)
+
+    assert_empty channel.declared
+    assert_includes log.string, "Attempted to delete queue with nil name"
   end
 
   def test_singleton_instance
