@@ -35,6 +35,28 @@ class TestBase < Minitest::Test
   end
 
 
+  def test_get_keeps_explicit_false_nil_and_zero_from_the_request
+    klass = Class.new(Agent99::Base) do
+      const_set(:REQUEST_SCHEMA, {
+        properties: {
+          loud:  { examples: [true] },
+          count: { examples: [3] },
+          note:  { examples: ["hi"] }
+        }
+      })
+    end
+    agent = klass.allocate
+    agent.instance_variable_set(:@payload, { loud: false, count: 0, note: nil })
+
+    assert_equal false, agent.send(:get, :loud)
+    assert_equal 0, agent.send(:get, :count)
+    assert_nil agent.send(:get, :note)
+
+    agent.instance_variable_set(:@payload, {})
+    assert_equal true, agent.send(:get, :loud)
+  end
+
+
   # These check the real Agent99 code, not the TestInfrastructure::TestAgent
   # double, which adds public methods Base does not have. Each assertion
   # fails naming what is missing. The message hooks are pinned as
