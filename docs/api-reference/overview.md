@@ -97,7 +97,7 @@ To implement a custom registry client, create a class that implements these meth
 
 ### Required Methods
 
-#### `initialize(base_url: ENV.fetch('REGISTRY_BASE_URL', 'http://localhost:4567'), logger: Logger.new($stdout))`
+#### `initialize(base_url: ENV.fetch('AGENT99_REGISTRY_URL', 'http://localhost:4567'), logger: Logger.new($stdout))`
 Sets up the registry connection.
 
 #### `register(name:, capabilities:)`
