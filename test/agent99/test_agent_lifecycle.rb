@@ -188,25 +188,17 @@ class TestAgentLifecycle < Minitest::Test
       logger: @logger
     )
     
-    error_handled = false
-    
-    agent_class = Class.new(TestInfrastructure::TestAgent) do
-      def handle_error(message, error)
-        @error_handled = true
-        super
-      end
+    # Registration fails, so the agent logs it and exits instead of running
+    # with a nil id and a queue nobody can address.
+    assert_raises(SystemExit) do
+      TestInfrastructure::TestAgent.new(
+        name: "FailingAgent",
+        capabilities: ["test"],
+        registry_client: failing_registry,
+        message_client: @message_client,
+        logger: @logger
+      )
     end
-    
-    # This will attempt to register and should handle the error gracefully
-    agent = agent_class.new(
-      name: "FailingAgent",
-      capabilities: ["test"],
-      registry_client: failing_registry,
-      message_client: @message_client,
-      logger: @logger
-    )
-    
-    # Agent should still be created but without a valid ID
-    assert_nil agent.id
+    assert_empty @message_client.queues
   end
 end

@@ -60,7 +60,7 @@ class MyFirstAgent < Agent99::Base
     }
   end
 
-  def process_request(payload)
+  def receive_request
     name = payload.dig(:name) || "World"
     logger.info "Processing greeting request for: #{name}"
 

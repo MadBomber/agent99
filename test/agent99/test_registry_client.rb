@@ -14,6 +14,28 @@ class TestRegistryClient < Minitest::Test
     assert_equal custom_url, client.instance_variable_get(:@base_url)
   end
 
+
+  def test_base_url_path_prefixes_requests
+    seen_path = nil
+    @registry_server.server.mount_proc('/registry') do |req, res|
+      seen_path = req.path
+      res.status = 201
+      res.body = { uuid: 'prefixed-id' }.to_json
+    end
+    client = Agent99::RegistryClient.new(base_url: "#{registry_url}/registry/", logger: @logger)
+
+    assert_equal 'prefixed-id', client.register(info: { name: 'TestAgent' })
+    assert_equal '/registry/register', seen_path
+  end
+
+
+  def test_base_url_scheme_configures_client
+    client = Agent99::RegistryClient.new(base_url: 'https://registry.example', logger: @logger)
+
+    assert_predicate client.instance_variable_get(:@http_client), :use_ssl?
+  end
+
+
   def test_register_agent
     client = Agent99::RegistryClient.new(base_url: registry_url, logger: @logger)
     
