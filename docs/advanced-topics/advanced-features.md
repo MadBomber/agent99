@@ -83,8 +83,11 @@ Using AgentWatcher to manage multiple agents:
 # Start the watcher
 watcher = AgentWatcher.new
 watcher.run
+```
 
-# Deploy multiple agents
+Then deploy agents by copying them into the watched directory:
+
+```bash
 cp agent1.rb agents/
 cp agent2.rb agents/
 cp agent3.rb agents/

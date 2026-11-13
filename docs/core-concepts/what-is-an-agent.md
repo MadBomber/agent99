@@ -255,6 +255,7 @@ class MaxwellAgent86 < Agent99::Base
       # ...
     }
   end
+end
 ```
 
 When an agent subclass defines a **:request_schema** in its `info`, the message processing of the **Agent99::Base** validates all incoming requests against the schema. If there are errors, those errors are returned to the sender without presenting the request message to the agent's custom **receive_request** method.
