@@ -38,18 +38,6 @@ Rake::TestTask.new(:test_system) do |t|
   t.verbose = true
 end
 
-desc "Run tests with coverage reporting (requires simplecov gem)"
-task :test_coverage do
-  ENV["COVERAGE"] = "true"
-  Rake::Task[:test].invoke
-end
-
-desc "Run tests in verbose mode"
-task :test_verbose do
-  ENV["VERBOSE"] = "true"
-  Rake::Task[:test].invoke
-end
-
 desc "Show test statistics"
 task :test_stats do
   unit_tests = Dir.glob("test/agent99/*test*.rb").size
