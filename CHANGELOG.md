@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 #### Fixed
+- Fixed AMQP agent queues never expiring: `create_queue` passed `expires:`, which Bunny silently ignores; it now declares the RabbitMQ `x-expires` argument, and the messaging docs no longer claim messages survive a broker restart or carry a TTL (#76)
 - An agent now replies `{error: "Unknown control action: <name>"}` to a control message whose action it has no handler for; it only logged a warning and sent nothing, leaving the controller waiting (#75)
 - Fixed a dead "documentation" link in `docs/core-concepts/what-is-an-agent.md`; it pointed at a `docs/README.md` that no longer exists and now links to the docs home (#74)
 - Getting-started and example docs now query the example registry at `/` and `/discover?capability=...`; they used `/agents` and `/agents/discover/...`, which return 404 (#73)

@@ -321,4 +321,23 @@ class TestAmqpMessageClient < Minitest::Test
     # Clean up singleton instance for other tests
     Agent99::AmqpMessageClient.instance_variable_set(:@instance, nil)
   end
+
+  # Issue #76: Bunny has no :expires option; the TTL must go to RabbitMQ as
+  # the x-expires queue argument.
+  def test_create_queue_declares_x_expires_argument
+    declared = []
+    channel = Object.new
+    channel.define_singleton_method(:default_exchange) { Object.new }
+    channel.define_singleton_method(:queue) { |name, **options| declared << [name, options] }
+    connection = Object.new
+    connection.define_singleton_method(:create_channel) { channel }
+
+    client = Agent99::AmqpMessageClient.allocate
+    client.define_singleton_method(:create_amqp_connection) { connection }
+    client.send(:initialize, logger: @logger)
+
+    client.create_queue("agent-1")
+
+    assert_equal [["agent-1", { arguments: { "x-expires" => Agent99::AmqpMessageClient::QUEUE_TTL } }]], declared
+  end
 end
