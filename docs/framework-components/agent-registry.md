@@ -2,13 +2,13 @@
 
 ## Agent Registry Processes
 
-In the Agent99 framework, an instance of the `Agent99::RegistryClient` class is responsible for registering agent capabilities with a centralized registry.  `examples/registry.rb` is a Sinatra web-app example of what a centralized regristry service should be. 
+In the Agent99 framework, an instance of the `Agent99::RegistryClient` class is responsible for registering agent capabilities with a centralized registry.  `examples/registry.rb` is a Sinatra web-app example of what a centralized registry service should be. 
 
 The registration process is transparent to a new instance of an `Agent99::Base` class.
 
 First thing: start the registry.rb Sinatra app and the peer-to-peer messaging network.  The default is the `AmqpMessageClient` class.
 
-If you do not have the RabbitMQ server installed on your Macthen then grab it using `brew install rabbitmq-server` and while you are installing software do `brew install boxes` as well since the `chief_agent.rb` example uses that little CLI tool to highlight some text in the terminal.
+If you do not have the RabbitMQ server installed on your Mac then grab it using `brew install rabbitmq-server` and while you are installing software do `brew install boxes` as well since the `chief_agent.rb` example uses that little CLI tool to highlight some text in the terminal.
 
 ```bash
 git clone ssh://git@github.com/MadBomber/agent99
@@ -64,13 +64,13 @@ my_agent.id
   #=> "9e735449-582f-46e2-8f11-371e584d0f08"
 ```
 
-The image below shows how the `Agent99::Base` class uses dependency injection in its constructor method to bring in an instance of the `RegristryClient` class to provide an interface to the centralized regristery service.
+The image below shows how the `Agent99::Base` class uses dependency injection in its constructor method to bring in an instance of the `RegistryClient` class to provide an interface to the centralized registry service.
 
 ![Agent Register, Discover and Withdraw Processes](../assets/images/agent-registry-processes.svg)
 
 The above image also show the other services provided via the RegistryClient class.
 
-The example centralized regristry service provides three processes:
+The example centralized registry service provides three processes:
 
 1. Registration Process:
      - MyAgent initializes the RegistryClient
@@ -92,14 +92,14 @@ Like the register process, the withdraw process is also transparent.  Its execut
 
 The discover process is primary business logic for your agent class.  You must call the `@registry_client.discover(capability: "whatever")` method directly within the agents process.
 
-For example suppose your agent needs to work with other agents that provide the "pne", "twp" and "three" services.  That is 3 outside agents.  You can do this in the `init` method for you agent.
+For example suppose your agent needs to work with other agents that provide the "one", "two" and "three" services.  That is 3 outside agents.  You can do this in the `init` method for you agent.
 
 ```ruby
 class MyAgent < Agent99::Base
   def init
-    @agnet_1 = discover_agent(capability: 'one')
-    @agnet_2 = discover_agent(capability: 'two')
-    @agnet_3 = discover_agent(capability: 'three')
+    @agent_1 = discover_agent(capability: 'one')
+    @agent_2 = discover_agent(capability: 'two')
+    @agent_3 = discover_agent(capability: 'three')
   end
 end
 ```

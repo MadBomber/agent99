@@ -74,7 +74,7 @@ The default `fini` method does:
 - Withdrawing from the registry
 - Closing message queue connections
 
-If your agent requires additional cleanup or state presistence you should implement a custom `fini` method to do things like:
+If your agent requires additional cleanup or state persistence you should implement a custom `fini` method to do things like:
 - Cleaning up resources
 - Saving state (if required)
 - Releasing system resources
