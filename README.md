@@ -19,14 +19,14 @@
         <br/><br/>
         <h3>Key Features</h3>
         <ul>
-            <li><strong>🌐 <a href="#agent-discovery">Agent Discovery</a></strong> - Find agents by capabilities</li>
-            <li><strong>📡 <a href="#flexible-communication">Peer-to-Peer Messaging</a></strong> - AMQP & NATS support</li>
+            <li><strong>🌐 <a href="docs/framework-components/agent-discovery.md">Agent Discovery</a></strong> - Find agents by capabilities</li>
+            <li><strong>📡 <a href="docs/framework-components/messaging-system.md">Peer-to-Peer Messaging</a></strong> - AMQP & NATS support</li>
             <li><strong>🔄 <a href="#message-processing">Message Processing</a></strong> - Requests, responses & control</li>
             <li><strong>📋 <a href="#registry-integration">Registry Integration</a></strong> - Centralized agent registry</li>
-            <li><strong>⚡ <a href="#control-actions">Control Actions</a></strong> - Pause, resume, update agents</li>
-            <li><strong>🔧 <a href="#agent-lifecycle-management">Lifecycle Management</a></strong> - Easy setup & teardown</li>
-            <li><strong>🚀 <a href="#multi-agent-processing">Multi-Agent Processing</a></strong> - Thread isolation support</li>
-            <li><strong>📊 <a href="#error-handling-and-logging">Error Handling & Logging</a></strong> - Built-in management</li>
+            <li><strong>⚡ <a href="docs/advanced-topics/control-actions.md">Control Actions</a></strong> - Pause, resume, update agents</li>
+            <li><strong>🔧 <a href="#agent-lifecycle">Lifecycle Management</a></strong> - Easy setup & teardown</li>
+            <li><strong>🚀 <a href="docs/advanced-topics/multi-agent-processing.md">Multi-Agent Processing</a></strong> - Thread isolation support</li>
+            <li><strong>📊 <a href="docs/agent-development/error-handling-and-logging.md">Error Handling & Logging</a></strong> - Built-in management</li>
         </ul>
       </td>
     </tr>

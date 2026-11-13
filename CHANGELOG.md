@@ -18,6 +18,7 @@
 - Fixed `Agent99::NatsMessageClient.new` when no NATS server can be reached: it raised `NoMethodError` (logger not yet set) or let the raw socket error escape unlogged; it now logs the failure and raises the intended "NATS Connection Error" message, with the original error as its `cause` (#6)
 - Fixed `Agent99::NatsMessageClient.new` when it cannot connect to NATS: it raised `NoMethodError` (logger not yet set) or let the raw socket error escape unlogged; any connect failure is now logged and raised as the intended "NATS Connection Error" message, with the original error as its `cause` (#6)
 - `require "agent99"` now loads `Agent99::VERSION` and `Agent99::HeaderSchema`; README step 1 raised `NameError` without an extra require (#15, #21)
+- Fixed six README "Key Features" links that pointed at anchors that do not exist; they now go to the matching README section or `docs/` page (#31)
 - Fixed `bin/console` requiring the old `ai_agent` name, which raised `LoadError`; it now requires `agent99` (#30)
 - Declared `logger` as a runtime dependency; the library requires it, and on Ruby 4.0 it is a bundled gem that was only present through `sinatra` (#25)
 - README Quick Start, `docs/getting-started/quick-start.md`, and `docs/getting-started/basic-example.md` now override the `receive_request` hook instead of the private `process_request` dispatcher, which left `payload` unset so the first agent could not respond (#24)
