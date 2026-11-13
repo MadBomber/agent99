@@ -201,4 +201,69 @@ class TestAgentLifecycle < Minitest::Test
     end
     assert_empty @message_client.queues
   end
+
+  # Stands in for RegistryClient; registration always succeeds.
+  class StubRegistry
+    attr_accessor :logger
+
+    def register(info:) = 'agent-1'
+    def withdraw(_id) = nil
+  end
+
+  # Stands in for a message client; no broker.
+  class StubMessenger
+    def setup(agent_id:, logger:) = agent_id
+    def delete_queue(_name) = nil
+  end
+
+  def build_stubbed_agent(klass)
+    klass.new(registry_client: StubRegistry.new,
+              message_client: StubMessenger.new,
+              logger: @logger)
+  rescue SystemExit => e
+    flunk "agent exited during startup (status #{e.status})"
+  end
+
+  def test_private_info_is_found_at_startup
+    klass = Class.new(Agent99::Base) do
+      private
+
+      def info = { name: 'PrivateInfoAgent', capabilities: ['test'] }
+    end
+
+    agent = build_stubbed_agent(klass)
+
+    assert_equal 'agent-1', agent.id
+  end
+
+  def test_private_init_is_called_at_startup
+    klass = Class.new(Agent99::Base) do
+      attr_reader :init_ran
+
+      def info = { name: 'PrivateInitAgent', capabilities: ['test'] }
+
+      private
+
+      def init = @init_ran = true
+    end
+
+    agent = build_stubbed_agent(klass)
+
+    assert agent.init_ran
+  end
+
+  def test_string_info_keys_are_not_reported_missing
+    klass = Class.new(Agent99::Base) do
+      def info = { 'name' => 'StringKeyAgent', 'capabilities' => ['test'] }
+    end
+    agent = klass.allocate
+    messages = []
+    logger = Logger.new(nil)
+    logger.define_singleton_method(:error) { |message| messages << message }
+    agent.instance_variable_set(:@logger, logger)
+
+    assert_raises(SystemExit) { agent.send(:validate_info_keys) }
+    refute_match(/missing/, messages.join)
+    assert_match(/Symbol/, messages.join)
+  end
 end

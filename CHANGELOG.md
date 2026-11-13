@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 #### Fixed
+- Agents may now define `info` and `init` as private methods: startup exited with "must implement the info method" for a private `info` and silently skipped a private `init`; an `info` hash with String keys now gets a "must use Symbol keys" error instead of a report that present keys are missing (#61)
 - Added tests for the pause, resume, update_config and status control handlers and the handler-error reply; the suite's test agent replaced the library's control path, so none of them were exercised (#60)
 - Docs no longer present 0.0.4 as the current version: the overview points at RubyGems and the CHANGELOG instead of a hard-coded number, and "Recent Updates" gains a 0.0.5 entry and the correct 0.0.4 date (#59)
 - Removed a fixed `sleep 0.5` from the test suite's mock registry startup; the connect/retry loop already waits for the port, and the full suite drops from about 40 s to about 6 s (#58)
