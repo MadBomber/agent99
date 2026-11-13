@@ -3,7 +3,11 @@
 require "bundler/gem_tasks"
 require "minitest/test_task"
 
-Minitest::TestTask.create
+# Only real test files; test_helper.rb and test/support/ also match the
+# default test_*.rb glob and fail if loaded before test_helper.
+Minitest::TestTask.create do |t|
+  t.test_globs = ["test/{agent99,integration,system}/**/test_*.rb"]
+end
 
 task default: :test
 
