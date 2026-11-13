@@ -82,7 +82,11 @@ class Control < Agent99::Base
   end
 
   def receive_response
-    if payload[:action] == 'response' && payload[:data][:type] == 'status'
+    # Only status replies carry a Hash; pause/resume/shutdown/update_config
+    # acknowledgements send a String.
+    data = payload[:data]
+
+    if payload[:action] == 'response' && data.is_a?(Hash) && data[:type] == 'status'
       agent_name = payload[:header][:from_uuid]
       @statuses[agent_name] = payload[:data]
       logger.info "Received status from #{agent_name}: #{payload[:data]}"
