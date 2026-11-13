@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 #### Fixed
+- `test/agent99/test_amqp_message_client.rb` now tests the real `Agent99::AmqpMessageClient` (publish and its error branches, message dispatch, queue creation and deletion) through a Bunny-free fake channel; most of its tests exercised only the test mock (#71)
 - `Agent99::RegistryClient` now configures its HTTP client from the full registry URL, honoring the URL's scheme and path: a base URL like `http://host:8080/registry` sends requests under `/registry`
 - Fixed `Agent99::AmqpMessageClient#setup` ignoring its `logger:` after one line; the client now keeps that logger for later receive, publish, and queue logging, as the NATS client does (#20)
 - Fixed `Agent99::Timestamp.ts2utc` decoding timestamps ~2.6 years early with garbled sub-second values; it now inverts `utc2ts` exactly, and `Timestamp.new(time)` no longer converts the caller's Time to UTC in place (#4)
