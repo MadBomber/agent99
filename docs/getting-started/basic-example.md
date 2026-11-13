@@ -63,7 +63,7 @@ class CalculatorAgent < Agent99::Base
     }
   end
 
-  def process_request(payload)
+  def receive_request
     logger.info "Received calculation request: #{payload}"
     
     # Extract and validate inputs

@@ -35,7 +35,6 @@ module Agent99::MessageProcessing
   #
   def process_request(message)
     @payload  = message
-    @header   = payload[:header]
     return unless validate_schema.empty?
     receive_request
   end
@@ -144,7 +143,7 @@ module Agent99::MessageProcessing
   # @return [Object] The value of the field or its default
   #
   def get(field)
-    payload[field] || default(field)
+    payload.key?(field) ? payload[field] : default(field)
   end
 
 
@@ -154,6 +153,11 @@ module Agent99::MessageProcessing
   # @return [Object, nil] The default value or nil if not found
   #
   def default(field)
-    self.class::REQUEST_SCHEMA.dig(:properties, field, :examples)&.first
+    # Skip Object so a top-level ::REQUEST_SCHEMA is not picked up.
+    owner = self.class.ancestors.take_while { |mod| mod != Object }
+                .find { |mod| mod.const_defined?(:REQUEST_SCHEMA, false) }
+    return unless owner
+
+    owner::REQUEST_SCHEMA.dig(:properties, field, :examples)&.first
   end
 end
