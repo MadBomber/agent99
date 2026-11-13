@@ -32,7 +32,7 @@ module Agent99::AgentLifecycle
 
     @queue = message_client.setup(agent_id: id, logger:)
 
-    init if respond_to?(:init)
+    init if respond_to?(:init, true)
   
     setup_signal_handlers
   end
@@ -40,7 +40,13 @@ module Agent99::AgentLifecycle
 
   def validate_info_keys
     required_keys = [:name, :capabilities]
-    if respond_to? :info
+    if respond_to?(:info, true)
+      string_keys = required_keys.map(&:to_s) & info.keys
+      unless string_keys.empty?
+        logger.error "This agent's info method must use Symbol keys, not Strings: #{string_keys}"
+        exit(1)
+      end
+
       missing_keys = required_keys - info.keys
       unless missing_keys.empty?
         logger.error <<~MESSAGE

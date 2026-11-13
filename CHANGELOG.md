@@ -4,6 +4,13 @@
 
 #### Fixed
 - Fixed `examples/run_demo.rb` generating watcher-demo agents with `require_relative '../lib/agent99'`, which from `examples/agents/` points at a missing `examples/lib/agent99`; it now uses `../../lib/agent99` (#65)
+- Docs now name the registry URL variable `AGENT99_REGISTRY_URL`, which `RegistryClient` reads; four pages said `REGISTRY_BASE_URL`, which nothing reads (#64)
+- Fixed `bin/console` raising `LoadError: cannot load such file -- irb` on Ruby 4.0+, where irb is a bundled gem; `irb` is now in the Gemfile (#63)
+- Fixed the custom control action snippet in `docs/advanced-topics/control-actions.md`: bare `CONTROL_HANDLERS` raised `NameError` inside an agent class; it now uses `Agent99::CONTROL_HANDLERS` and notes that the table is shared by every agent in the process (#62)
+- Agents may now define `info` and `init` as private methods: startup exited with "must implement the info method" for a private `info` and silently skipped a private `init`; an `info` hash with String keys now gets a "must use Symbol keys" error instead of a report that present keys are missing (#61)
+- Added tests for the pause, resume, update_config and status control handlers and the handler-error reply; the suite's test agent replaced the library's control path, so none of them were exercised (#60)
+- Docs no longer present 0.0.4 as the current version: the overview points at RubyGems and the CHANGELOG instead of a hard-coded number, and "Recent Updates" gains a 0.0.5 entry and the correct 0.0.4 date (#59)
+- Removed a fixed `sleep 0.5` from the test suite's mock registry startup; the connect/retry loop already waits for the port, and the full suite drops from about 40 s to about 6 s (#58)
 - `Agent99::RegistryClient` now configures its HTTP client from the full registry URL, honoring the URL's scheme and path: a base URL like `http://host:8080/registry` sends requests under `/registry`
 - Fixed `Agent99::AmqpMessageClient#setup` ignoring its `logger:` after one line; the client now keeps that logger for later receive, publish, and queue logging, as the NATS client does (#20)
 - Fixed `Agent99::Timestamp.ts2utc` decoding timestamps ~2.6 years early with garbled sub-second values; it now inverts `utc2ts` exactly, and `Timestamp.new(time)` no longer converts the caller's Time to UTC in place (#4)
