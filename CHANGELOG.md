@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 #### Fixed
+- Fixed AMQP agent queues never expiring: `create_queue` passed `expires:`, which Bunny silently ignores; it now declares the RabbitMQ `x-expires` argument, and the messaging docs no longer claim messages survive a broker restart or carry a TTL (#76)
 - `Agent99::RegistryClient` now configures its HTTP client from the full registry URL, honoring the URL's scheme and path: a base URL like `http://host:8080/registry` sends requests under `/registry`
 - Fixed `Agent99::AmqpMessageClient#setup` ignoring its `logger:` after one line; the client now keeps that logger for later receive, publish, and queue logging, as the NATS client does (#20)
 - Fixed `Agent99::Timestamp.ts2utc` decoding timestamps ~2.6 years early with garbled sub-second values; it now inverts `utc2ts` exactly, and `Timestamp.new(time)` no longer converts the caller's Time to UTC in place (#4)

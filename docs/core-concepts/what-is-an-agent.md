@@ -279,7 +279,7 @@ Control messages manage agent lifecycles and configurations and include commands
 - **status:** Query agent state.
 - **response:** Handle control operation results.
 
-Messages are queued with a 60-second TTL (Time To Live) to prevent buildup from inactive agents.
+With AMQP, an agent's queue expires 60 seconds after its last consumer goes away, so queues left by agents that stopped without cleaning up do not build up. The messages themselves have no TTL.
 
 ## Additional Resources
 
