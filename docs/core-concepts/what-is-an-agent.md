@@ -22,7 +22,7 @@ To install the Agent99 gem, simply run:
 gem install agent99
 ```
 
-The [documentation](https://github.com/MadBomber/agent99/blob/main/docs/README.md) provides a comprehensive overview of the framework, but here, we will explore definitions of software agents and the Single Responsibility Principle (SRP), along with how Agent99 distinguishes itself in agent management and description.
+The [documentation](../index.md) provides a comprehensive overview of the framework, but here, we will explore definitions of software agents and the Single Responsibility Principle (SRP), along with how Agent99 distinguishes itself in agent management and description.
 
 ## What Is a Reference Implementation?
 
