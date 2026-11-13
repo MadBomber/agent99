@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 #### Fixed
+- Fixed a dead "documentation" link in `docs/core-concepts/what-is-an-agent.md`; it pointed at a `docs/README.md` that no longer exists and now links to the docs home (#74)
 - Getting-started and example docs now query the example registry at `/` and `/discover?capability=...`; they used `/agents` and `/agents/discover/...`, which return 404 (#73)
 - Fixed `Agent99::NatsMessageClient#publish` raising `NameError` instead of returning an error result when the NATS publish failed; it rescued the nonexistent `NATS::IO::TimeoutError` (now `NATS::IO::Timeout`). Added tests for NATS publish, message dispatch and `delete_queue` (#72)
 - `test/agent99/test_amqp_message_client.rb` now tests the real `Agent99::AmqpMessageClient` (publish and its error branches, message dispatch, queue creation and deletion) through a Bunny-free fake channel; most of its tests exercised only the test mock (#71)
