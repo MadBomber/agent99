@@ -21,8 +21,6 @@ module TestInfrastructure
 
     def start
       @thread = Thread.new { @server.start }
-      # Give more time for server to start up
-      sleep 0.5
       # Wait until server is actually listening
       10.times do
         begin
