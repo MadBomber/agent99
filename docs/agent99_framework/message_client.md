@@ -33,15 +33,16 @@ end
 ### Initialization
 
 ```ruby
-def initialize(config: {}, logger: Logger.new($stdout))
+def initialize(logger: Logger.new($stdout))
   # Implementation details...
 end
 ```
 
 Creates a new instance of the MessageClient.
 
-- `config:` A hash containing configuration options for the message broker connection.
 - `logger:` A logger instance for output (default: stdout logger).
+
+`Agent99::AmqpMessageClient` also takes `config:`, a Hash of broker connection options (default: its `CONFIG`). `Agent99::NatsMessageClient` takes only `logger:`.
 
 ### Public Methods
 
@@ -82,27 +83,27 @@ Starts listening for incoming messages on the specified queue.
 #### publish
 
 ```ruby
-def publish(message:)
+def publish(message)
   # Implementation details...
 end
 ```
 
 Publishes a message to the specified queue.
 
-- `message:` A hash containing the message to be published. This must be in JSON format and include a header that conforms to the `HeaderSchema`.
+- `message`: A hash containing the message to be published. This must be in JSON format and include a header that conforms to the `HeaderSchema`.
 - Returns: A hash indicating the success or failure of the publish operation, including details if the message structure is invalid.
 
 #### delete_queue
 
 ```ruby
-def delete_queue(queue_name:)
+def delete_queue(queue_name)
   # Implementation details...
 end
 ```
 
 Deletes the specified queue or cleans up resources associated with it.
 
-- `queue_name:` The name of the queue to be deleted.
+- `queue_name`: The name of the queue to be deleted.
 
 ### Implementation Notes
 

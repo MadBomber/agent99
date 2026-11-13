@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 #### Fixed
+- Corrected the method signatures in `docs/agent99_framework/`: `register(info:)`, positional `publish(message)` and `delete_queue(queue_name)`, and a message client `initialize` that takes only `logger:` (AMQP also takes `config:`) (#66)
 - `Agent99::RegistryClient` now configures its HTTP client from the full registry URL, honoring the URL's scheme and path: a base URL like `http://host:8080/registry` sends requests under `/registry`
 - Fixed `Agent99::AmqpMessageClient#setup` ignoring its `logger:` after one line; the client now keeps that logger for later receive, publish, and queue logging, as the NATS client does (#20)
 - Fixed `Agent99::Timestamp.ts2utc` decoding timestamps ~2.6 years early with garbled sub-second values; it now inverts `utc2ts` exactly, and `Timestamp.new(time)` no longer converts the caller's Time to UTC in place (#4)
