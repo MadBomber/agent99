@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 #### Fixed
+- Fixed docs code samples that did not parse (the agent-registry irb walkthrough, an unclosed class in what-is-an-agent, shell lines in a Ruby fence), replaced the nonexistent `on_exit` hook with `at_exit`, and dropped a call to the nonexistent `deregister_from_registry` from the `fini` example (#67)
 - `Agent99::RegistryClient` now configures its HTTP client from the full registry URL, honoring the URL's scheme and path: a base URL like `http://host:8080/registry` sends requests under `/registry`
 - Fixed `Agent99::AmqpMessageClient#setup` ignoring its `logger:` after one line; the client now keeps that logger for later receive, publish, and queue logging, as the NATS client does (#20)
 - Fixed `Agent99::Timestamp.ts2utc` decoding timestamps ~2.6 years early with garbled sub-second values; it now inverts `utc2ts` exactly, and `Timestamp.new(time)` no longer converts the caller's Time to UTC in place (#4)
