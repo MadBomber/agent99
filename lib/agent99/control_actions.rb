@@ -34,12 +34,14 @@ module Agent99
 
 
     # Handles the shutdown control message.
+    # Cleanup runs once, in the at_exit hook that calls fini.
+    # Exits via the main thread: message clients may run this handler on a
+    # pool thread (nats-pure does), where a plain exit ends only that thread.
     #
     def handle_shutdown
       logger.info "Received shutdown command. Initiating graceful shutdown..."
       send_control_response("Shutting down")
-      fini
-      exit(0)
+      Thread.main.raise(SystemExit.new(0))
     end
 
 
