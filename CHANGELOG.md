@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 #### Fixed
+- Fixed `examples/run_demo.rb` generating watcher-demo agents with `require_relative '../lib/agent99'`, which from `examples/agents/` points at a missing `examples/lib/agent99`; it now uses `../../lib/agent99` (#65)
 - `Agent99::RegistryClient` now configures its HTTP client from the full registry URL, honoring the URL's scheme and path: a base URL like `http://host:8080/registry` sends requests under `/registry`
 - Fixed `Agent99::AmqpMessageClient#setup` ignoring its `logger:` after one line; the client now keeps that logger for later receive, publish, and queue logging, as the NATS client does (#20)
 - Fixed `Agent99::Timestamp.ts2utc` decoding timestamps ~2.6 years early with garbled sub-second values; it now inverts `utc2ts` exactly, and `Timestamp.new(time)` no longer converts the caller's Time to UTC in place (#4)
