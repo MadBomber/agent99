@@ -18,6 +18,7 @@
 - Fixed `Agent99::NatsMessageClient.new` when no NATS server can be reached: it raised `NoMethodError` (logger not yet set) or let the raw socket error escape unlogged; it now logs the failure and raises the intended "NATS Connection Error" message, with the original error as its `cause` (#6)
 - Fixed `Agent99::NatsMessageClient.new` when it cannot connect to NATS: it raised `NoMethodError` (logger not yet set) or let the raw socket error escape unlogged; any connect failure is now logged and raised as the intended "NATS Connection Error" message, with the original error as its `cause` (#6)
 - `require "agent99"` now loads `Agent99::VERSION` and `Agent99::HeaderSchema`; README step 1 raised `NameError` without an extra require (#15, #21)
+- Fixed `bin/test` reporting "All tests PASSED" and exiting 0 when a test file failed or crashed; it now counts failures from every file, counts a crashed file as an error, exits 1 on any failure, and only runs `test_*.rb` files outside `test/support` (#33)
 - `test/agent99/test_gemspec.rb` now skips, with a message, when the source tree is not a git checkout (git archive, Download ZIP) instead of reporting four failures (#37)
 - Fixed the test commands in `test/README.md`: they globbed `*_test.rb`, matched no files, and silently ran nothing; they now use the Rake test tasks, and the single-file commands add `-Itest` so `test_helper` loads (#34)
 - Removed the `test_coverage` and `test_verbose` Rake tasks; they set environment variables nothing reads and ran the plain suite (#32)
