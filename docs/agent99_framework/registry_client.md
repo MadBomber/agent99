@@ -9,7 +9,7 @@ The RegistryClient class is a crucial component of the Agent99 framework, provid
 ### Initialization
 
 ```ruby
-def initialize(base_url: ENV.fetch('REGISTRY_BASE_URL', 'http://localhost:4567'),
+def initialize(base_url: ENV.fetch('AGENT99_REGISTRY_URL', 'http://localhost:4567'),
                logger: Logger.new($stdout))
 ```
 
