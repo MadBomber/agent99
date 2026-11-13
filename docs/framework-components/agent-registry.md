@@ -41,7 +41,7 @@ class MyAgent < Agent99::Base
   def info
     {
       # ...
-      request_schema: MyAgentRequest.schema
+      request_schema: MyAgentRequest.schema,
       capabilities:   %w[ greeter hello_world ],
       # ...
     }
@@ -52,11 +52,11 @@ end
 
 my_agent = MyAgent.new
 
-I, [2024-12-07T14:42:08.140286 #36471]  INFO -- : Registered Agent MyAgent with ID: 9e735449-582f-46e2-8f11-371e584d0f08
-I, [2024-12-07T14:42:08.141978 #36471]  INFO -- : Created queue for agent_id: 9e735449-582f-46e2-8f11-371e584d0f08
-  #=>
-#<MyAgent:0x000000011d4d2e48
-...
+# I, [2024-12-07T14:42:08.140286 #36471]  INFO -- : Registered Agent MyAgent with ID: 9e735449-582f-46e2-8f11-371e584d0f08
+# I, [2024-12-07T14:42:08.141978 #36471]  INFO -- : Created queue for agent_id: 9e735449-582f-46e2-8f11-371e584d0f08
+#   #=>
+# #<MyAgent:0x000000011d4d2e48
+# ...
 
 # The agent as an ID and an address in the peer-to-peer network
 
@@ -88,7 +88,7 @@ The example centralized registry service provides three processes:
      - Central Registry responds with a 204 No Content
      - RegistryClient confirms the withdrawal to MyAgent
 
-Like the register process, the withdraw process is also transparent.  Its executed on any exit via the public method `fini` in the base class' `on_exit {...}` handler.  Calling `exit` for any reason within your agent class will withdraw it from the central registry and remove its message queue from peer-to-peer messaging network.
+Like the register process, the withdraw process is also transparent.  Its executed on any exit via the public method `fini` in the base class' `at_exit {...}` handler.  Calling `exit` for any reason within your agent class will withdraw it from the central registry and remove its message queue from peer-to-peer messaging network.
 
 The discover process is primary business logic for your agent class.  You must call the `@registry_client.discover(capability: "whatever")` method directly within the agents process.
 
