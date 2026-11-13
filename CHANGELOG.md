@@ -15,6 +15,7 @@
 - Fixed `Agent99::NatsMessageClient.new` when no NATS server can be reached: it raised `NoMethodError` (logger not yet set) or let the raw socket error escape unlogged; it now logs the failure and raises the intended "NATS Connection Error" message, with the original error as its `cause` (#6)
 - Fixed `Agent99::NatsMessageClient.new` when it cannot connect to NATS: it raised `NoMethodError` (logger not yet set) or let the raw socket error escape unlogged; any connect failure is now logged and raised as the intended "NATS Connection Error" message, with the original error as its `cause` (#6)
 - `require "agent99"` now loads `Agent99::VERSION` and `Agent99::HeaderSchema`; README step 1 raised `NameError` without an extra require (#15, #21)
+- Re-locked the development bundle (`Gemfile.lock`) so it installs on Ruby 4.0 and builds on Ruby 4.1: tocer 20.5, rbtree 0.4.7 / sorted_set 1.1.0, Bundler 4.0.23, plus `ruby` and `x86_64-linux` platforms (#7)
 
 
 ## Released
