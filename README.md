@@ -144,7 +144,7 @@ class GreeterAgent < Agent99::Base
     }
   end
 
-  def process_request(payload)
+  def receive_request
     name = payload.dig(:name)
     send_response(result: "Hello, #{name}!")
   end

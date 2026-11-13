@@ -13,8 +13,3 @@ class Agent99::HeaderSchema < SimpleJsonSchemaBuilder::Base
     integer :timestamp,   required: true, examples: [Agent99::Timestamp.new.to_i]
   end
 end
-
-__END__
-
-    string :type, required: true, enum: %w[request response control]
-
