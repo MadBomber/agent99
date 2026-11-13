@@ -35,6 +35,28 @@ class TestBase < Minitest::Test
   end
 
 
+  def test_get_keeps_explicit_false_nil_and_zero_from_the_request
+    klass = Class.new(Agent99::Base) do
+      const_set(:REQUEST_SCHEMA, {
+        properties: {
+          loud:  { examples: [true] },
+          count: { examples: [3] },
+          note:  { examples: ["hi"] }
+        }
+      })
+    end
+    agent = klass.allocate
+    agent.instance_variable_set(:@payload, { loud: false, count: 0, note: nil })
+
+    assert_equal false, agent.send(:get, :loud)
+    assert_equal 0, agent.send(:get, :count)
+    assert_nil agent.send(:get, :note)
+
+    agent.instance_variable_set(:@payload, {})
+    assert_equal true, agent.send(:get, :loud)
+  end
+
+
   # These check the real Agent99 code, not the TestInfrastructure::TestAgent
   # double, which adds public methods Base does not have. Each assertion
   # fails naming what is missing. The message hooks are pinned as
@@ -56,12 +78,32 @@ class TestBase < Minitest::Test
   end
 
 
-  # Base's own attr_reader :header shadows HeaderManagement#header, so
-  # also check the module that defines the header helpers.
+  # Also check the module that defines the header helpers, so a reader
+  # added on Base cannot shadow them unnoticed.
   def test_base_public_header_methods
     expected = %i[header to_uuid from_uuid event_uuid timestamp type return_address]
     assert_empty expected - Agent99::Base.public_instance_methods
     assert_empty expected - Agent99::HeaderManagement.public_instance_methods(false)
+  end
+
+
+  def test_header_helpers_read_the_current_message
+    klass = Class.new(Agent99::Base) do
+      attr_reader :seen
+
+      def receive_request = (@seen ||= []) << [:request, from_uuid]
+      def receive_response = (@seen ||= []) << [:response, from_uuid]
+      def receive_control = (@seen ||= []) << [:control, from_uuid]
+    end
+    agent = klass.allocate
+
+    agent.send(:process_response, { header: { from_uuid: "carol", type: "response" } })
+    agent.send(:process_request,  { header: { from_uuid: "alice", type: "request" } })
+    agent.send(:process_response, { header: { from_uuid: "bob",   type: "response" } })
+    agent.send(:process_control,  { header: { from_uuid: "dave",  type: "control" }, action: "status" })
+
+    assert_equal [[:response, "carol"], [:request, "alice"], [:response, "bob"], [:control, "dave"]], agent.seen
+    assert_equal({ from_uuid: "dave", type: "control" }, agent.header)
   end
 
 
