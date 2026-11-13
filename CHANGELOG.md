@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 #### Fixed
+- Docs no longer present 0.0.4 as the current version: the overview points at RubyGems and the CHANGELOG instead of a hard-coded number, and "Recent Updates" gains a 0.0.5 entry and the correct 0.0.4 date (#59)
 - `Agent99::RegistryClient` now configures its HTTP client from the full registry URL, honoring the URL's scheme and path: a base URL like `http://host:8080/registry` sends requests under `/registry`
 - Fixed `Agent99::AmqpMessageClient#setup` ignoring its `logger:` after one line; the client now keeps that logger for later receive, publish, and queue logging, as the NATS client does (#20)
 - Fixed `Agent99::Timestamp.ts2utc` decoding timestamps ~2.6 years early with garbled sub-second values; it now inverts `utc2ts` exactly, and `Timestamp.new(time)` no longer converts the caller's Time to UTC in place (#4)
