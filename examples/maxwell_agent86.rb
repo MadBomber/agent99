@@ -96,8 +96,8 @@ class MaxwellAgent86 < Agent99::Base
 
   # As a server type, HelloWorld should never receive
   # a response message.
-  def receive_response(response)
-    loger.warn("Unexpected response type message: response.inspect")
+  def receive_response
+    logger.warn("Unexpected response message: #{payload.inspect}")
   end
 end
 

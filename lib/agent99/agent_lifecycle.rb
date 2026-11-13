@@ -25,6 +25,11 @@ module Agent99::AgentLifecycle
     @registry_client.logger = logger
     register(info)
 
+    if id.nil?
+      logger.error "Agent #{name} could not register with the registry; shutting down"
+      exit(1)
+    end
+
     @queue = message_client.setup(agent_id: id, logger:)
 
     init if respond_to?(:init)
@@ -59,7 +64,7 @@ module Agent99::AgentLifecycle
   #
   def register(agent_info)
     @id = registry_client.register(info: agent_info)
-    logger.info "Registered Agent #{name} with ID: #{id}"
+    logger.info "Registered Agent #{name} with ID: #{id}" if id
   rescue StandardError => e
     handle_error("Error during registration", e)
   end
