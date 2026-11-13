@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "minitest/autorun"
+require "open3"
 
 class TestGemspec < Minitest::Test
   ROOT = File.expand_path("../..", __dir__)
@@ -8,7 +9,14 @@ class TestGemspec < Minitest::Test
   SHIPPED_ROOT_FILES = %w[README.md CHANGELOG.md LICENSE].freeze
 
   # Skip the mock registry server test_helper starts for every test.
-  def setup; end
+  # spec.files intersects with `git ls-files`, so outside a git checkout
+  # (git archive, Download ZIP, release tarball) it is empty by design.
+  def setup
+    _out, _err, status = Open3.capture3("git", "rev-parse", "--is-inside-work-tree", chdir: ROOT)
+    skip "#{ROOT} is not a git work tree; spec.files relies on git ls-files" unless status.success?
+  rescue SystemCallError
+    skip "git is not available; spec.files relies on git ls-files"
+  end
 
   def teardown; end
 

@@ -3,6 +3,7 @@ PATH
   specs:
     agent99 (0.0.5)
       bunny
+      logger
       nats-pure
       simple_json_schema_builder
       sinatra
