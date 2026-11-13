@@ -10,12 +10,12 @@ The **capabilities** is now just one of several within a Hash collection returne
 
 The capabilities element of this new `info` hash still has the same requirement of being an Array of Strings with a promiss of becoming more later as the system becomes more sophisticated.
 
-The required elements of the `info` Hash are:
+The elements of the `info` Hash are:
 
-- **name** -- automaticall derived from the class name of the agent.
-- **type** -- one of server, client or hybrid.
-- **capabilities** -- An Array of Strings
-- **request_schema** -- is required when the type is server
+- **capabilities** -- An Array of Strings (required)
+- **name** -- optional; defaults to the class name of the agent.
+- **type** -- one of server, client or hybrid; not checked by the framework.
+- **request_schema** -- recommended for server agents; not checked by the framework.
 
 The keys to the `info` Hash are Symbols.
 

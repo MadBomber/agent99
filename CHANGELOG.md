@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 #### Fixed
+- An agent whose `info` leaves out `name` no longer exits at startup; `name` now defaults to the agent's class name, as the docs said, and `docs/operations/breaking-changes.md` no longer claims `type` and `request_schema` are required (#69)
 - `Agent99::RegistryClient` now configures its HTTP client from the full registry URL, honoring the URL's scheme and path: a base URL like `http://host:8080/registry` sends requests under `/registry`
 - Fixed `Agent99::AmqpMessageClient#setup` ignoring its `logger:` after one line; the client now keeps that logger for later receive, publish, and queue logging, as the NATS client does (#20)
 - Fixed `Agent99::Timestamp.ts2utc` decoding timestamps ~2.6 years early with garbled sub-second values; it now inverts `utc2ts` exactly, and `Timestamp.new(time)` no longer converts the caller's Time to UTC in place (#4)
