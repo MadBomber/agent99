@@ -52,7 +52,7 @@ all_agents = discover_agent(capability: 'process_image', all: true)
 
 The registry client comes with default settings, which you can override as needed:
 
-- **URL**: Default is `http://localhost:4567` (you can override this using the `REGISTRY_BASE_URL` environment variable).
+- **URL**: Default is `http://localhost:4567` (you can override this using the `AGENT99_REGISTRY_URL` environment variable).
 - **Interface**: Supports a standard HTTP REST interface.
 - **Reconnection**: Automatic reconnection handling is provided to ensure reliable communication.
 
