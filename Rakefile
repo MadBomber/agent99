@@ -3,7 +3,11 @@
 require "bundler/gem_tasks"
 require "minitest/test_task"
 
-Minitest::TestTask.create
+# Only real test files; test_helper.rb and test/support/ also match the
+# default test_*.rb glob and fail if loaded before test_helper.
+Minitest::TestTask.create do |t|
+  t.test_globs = ["test/{agent99,integration,system}/**/test_*.rb"]
+end
 
 task default: :test
 
@@ -32,18 +36,6 @@ Rake::TestTask.new(:test_system) do |t|
   t.libs << "test"  
   t.test_files = FileList["test/system/*test*.rb"]
   t.verbose = true
-end
-
-desc "Run tests with coverage reporting (requires simplecov gem)"
-task :test_coverage do
-  ENV["COVERAGE"] = "true"
-  Rake::Task[:test].invoke
-end
-
-desc "Run tests in verbose mode"
-task :test_verbose do
-  ENV["VERBOSE"] = "true"
-  Rake::Task[:test].invoke
 end
 
 desc "Show test statistics"
