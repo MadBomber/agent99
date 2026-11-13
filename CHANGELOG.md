@@ -18,6 +18,7 @@
 - Fixed `Agent99::NatsMessageClient.new` when no NATS server can be reached: it raised `NoMethodError` (logger not yet set) or let the raw socket error escape unlogged; it now logs the failure and raises the intended "NATS Connection Error" message, with the original error as its `cause` (#6)
 - Fixed `Agent99::NatsMessageClient.new` when it cannot connect to NATS: it raised `NoMethodError` (logger not yet set) or let the raw socket error escape unlogged; any connect failure is now logged and raised as the intended "NATS Connection Error" message, with the original error as its `cause` (#6)
 - `require "agent99"` now loads `Agent99::VERSION` and `Agent99::HeaderSchema`; README step 1 raised `NameError` without an extra require (#15, #21)
+- Fixed `examples/control.rb` raising `TypeError` on pause, resume, shutdown, and update_config acknowledgements, whose `data` is a String rather than a Hash (#16)
 - Fixed an agent that failed to register carrying on with a `nil` id and an unaddressable queue while logging that it had registered; it now logs the failure and exits with status 1 (#19)
 - Fixed the header helpers (`header`, `from_uuid`, `to_uuid`, ...) returning the previous request's header inside `receive_response` and `receive_control`, or raising `NoMethodError` before any request arrived; they now always read the current message (#18)
 - Fixed `discover_agent` raising `NoMethodError` when the registry is unreachable or returns an error; it now logs and raises the documented "No agents available" `RuntimeError` (#35)
