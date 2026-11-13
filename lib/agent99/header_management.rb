@@ -6,7 +6,7 @@ module Agent99::HeaderManagement
   ################################################
   # private
   
-  def header      = @payload[:header]
+  def header      = @payload&.[](:header)
   def to_uuid     = header[:to_uuid]
   def from_uuid   = header[:from_uuid]
   def event_uuid  = header[:event_uuid]
