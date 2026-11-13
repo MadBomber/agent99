@@ -35,7 +35,6 @@ module Agent99::MessageProcessing
   #
   def process_request(message)
     @payload  = message
-    @header   = payload[:header]
     return unless validate_schema.empty?
     receive_request
   end

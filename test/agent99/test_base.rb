@@ -56,12 +56,32 @@ class TestBase < Minitest::Test
   end
 
 
-  # Base's own attr_reader :header shadows HeaderManagement#header, so
-  # also check the module that defines the header helpers.
+  # Also check the module that defines the header helpers, so a reader
+  # added on Base cannot shadow them unnoticed.
   def test_base_public_header_methods
     expected = %i[header to_uuid from_uuid event_uuid timestamp type return_address]
     assert_empty expected - Agent99::Base.public_instance_methods
     assert_empty expected - Agent99::HeaderManagement.public_instance_methods(false)
+  end
+
+
+  def test_header_helpers_read_the_current_message
+    klass = Class.new(Agent99::Base) do
+      attr_reader :seen
+
+      def receive_request = (@seen ||= []) << [:request, from_uuid]
+      def receive_response = (@seen ||= []) << [:response, from_uuid]
+      def receive_control = (@seen ||= []) << [:control, from_uuid]
+    end
+    agent = klass.allocate
+
+    agent.send(:process_response, { header: { from_uuid: "carol", type: "response" } })
+    agent.send(:process_request,  { header: { from_uuid: "alice", type: "request" } })
+    agent.send(:process_response, { header: { from_uuid: "bob",   type: "response" } })
+    agent.send(:process_control,  { header: { from_uuid: "dave",  type: "control" }, action: "status" })
+
+    assert_equal [[:response, "carol"], [:request, "alice"], [:response, "bob"], [:control, "dave"]], agent.seen
+    assert_equal({ from_uuid: "dave", type: "control" }, agent.header)
   end
 
 
