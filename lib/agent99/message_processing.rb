@@ -144,7 +144,7 @@ module Agent99::MessageProcessing
   # @return [Object] The value of the field or its default
   #
   def get(field)
-    payload[field] || default(field)
+    payload.key?(field) ? payload[field] : default(field)
   end
 
 
