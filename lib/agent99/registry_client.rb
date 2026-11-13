@@ -14,7 +14,9 @@ class Agent99::RegistryClient
     @base_url     = base_url
     @logger       = logger
     uri = URI.parse(base_url)
+    @base_path    = uri.path.to_s.chomp('/')
     @http_client  = Net::HTTP.new(uri.host, uri.port)
+    @http_client.use_ssl = (uri.scheme == 'https')
   end
 
   def register(info:)
@@ -47,7 +49,7 @@ class Agent99::RegistryClient
   private
 
   def create_request(method, path, body = nil)
-    request       = Object.const_get("Net::HTTP::#{method.capitalize}").new(path, { "Content-Type" => "application/json" })
+    request       = Object.const_get("Net::HTTP::#{method.capitalize}").new(@base_path + path, { "Content-Type" => "application/json" })
     request.body  = body.to_json if body
     request
   end
