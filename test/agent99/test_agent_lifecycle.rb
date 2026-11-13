@@ -201,4 +201,48 @@ class TestAgentLifecycle < Minitest::Test
     end
     assert_empty @message_client.queues
   end
+
+  # Records the info it is asked to register; registration always succeeds.
+  class RecordingRegistry
+    attr_accessor :logger
+    attr_reader :registered_info
+
+    def register(info:)
+      @registered_info = info
+      'agent-1'
+    end
+
+    def withdraw(_id) = nil
+  end
+
+  # Stands in for a message client; no broker.
+  class StubMessenger
+    def setup(agent_id:, logger:) = agent_id
+    def delete_queue(_name) = nil
+  end
+
+  class NamelessAgent < Agent99::Base
+    def info = { capabilities: ['test'] }
+  end
+
+  def test_info_name_defaults_to_class_name
+    registry = RecordingRegistry.new
+    begin
+      NamelessAgent.new(registry_client: registry,
+                        message_client: StubMessenger.new,
+                        logger: @logger)
+    rescue SystemExit => e
+      flunk "agent without info[:name] exited during startup (status #{e.status})"
+    end
+
+    assert_equal NamelessAgent.name, registry.registered_info[:name]
+    assert_equal ['test'], registry.registered_info[:capabilities]
+  end
+
+  def test_info_name_given_by_the_agent_is_kept
+    agent = NamelessAgent.allocate
+    agent.define_singleton_method(:info) { { name: 'Custom', capabilities: ['test'] } }
+
+    assert_equal 'Custom', agent.send(:info_with_defaults)[:name]
+  end
 end
