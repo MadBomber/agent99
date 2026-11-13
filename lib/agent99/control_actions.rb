@@ -34,11 +34,11 @@ module Agent99
 
 
     # Handles the shutdown control message.
+    # Cleanup runs once, in the at_exit hook that calls fini.
     #
     def handle_shutdown
       logger.info "Received shutdown command. Initiating graceful shutdown..."
       send_control_response("Shutting down")
-      fini
       exit(0)
     end
 
