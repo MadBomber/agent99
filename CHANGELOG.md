@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 #### Fixed
+- Fixed `bin/console` raising `LoadError: cannot load such file -- irb` on Ruby 4.0+, where irb is a bundled gem; `irb` is now in the Gemfile (#63)
 - Fixed the custom control action snippet in `docs/advanced-topics/control-actions.md`: bare `CONTROL_HANDLERS` raised `NameError` inside an agent class; it now uses `Agent99::CONTROL_HANDLERS` and notes that the table is shared by every agent in the process (#62)
 - Agents may now define `info` and `init` as private methods: startup exited with "must implement the info method" for a private `info` and silently skipped a private `init`; an `info` hash with String keys now gets a "must use Symbol keys" error instead of a report that present keys are missing (#61)
 - Added tests for the pause, resume, update_config and status control handlers and the handler-error reply; the suite's test agent replaced the library's control path, so none of them were exercised (#60)
