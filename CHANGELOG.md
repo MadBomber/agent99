@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 #### Fixed
+- `test/agent99/test_amqp_message_client.rb` now tests the real `Agent99::AmqpMessageClient` (publish and its error branches, message dispatch, queue creation and deletion) through a Bunny-free fake channel; most of its tests exercised only the test mock (#71)
 - Fixed `examples/maxwell_request.rb` raising `NameError` when loaded on its own; it required only `header_schema`, which needs the rest of the library, and now requires `agent99` (#70)
 - Fixed misspellings in the docs and `examples/start_rabbitmq_and_registry.sh`, including the `RegristryClient` and `@agnet_1` identifiers in agent-registry code samples (#68)
 - Fixed docs code samples that did not parse (the agent-registry irb walkthrough, an unclosed class in what-is-an-agent, shell lines in a Ruby fence), replaced the nonexistent `on_exit` hook with `at_exit`, and dropped a call to the nonexistent `deregister_from_registry` from the `fini` example (#67)
