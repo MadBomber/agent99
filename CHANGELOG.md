@@ -5,6 +5,7 @@
 #### Fixed
 - Fixed `Agent99::AmqpMessageClient#setup` ignoring its `logger:` after one line; the client now keeps that logger for later receive, publish, and queue logging, as the NATS client does (#20)
 - Fixed `Agent99::Timestamp.ts2utc` decoding timestamps ~2.6 years early with garbled sub-second values; it now inverts `utc2ts` exactly, and `Timestamp.new(time)` no longer converts the caller's Time to UTC in place (#4)
+- Removed stray notes after `__END__` in `tcp_message_client.rb` (a pasted analysis) and `header_schema.rb` (a stale schema line); nothing read them
 - `test/agent99/test_base.rb` now checks method names and visibility on `Agent99::Base` and `Agent99::HeaderManagement` instead of the test double, which defines public methods Base does not have
 - **[BREAKING FIX]** `require "agent99"` no longer fails on a clean install: the development-only `debug_me` gem is no longer required and `DebugMe` is no longer mixed into `Object` (#3)
   - Code that called `debug_me` without requiring it, relying on agent99 to mix it in, must now `require "debug_me"` and `include DebugMe` itself
