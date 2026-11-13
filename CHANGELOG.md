@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 #### Fixed
+- Fixed the custom control action snippet in `docs/advanced-topics/control-actions.md`: bare `CONTROL_HANDLERS` raised `NameError` inside an agent class; it now uses `Agent99::CONTROL_HANDLERS` and notes that the table is shared by every agent in the process (#62)
 - `Agent99::RegistryClient` now configures its HTTP client from the full registry URL, honoring the URL's scheme and path: a base URL like `http://host:8080/registry` sends requests under `/registry`
 - Fixed `Agent99::AmqpMessageClient#setup` ignoring its `logger:` after one line; the client now keeps that logger for later receive, publish, and queue logging, as the NATS client does (#20)
 - Fixed `Agent99::Timestamp.ts2utc` decoding timestamps ~2.6 years early with garbled sub-second values; it now inverts `utc2ts` exactly, and `Timestamp.new(time)` no longer converts the caller's Time to UTC in place (#4)
