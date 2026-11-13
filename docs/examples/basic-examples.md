@@ -255,10 +255,10 @@ You can test agent communication using the client example or by sending HTTP req
 
 ```bash
 # List all registered agents
-curl http://localhost:4567/agents
+curl http://localhost:4567/
 
 # Find agents by capability
-curl http://localhost:4567/agents/discover/greeter
+curl "http://localhost:4567/discover?capability=greeter"
 ```
 
 ## Next Steps

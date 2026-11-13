@@ -76,7 +76,13 @@ Working examples and tutorials:
 
 ## 🔄 Recent Updates
 
-### 2024-12-12 - Version 0.0.4 Release
+### 2025-09-03 - Version 0.0.5 Release
+- Demo runner (`examples/run_demo.rb`) with multiple scenarios
+- A2A and MCP protocol documentation
+- Disabled the broken JSON schema validation that crashed at runtime
+- See the [CHANGELOG](https://github.com/MadBomber/agent99/blob/main/CHANGELOG.md) for the full list
+
+### 2024-12-14 - Version 0.0.4 Release
 - Breaking changes in agent registration and discovery
 - Improved message processing performance
 - Enhanced error handling and logging
