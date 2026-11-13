@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 #### Fixed
+- Fixed `examples/maxwell_request.rb` raising `NameError` when loaded on its own; it required only `header_schema`, which needs the rest of the library, and now requires `agent99` (#70)
 - Fixed misspellings in the docs and `examples/start_rabbitmq_and_registry.sh`, including the `RegristryClient` and `@agnet_1` identifiers in agent-registry code samples (#68)
 - Fixed docs code samples that did not parse (the agent-registry irb walkthrough, an unclosed class in what-is-an-agent, shell lines in a Ruby fence), replaced the nonexistent `on_exit` hook with `at_exit`, and dropped a call to the nonexistent `deregister_from_registry` from the `fini` example (#67)
 - Corrected the method signatures in `docs/agent99_framework/`: `register(info:)`, positional `publish(message)` and `delete_queue(queue_name)`, and a message client `initialize` that takes only `logger:` (AMQP also takes `config:`) (#66)
