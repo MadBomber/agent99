@@ -345,7 +345,7 @@ class Agent99Demo
   
   def generate_demo_agent_code(class_name, capabilities)
     <<~RUBY
-      require_relative '../lib/agent99'
+      require_relative '../../lib/agent99'
       
       class #{class_name} < Agent99::Base
         def info

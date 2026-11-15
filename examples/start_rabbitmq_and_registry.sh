@@ -3,7 +3,7 @@
 #
 # brew install rabbitmq-server
 #
-# Start up the AMQP message broker (RabbitM@) in the background
+# Start up the AMQP message broker (RabbitMQ) in the background
 
 echo "Starting rabbitmq-server in background ..."
 rabbitmq-server &
@@ -12,7 +12,7 @@ open http://localhost:15672/#/queues
 
 echo
 echo
-echo "Starting example registry in forground ..."
+echo "Starting example registry in foreground ..."
 echo "http://localhost:4567"
 echo
 ruby registry.rb  # blocks until control-C

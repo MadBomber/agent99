@@ -6,7 +6,7 @@ require 'json'
 
 module TestInfrastructure
   class MockRegistryServer
-    attr_reader :agents, :port, :thread, :server
+    attr_reader :agents, :port, :server
 
     def initialize(port = 0)
       @agents = {}
@@ -21,8 +21,6 @@ module TestInfrastructure
 
     def start
       @thread = Thread.new { @server.start }
-      # Give more time for server to start up
-      sleep 0.5
       # Wait until server is actually listening
       10.times do
         begin
@@ -38,10 +36,6 @@ module TestInfrastructure
     def stop
       @server.shutdown if @server
       @thread&.join(2)
-      @agents.clear
-    end
-
-    def reset
       @agents.clear
     end
 
@@ -166,11 +160,10 @@ module TestInfrastructure
   end
 
   class MockAmqpMessageClient
-    attr_accessor :logger, :channel, :exchange
+    attr_accessor :logger
     attr_reader :queues, :published_messages
 
-    def initialize(config: {}, logger: Logger.new('/dev/null'))
-      @config = config
+    def initialize(logger: Logger.new('/dev/null'))
       @logger = logger
       @queues = {}
       @published_messages = []
@@ -181,11 +174,6 @@ module TestInfrastructure
       queue_name = agent_id
       @queues[queue_name] = MockQueue.new(queue_name)
       @queues[queue_name]
-    end
-
-    def create_queue(agent_id)
-      queue_name = agent_id
-      @queues[queue_name] = MockQueue.new(queue_name)
     end
 
     def listen_for_messages(queue, request_handler:, response_handler:, control_handler:)
@@ -225,7 +213,7 @@ module TestInfrastructure
   end
 
   class MockQueue
-    attr_reader :name, :messages
+    attr_reader :name
     
     def initialize(name)
       @name = name
@@ -360,12 +348,6 @@ module TestInfrastructure
 
     def get_all_agents
       registry_client.fetch_all_agents
-    end
-
-    def clear_received_messages
-      @received_requests.clear
-      @received_responses.clear
-      @received_controls.clear
     end
   end
 end

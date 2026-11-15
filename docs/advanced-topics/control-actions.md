@@ -121,12 +121,14 @@ def handle_custom_action
 end
 ```
 
-2. Registering the handler in CONTROL_HANDLERS:
+2. Registering the handler in `Agent99::CONTROL_HANDLERS`:
 ```ruby
-CONTROL_HANDLERS.merge!({
+Agent99::CONTROL_HANDLERS.merge!({
   'custom_action' => :handle_custom_action
 })
 ```
+
+`Agent99::CONTROL_HANDLERS` is one table shared by every agent class in the process, so a handler registered this way is dispatched for all of them. An agent class without the handler method gets an error reply for that action.
 
 ### Best Practices
 

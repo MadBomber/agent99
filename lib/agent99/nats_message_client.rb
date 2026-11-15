@@ -71,7 +71,7 @@ class Agent99::NatsMessageClient
       logger.error "Failed to convert payload to JSON: #{e.message}"
       { success: false, error: "JSON conversion error: #{e.message}" }
     
-    rescue NATS::IO::TimeoutError => e
+    rescue NATS::IO::Timeout => e
       logger.error "Failed to publish message: #{e.message}"
       { success: false, error: "Publishing error: #{e.message}" }
     

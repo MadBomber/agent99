@@ -4,7 +4,7 @@ Agent99 is a Ruby framework for building distributed AI agents with peer-to-peer
 
 ## Current Status
 
-**Version**: 0.0.4 (Under Development)
+**Version**: see [RubyGems](https://rubygems.org/gems/agent99) for the latest release and the [CHANGELOG](https://github.com/MadBomber/agent99/blob/main/CHANGELOG.md) for what changed (under development)
 
 !!! warning "Development Status"
     Agent99 is currently under active development. The initial release has no AI components - it's a generic client-server / request-response microservices system using peer-to-peer messaging brokers and a centralized agent registry.

@@ -4,7 +4,7 @@
 
 Agents can be configured using environment variables. Key configuration options include:
 
-- `REGISTRY_BASE_URL`: Specifies the URL of the agent registry service (default: 'http://localhost:4567').
+- `AGENT99_REGISTRY_URL`: Specifies the URL of the agent registry service (default: 'http://localhost:4567').
 
 
 ### Environment Variables
@@ -12,6 +12,6 @@ Agents can be configured using environment variables. Key configuration options 
 To set an environment variable, use the following command in your terminal before running your application:
 
 ```bash
-export REGISTRY_BASE_URL=http://my-registry-url
+export AGENT99_REGISTRY_URL=http://my-registry-url
 ```
 

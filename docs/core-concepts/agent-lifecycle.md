@@ -66,7 +66,7 @@ In this case, the custom agent not need the `init` method to perform any additio
 
 #### The `fini` Method
 
-The `fini` method is setup to be invoked when the `exit` method is called within `initialize` method by the `on_exit { fini }` hook.
+The `fini` method is setup to be invoked when the `exit` method is called within `initialize` method by the `at_exit { fini }` hook.
 
 The `fini` method ensures proper cleanup during agent shutdown:
 
@@ -74,7 +74,7 @@ The default `fini` method does:
 - Withdrawing from the registry
 - Closing message queue connections
 
-If your agent requires additional cleanup or state presistence you should implement a custom `fini` method to do things like:
+If your agent requires additional cleanup or state persistence you should implement a custom `fini` method to do things like:
 - Cleaning up resources
 - Saving state (if required)
 - Releasing system resources
@@ -85,9 +85,8 @@ Example implementation:
 def fini
   save_state if @state
   cleanup_resources
-  deregister_from_registry
-  
-  super  # Always call super last for proper framework cleanup
+
+  super  # Always call super last; it withdraws from the registry and deletes the queue
 end
 ```
 
@@ -132,7 +131,7 @@ The Agent99 framework automatically manages the lifecycle of agents:
 
 1. Calls `init` (if present) after agent creation.
 2. Monitors agent health during operation.
-3. Calls `fini` during shutdown (`on_exit {fini}`).
+3. Calls `fini` during shutdown (`at_exit { fini }`).
 4. Handles cleanup if initialization fails.
 
 This automated lifecycle management ensures reliable agent operation within the framework.

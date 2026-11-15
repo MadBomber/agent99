@@ -172,7 +172,7 @@ You've successfully:
 
 **Can't find agents?**
 - Ensure all components (registry, broker, agents) are running
-- Check that agents are registering: visit http://localhost:4567/agents
+- Check that agents are registering: visit http://localhost:4567/
 
 **Need help?**
 - Check the [Troubleshooting Guide](../operations/troubleshooting.md)

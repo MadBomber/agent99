@@ -1,6 +1,6 @@
 # examples/maxwell_request.rb
 
-require_relative '../lib/agent99/header_schema'
+require_relative '../lib/agent99'
 
 class MaxwellRequest < SimpleJsonSchemaBuilder::Base
   object do

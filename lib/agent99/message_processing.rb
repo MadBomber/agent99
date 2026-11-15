@@ -89,6 +89,7 @@ module Agent99::MessageProcessing
       send(handler)
     else
       logger.warn "Unknown control action: #{action}"
+      send_control_response({ error: "Unknown control action: #{action}" })
     end
   
   rescue StandardError => e

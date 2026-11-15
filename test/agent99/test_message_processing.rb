@@ -34,4 +34,35 @@ class TestMessageProcessing < Minitest::Test
 
     assert_equal "Hi", agent.send(:get, :greeting)
   end
+
+  # Records what the agent publishes, in place of a message broker.
+  class RecordingPublisher
+    attr_reader :published
+
+    def initialize
+      @published = []
+    end
+
+    def publish(message)
+      @published << message
+    end
+  end
+
+  def test_unknown_control_action_replies_with_error
+    publisher = RecordingPublisher.new
+    agent = build_agent(
+      Class.new(Agent99::Base),
+      { header: { type: "control", from_uuid: "controller", to_uuid: "agent-1" }, action: "restart" }
+    )
+    agent.instance_variable_set(:@logger, Logger.new(nil))
+    agent.instance_variable_set(:@message_client, publisher)
+
+    agent.send(:receive_control)
+
+    assert_equal 1, publisher.published.size
+    reply = publisher.published.first
+    assert_equal "response", reply[:action]
+    assert_equal "controller", reply[:header][:to_uuid]
+    assert_equal({ error: "Unknown control action: restart" }, reply[:data])
+  end
 end

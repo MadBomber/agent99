@@ -22,7 +22,7 @@ To install the Agent99 gem, simply run:
 gem install agent99
 ```
 
-The [documentation](https://github.com/MadBomber/agent99/blob/main/docs/README.md) provides a comprehensive overview of the framework, but here, we will explore definitions of software agents and the Single Responsibility Principle (SRP), along with how Agent99 distinguishes itself in agent management and description.
+The [documentation](../index.md) provides a comprehensive overview of the framework, but here, we will explore definitions of software agents and the Single Responsibility Principle (SRP), along with how Agent99 distinguishes itself in agent management and description.
 
 ## What Is a Reference Implementation?
 
@@ -255,6 +255,7 @@ class MaxwellAgent86 < Agent99::Base
       # ...
     }
   end
+end
 ```
 
 When an agent subclass defines a **:request_schema** in its `info`, the message processing of the **Agent99::Base** validates all incoming requests against the schema. If there are errors, those errors are returned to the sender without presenting the request message to the agent's custom **receive_request** method.
@@ -279,7 +280,7 @@ Control messages manage agent lifecycles and configurations and include commands
 - **status:** Query agent state.
 - **response:** Handle control operation results.
 
-Messages are queued with a 60-second TTL (Time To Live) to prevent buildup from inactive agents.
+With AMQP, an agent's queue expires 60 seconds after its last consumer goes away, so queues left by agents that stopped without cleaning up do not build up. The messages themselves have no TTL.
 
 ## Additional Resources
 
