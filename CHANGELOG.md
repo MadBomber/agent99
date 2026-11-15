@@ -55,6 +55,7 @@
 - Updated rack, rack-protection, rack-session, sinatra, json and uri in the development `Gemfile.lock` to their latest releases within their current major versions
 - Removed unused helpers from the test suite's mocks (`test/support/test_infrastructure.rb`): `MockRegistryServer#reset` and `#thread`, `MockAmqpMessageClient#create_queue`, `#channel`, `#exchange` and its unread `config:` keyword, `MockQueue#messages`, and `TestAgent#clear_received_messages`
 - Fixed `examples/control.rb` "Stop all agents" shutting down the controller itself, and its exit logging a false "fini called with a nil id" warning (#98)
+- Fixed `examples/registry.rb` restarting after Ctrl-C or TERM instead of stopping; its explicit `run!` duplicated Sinatra's classic-style auto-run, so the server started a second time on exit (#105)
 
 
 ## Released

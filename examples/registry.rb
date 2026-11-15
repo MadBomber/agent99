@@ -71,8 +71,3 @@ get '/' do
   content_type :json
   AGENT_REGISTRY.to_json
 end
-
-# Start the Sinatra server
-if __FILE__ == $PROGRAM_NAME
-  Sinatra::Application.run!
-end
