@@ -103,8 +103,7 @@ module Agent99::MessageProcessing
   # @param response [Hash] The response to send
   #
   def send_response(response)
-    response[:header] = return_address
-    @message_client.publish(response)
+    @message_client.publish(response.merge(header: return_address))
   end
 
 
