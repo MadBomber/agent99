@@ -39,26 +39,24 @@ module Agent99::AgentLifecycle
 
 
   def validate_info_keys
-    required_keys = [:name, :capabilities]
-    if respond_to?(:info, true)
-      string_keys = required_keys.map(&:to_s) & info.keys
-      unless string_keys.empty?
-        logger.error "This agent's info method must use Symbol keys, not Strings: #{string_keys}"
-        exit(1)
-      end
-
-      missing_keys = required_keys - info_with_defaults.keys
-      unless missing_keys.empty?
-        logger.error <<~MESSAGE
-          This agent's info method is missing 
-          #{1 == missing_keys.size ? 'a required key' : 'some required keys'}: 
-          #{missing_keys}
-        MESSAGE
-        .split("\n").join
-        exit(1)
-      end
-    else
+    unless respond_to?(:info, true)
       logger.error "An agent must implement the info method"
+      exit(1)
+    end
+
+    required_keys = [:name, :capabilities]
+    info_keys     = info_with_defaults.keys
+
+    string_keys = required_keys.map(&:to_s) & info_keys
+    unless string_keys.empty?
+      logger.error "This agent's info method must use Symbol keys, not Strings: #{string_keys}"
+      exit(1)
+    end
+
+    missing_keys = required_keys - info_keys
+    unless missing_keys.empty?
+      wording = missing_keys.size == 1 ? 'a required key' : 'some required keys'
+      logger.error "This agent's info method is missing #{wording}: #{missing_keys}"
       exit(1)
     end
   end

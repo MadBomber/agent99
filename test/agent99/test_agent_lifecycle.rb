@@ -304,4 +304,26 @@ class TestAgentLifecycle < Minitest::Test
 
     assert_equal 'Custom', agent.send(:info_with_defaults)[:name]
   end
+
+  def validation_errors_for(info_hash)
+    agent = Class.new(Agent99::Base).allocate
+    agent.define_singleton_method(:info) { info_hash }
+    messages = []
+    logger = Logger.new(nil)
+    logger.define_singleton_method(:error) { |message| messages << message }
+    agent.instance_variable_set(:@logger, logger)
+
+    assert_raises(SystemExit) { agent.send(:validate_info_keys) }
+    messages
+  end
+
+  def test_missing_info_key_message_text
+    assert_equal ["This agent's info method is missing a required key: [:capabilities]"],
+                 validation_errors_for({ name: 'OneMissing' })
+  end
+
+  def test_missing_info_keys_message_text
+    assert_equal ["This agent's info method is missing some required keys: [:name, :capabilities]"],
+                 validation_errors_for({})
+  end
 end
