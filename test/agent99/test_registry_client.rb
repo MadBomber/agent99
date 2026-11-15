@@ -42,7 +42,18 @@ class TestRegistryClient < Minitest::Test
 
     assert_nil client.register(info: { name: 'TestAgent' })
     assert_includes log.string, 'Registry returned 500 Internal Server Error'
+    assert_includes log.string, 'Error response body: <h1>Internal Server Error</h1>'
     refute_includes log.string, 'JSON parsing error'
+  end
+
+
+  def test_error_detail
+    client = Agent99::RegistryClient.new(logger: @logger)
+
+    assert_equal ': boom', client.send(:error_detail, '{"error":"boom"}')
+    ['<h1>oops</h1>', '', nil, '{}', '{"error":null}', '[1]', '"text"'].each do |body|
+      assert_equal '', client.send(:error_detail, body), "body: #{body.inspect}"
+    end
   end
 
 

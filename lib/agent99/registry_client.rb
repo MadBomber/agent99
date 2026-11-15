@@ -78,7 +78,9 @@ class Agent99::RegistryClient
       logger.info "Action completed successfully."
       nil
     else
-      logger.error "Registry returned #{response.code} #{response.message}#{error_detail(response.body)}"
+      status = "#{response.code} #{response.message}".rstrip
+      logger.error "Registry returned #{status}#{error_detail(response.body)}"
+      logger.debug "Error response body: #{response.body}"
       nil
     end
   end
