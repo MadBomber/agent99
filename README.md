@@ -178,7 +178,7 @@ Configure Agent99 through environment variables:
 - `RABBITMQ_USER`: Username (default: `guest`)
 - `RABBITMQ_PASS`: Password (default: `guest`)
 
-📚 **Complete configuration guide**: [Configuration Documentation](docs/configuration/)
+📚 **Complete configuration guide**: [Configuration Documentation](docs/operations/configuration.md)
 
 ## Agent Lifecycle
 
@@ -228,9 +228,7 @@ The registry supports both HTTP REST API and direct client integration.
 Explore real-world implementations:
 
 - **🚀 [Demo Runner](examples/run_demo.rb)**: Complete working system
-- **👋 [Greeter Agent](examples/greeter_agent.rb)**: Simple request-response
-- **🔄 [Multi-Agent System](examples/multi_agent/)**: Coordinated agents
-- **📊 [Monitoring Dashboard](examples/dashboard/)**: Agent status monitoring
+- **👋 [Maxwell Agent 86](examples/maxwell_agent86.rb)** and **[Maxwell Request](examples/maxwell_request.rb)**: Simple request-response
 
 💡 **All examples**: [Examples Directory](docs/examples/)
 
@@ -263,7 +261,7 @@ Bug reports and pull requests are welcome on GitHub at https://github.com/MadBom
 - **🔗 Interoperability**: Full Agent2Agent protocol compliance
 - **☁️ Cloud-native**: Kubernetes operators and cloud integrations
 
-⚠️ **Breaking changes**: [Migration Guide v0.0.4](docs/breaking_change_v0.0.4.md)
+⚠️ **Breaking changes**: [Migration Guide v0.0.4](docs/operations/breaking-changes.md)
 
 
 ## License
