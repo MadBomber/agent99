@@ -50,6 +50,7 @@
 - Fixed `discover_agent` raising `NoMethodError` when the registry is unreachable or returns an error; it now logs and raises the documented "No agents available" `RuntimeError` (#35)
 - Fixed `get(:field)` replacing an explicit `false` or `nil` in the request with the schema example; the default is now used only when the field is absent (#36)
 - Fixed `get(:field)` raising `NameError` when the field is missing and the agent defines no `REQUEST_SCHEMA`; it now returns `nil` (a top-level `::REQUEST_SCHEMA` is ignored) (#14)
+- Updated rack, rack-protection, rack-session, sinatra, json and uri in the development `Gemfile.lock` to their latest releases within their current major versions
 
 
 ## Released
