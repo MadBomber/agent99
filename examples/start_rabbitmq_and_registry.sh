@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # examples/start_rabbitmq_and_registry.sh
 #
-# brew install rabbitmq-server
+# brew install rabbitmq
 #
 # Start up the AMQP message broker (RabbitMQ) in the background
 

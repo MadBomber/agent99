@@ -8,11 +8,11 @@ The registration process is transparent to a new instance of an `Agent99::Base` 
 
 First thing: start the registry.rb Sinatra app and the peer-to-peer messaging network.  The default is the `AmqpMessageClient` class.
 
-If you do not have the RabbitMQ server installed on your Mac then grab it using `brew install rabbitmq-server` and while you are installing software do `brew install boxes` as well since the `chief_agent.rb` example uses that little CLI tool to highlight some text in the terminal.
+If you do not have the RabbitMQ server installed on your Mac then grab it using `brew install rabbitmq` and while you are installing software do `brew install boxes` as well since the `chief_agent.rb` example uses that little CLI tool to highlight some text in the terminal.
 
 ```bash
 git clone ssh://git@github.com/MadBomber/agent99
-brew install rabbitmq-server boxes
+brew install rabbitmq boxes
 gem install agent99
 
 cd agent99/examples
