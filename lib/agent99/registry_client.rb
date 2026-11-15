@@ -79,9 +79,8 @@ class Agent99::RegistryClient
       nil
     else
       status = "#{response.code} #{response.message}".rstrip
-      detail = error_detail(response.body)
-      logger.error "Registry returned #{status}#{detail}"
-      logger.debug { "Error response body: #{response.body}" } if detail.empty?
+      logger.error "Registry returned #{status}#{error_detail(response.body)}"
+      logger.debug "Error response body: #{response.body}"
       nil
     end
   end
@@ -89,7 +88,7 @@ class Agent99::RegistryClient
   # ": <error>" when an error body is a JSON object with an :error key, else "".
   def error_detail(body)
     case JSON.parse(body.to_s, symbolize_names: true)
-    in { error: } if error then ": #{error}"
+    in { error: } unless error.to_s.strip.empty? then ": #{error}"
     else ""
     end
   rescue JSON::ParserError

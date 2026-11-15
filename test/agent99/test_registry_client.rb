@@ -51,7 +51,7 @@ class TestRegistryClient < Minitest::Test
     client = Agent99::RegistryClient.new(logger: @logger)
 
     assert_equal ': boom', client.send(:error_detail, '{"error":"boom"}')
-    ['<h1>oops</h1>', '', nil, '{}', '{"error":null}', '[1]', '"text"'].each do |body|
+    ['<h1>oops</h1>', '', nil, '{}', '{"error":null}', '{"error":" "}', '[1]', '"text"'].each do |body|
       assert_equal '', client.send(:error_detail, body), "body: #{body.inspect}"
     end
   end
@@ -63,7 +63,6 @@ class TestRegistryClient < Minitest::Test
 
     assert_nil client.discover(capability: 'math')
     assert_includes log.string, 'Registry returned 404 Not Found: Not found: /missing/discover'
-    refute_includes log.string, 'Error response body'
   end
 
 
