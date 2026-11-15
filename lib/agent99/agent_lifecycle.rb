@@ -32,9 +32,9 @@ module Agent99::AgentLifecycle
 
     @queue = message_client.setup(agent_id: id, logger:)
 
-    init if respond_to?(:init, true)
-  
     setup_signal_handlers
+
+    init if respond_to?(:init, true)
   end
 
 
