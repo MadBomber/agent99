@@ -29,6 +29,7 @@
 - **[BREAKING FIX]** `require "agent99"` no longer fails on a clean install: the development-only `debug_me` gem is no longer required and `DebugMe` is no longer mixed into `Object` (#3)
   - Code that called `debug_me` without requiring it, relying on agent99 to mix it in, must now `require "debug_me"` and `include DebugMe` itself
 - Fixed a remote `shutdown` control message running `fini` twice and logging a false "fini called with a nil id" warning, and leaving a NATS agent running because the exit was swallowed on the nats-pure handler thread; `handle_shutdown` now exits through the main thread and leaves cleanup to the `at_exit` hook
+- `Agent99::RegistryClient` now logs the HTTP status of a failed registry request (`Registry returned 500 Internal Server Error`, plus the registry's `error` when the body is JSON); a non-JSON error page was logged as a misleading "JSON parsing error" and the status was never shown. Return values are unchanged
 - Gem package now ships only lib, sig, examples, README, CHANGELOG, and LICENSE (about 1.5 MB down to 80 KB); added `documentation_uri` metadata (#5)
 - Fixed the example registry (`examples/registry.rb`) returning 500 on `POST /register` under Rack 3, where the request body cannot be rewound; it no longer calls `request.body.rewind`, and it no longer requires the development-only `debug_me` gem, which it never used (#23)
 - Removed the class-body `rescue` at the end of `Agent99::Base`; it only covered load-time evaluation of the class, would have raised `NoMethodError` if it ever ran, and made `ruby -w` warn about mismatched indentation (#8)
@@ -50,6 +51,7 @@
 - Fixed `discover_agent` raising `NoMethodError` when the registry is unreachable or returns an error; it now logs and raises the documented "No agents available" `RuntimeError` (#35)
 - Fixed `get(:field)` replacing an explicit `false` or `nil` in the request with the schema example; the default is now used only when the field is absent (#36)
 - Fixed `get(:field)` raising `NameError` when the field is missing and the agent defines no `REQUEST_SCHEMA`; it now returns `nil` (a top-level `::REQUEST_SCHEMA` is ignored) (#14)
+- Updated rack, rack-protection, rack-session, sinatra, json and uri in the development `Gemfile.lock` to their latest releases within their current major versions
 - Removed unused helpers from the test suite's mocks (`test/support/test_infrastructure.rb`): `MockRegistryServer#reset` and `#thread`, `MockAmqpMessageClient#create_queue`, `#channel`, `#exchange` and its unread `config:` keyword, `MockQueue#messages`, and `TestAgent#clear_received_messages`
 
 
