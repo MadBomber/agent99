@@ -52,6 +52,7 @@
 - Fixed `get(:field)` replacing an explicit `false` or `nil` in the request with the schema example; the default is now used only when the field is absent (#36)
 - Fixed `get(:field)` raising `NameError` when the field is missing and the agent defines no `REQUEST_SCHEMA`; it now returns `nil` (a top-level `::REQUEST_SCHEMA` is ignored) (#14)
 - Updated rack, rack-protection, rack-session, sinatra, json and uri in the development `Gemfile.lock` to their latest releases within their current major versions
+- Removed unused helpers from the test suite's mocks (`test/support/test_infrastructure.rb`): `MockRegistryServer#reset` and `#thread`, `MockAmqpMessageClient#create_queue`, `#channel`, `#exchange` and its unread `config:` keyword, `MockQueue#messages`, and `TestAgent#clear_received_messages`
 
 
 ## Released
