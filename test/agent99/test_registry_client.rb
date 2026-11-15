@@ -38,7 +38,7 @@ class TestRegistryClient < Minitest::Test
       res.body = '<h1>Internal Server Error</h1>'
     end
     log = StringIO.new
-    client = Agent99::RegistryClient.new(base_url: "#{registry_url}/broken", logger: Logger.new(log))
+    client = Agent99::RegistryClient.new(base_url: "#{registry_url}/broken", logger: Logger.new(log, level: :debug))
 
     assert_nil client.register(info: { name: 'TestAgent' })
     assert_includes log.string, 'Registry returned 500 Internal Server Error'
@@ -59,10 +59,23 @@ class TestRegistryClient < Minitest::Test
 
   def test_json_error_response_logs_http_status_and_error
     log = StringIO.new
-    client = Agent99::RegistryClient.new(base_url: "#{registry_url}/missing", logger: Logger.new(log))
+    client = Agent99::RegistryClient.new(base_url: "#{registry_url}/missing", logger: Logger.new(log, level: :debug))
 
     assert_nil client.discover(capability: 'math')
     assert_includes log.string, 'Registry returned 404 Not Found: Not found: /missing/discover'
+    refute_includes log.string, 'Error response body'
+  end
+
+
+  def test_error_response_without_reason_phrase
+    log = StringIO.new
+    client = Agent99::RegistryClient.new(logger: Logger.new(log))
+    response = Net::HTTPServiceUnavailable.new('1.1', '503', '')
+    response.instance_variable_set(:@read, true)
+    response.body = '{"error":"down"}'
+
+    assert_nil client.send(:handle_response, response)
+    assert_includes log.string, "Registry returned 503: down\n"
   end
 
 

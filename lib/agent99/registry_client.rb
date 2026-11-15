@@ -79,8 +79,9 @@ class Agent99::RegistryClient
       nil
     else
       status = "#{response.code} #{response.message}".rstrip
-      logger.error "Registry returned #{status}#{error_detail(response.body)}"
-      logger.debug "Error response body: #{response.body}"
+      detail = error_detail(response.body)
+      logger.error "Registry returned #{status}#{detail}"
+      logger.debug { "Error response body: #{response.body}" } if detail.empty?
       nil
     end
   end
