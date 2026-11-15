@@ -85,8 +85,10 @@ class Agent99::RegistryClient
 
   # ": <error>" when an error body is a JSON object with an :error key, else "".
   def error_detail(body)
-    parsed = JSON.parse(body.to_s, symbolize_names: true)
-    parsed.is_a?(Hash) && parsed[:error] ? ": #{parsed[:error]}" : ""
+    case JSON.parse(body.to_s, symbolize_names: true)
+    in { error: } if error then ": #{error}"
+    else ""
+    end
   rescue JSON::ParserError
     ""
   end

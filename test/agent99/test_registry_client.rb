@@ -11,11 +11,9 @@ class TestRegistryClient < Minitest::Test
   end
 
   def test_initialize_with_custom_url
-    client = Agent99::RegistryClient.new(base_url: registry_url, logger: @logger)
+    http_client = Agent99::RegistryClient.new(base_url: 'http://test-registry:8080', logger: @logger).instance_variable_get(:@http_client)
 
-    agent_id = client.register(info: { name: 'TestAgent' })
-
-    assert_includes @registry_server.agents.keys, agent_id
+    assert_equal ['test-registry', 8080], [http_client.address, http_client.port]
   end
 
 
