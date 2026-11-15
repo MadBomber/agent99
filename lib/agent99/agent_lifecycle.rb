@@ -23,7 +23,7 @@ module Agent99::AgentLifecycle
     validate_info_keys
 
     @registry_client.logger = logger
-    register(info)
+    register(info_with_defaults)
 
     if id.nil?
       logger.error "Agent #{name} could not register with the registry; shutting down"
@@ -47,7 +47,7 @@ module Agent99::AgentLifecycle
         exit(1)
       end
 
-      missing_keys = required_keys - info.keys
+      missing_keys = required_keys - info_with_defaults.keys
       unless missing_keys.empty?
         logger.error <<~MESSAGE
           This agent's info method is missing 
@@ -61,6 +61,17 @@ module Agent99::AgentLifecycle
       logger.error "An agent must implement the info method"
       exit(1)
     end
+  end
+
+
+  # The agent's info Hash with defaults filled in: name defaults to the
+  # agent's class name.
+  #
+  # @return [Hash]
+  #
+  def info_with_defaults
+    defaults = self.class.name ? { name: self.class.name } : {}
+    defaults.merge(info)
   end
 
 
