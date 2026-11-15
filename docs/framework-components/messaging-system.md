@@ -101,7 +101,7 @@ Both implementations support these core operations:
    - NATS: Implicit subject-based routing
 
 2. **Message Persistence**:
-   - AMQP: Supports persistent messages and queues
+   - AMQP: Agent99 declares non-durable queues and publishes non-persistent messages
    - NATS: Ephemeral messaging by default
 
 3. **Error Handling**:
