@@ -60,6 +60,7 @@
 - An agent whose `init` exits or raises is now withdrawn from the registry and its queue deleted; the `at_exit { fini }` hook was installed only after `init` returned (#100)
 - Setup docs and `examples/run_demo.rb` now say `brew install rabbitmq`; Homebrew has no `rabbitmq-server` formula. `examples/DEMO.md` now lists Ruby 3.3+, matching the gemspec (#107)
 - Fixed five README links to files that do not exist: configuration and breaking-changes now point at `docs/operations/`, the request-response example at `maxwell_agent86.rb` and `maxwell_request.rb`, and the nonexistent multi-agent and dashboard examples are dropped (#106)
+- Fixed `examples/registry.rb` restarting after Ctrl-C or TERM instead of stopping; its explicit `run!` duplicated Sinatra's classic-style auto-run, so the server started a second time on exit (#105)
 
 
 ## Released
