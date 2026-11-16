@@ -58,6 +58,7 @@
 - `send_response` no longer writes `:header` into the caller's hash; it publishes a copy, so a shared response hash keeps no stale header and a frozen one no longer raises `FrozenError` (#108)
 - `validate_info_keys` builds its "missing required key" error as one string; the words were separated only by trailing spaces in a heredoc, which a whitespace-stripping editor would remove (#109)
 - An agent whose `init` exits or raises is now withdrawn from the registry and its queue deleted; the `at_exit { fini }` hook was installed only after `init` returned (#100)
+- Setup docs and `examples/run_demo.rb` now say `brew install rabbitmq`; Homebrew has no `rabbitmq-server` formula. `examples/DEMO.md` now lists Ruby 3.3+, matching the gemspec (#107)
 
 
 ## Released

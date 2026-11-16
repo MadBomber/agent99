@@ -82,14 +82,14 @@ The demo runner shows:
 ## Dependencies
 
 ### Required (Bundled)
-- Ruby 3.0+
+- Ruby 3.3+
 - Agent99 framework (in parent directory)
 - Example agent files
 
 ### Optional (Enhanced Experience)
 ```bash
 # Message broker for production-like messaging
-brew install rabbitmq-server
+brew install rabbitmq
 
 # Enhanced output formatting for Chief agent
 brew install boxes

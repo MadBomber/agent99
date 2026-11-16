@@ -180,7 +180,7 @@ class Agent99Demo
     begin
       system("which rabbitmq-server > /dev/null 2>&1")
       unless $?.success?
-        puts "⚠️  RabbitMQ not found. Install with: brew install rabbitmq-server"
+        puts "⚠️  RabbitMQ not found. Install with: brew install rabbitmq"
         puts "   Continuing anyway - agents will use fallback message client"
       end
     rescue
