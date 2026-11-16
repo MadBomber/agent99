@@ -55,6 +55,8 @@
 - Updated rack, rack-protection, rack-session, sinatra, json and uri in the development `Gemfile.lock` to their latest releases within their current major versions
 - Removed unused helpers from the test suite's mocks (`test/support/test_infrastructure.rb`): `MockRegistryServer#reset` and `#thread`, `MockAmqpMessageClient#create_queue`, `#channel`, `#exchange` and its unread `config:` keyword, `MockQueue#messages`, and `TestAgent#clear_received_messages`
 - Fixed `examples/control.rb` "Stop all agents" shutting down the controller itself, and its exit logging a false "fini called with a nil id" warning (#98)
+- `send_response` no longer writes `:header` into the caller's hash; it publishes a copy, so a shared response hash keeps no stale header and a frozen one no longer raises `FrozenError` (#108)
+- `validate_info_keys` builds its "missing required key" error as one string; the words were separated only by trailing spaces in a heredoc, which a whitespace-stripping editor would remove (#109)
 - An agent whose `init` exits or raises is now withdrawn from the registry and its queue deleted; the `at_exit { fini }` hook was installed only after `init` returned (#100)
 
 
