@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 require "test_helper"
+require "open3"
+require "rbconfig"
 
 class TestAgentLifecycle < Minitest::Test
   def test_agent_initialization_and_registration
@@ -303,5 +305,73 @@ class TestAgentLifecycle < Minitest::Test
     agent.define_singleton_method(:info) { { name: 'Custom', capabilities: ['test'] } }
 
     assert_equal 'Custom', agent.send(:info_with_defaults)[:name]
+  end
+
+  # Starts an agent in a child process with stub clients; its init runs the
+  # given code. Returns the child's output and status.
+  def run_agent_whose_init(init_body)
+    script = <<~RUBY
+      require 'agent99'
+
+      class StubRegistry
+        attr_accessor :logger
+
+        def register(info:) = 'agent-1'
+        def withdraw(id) = $stdout.puts("withdraw \#{id}")
+      end
+
+      class StubMessenger
+        def setup(agent_id:, logger:) = agent_id
+        def delete_queue(name) = $stdout.puts("delete_queue \#{name}")
+      end
+
+      class InitAgent < Agent99::Base
+        def info = { capabilities: ['test'] }
+        def init = #{init_body}
+      end
+
+      InitAgent.new(registry_client: StubRegistry.new,
+                    message_client: StubMessenger.new,
+                    logger: Logger.new(nil))
+    RUBY
+    Open3.capture2e(RbConfig.ruby, "-I#{File.expand_path('../../lib', __dir__)}", "-e", script)
+  end
+
+  def test_agent_is_withdrawn_when_init_exits
+    output, status = run_agent_whose_init("exit(1)")
+
+    refute status.success?
+    assert_includes output, "withdraw agent-1"
+    assert_includes output, "delete_queue agent-1"
+  end
+
+  def test_agent_is_withdrawn_when_init_raises
+    output, status = run_agent_whose_init("raise('boom')")
+
+    refute status.success?
+    assert_includes output, "withdraw agent-1"
+    assert_includes output, "delete_queue agent-1"
+  end
+
+  def validation_errors_for(info_hash)
+    agent = Class.new(Agent99::Base).allocate
+    agent.define_singleton_method(:info) { info_hash }
+    messages = []
+    logger = Logger.new(nil)
+    logger.define_singleton_method(:error) { |message| messages << message }
+    agent.instance_variable_set(:@logger, logger)
+
+    assert_raises(SystemExit) { agent.send(:validate_info_keys) }
+    messages
+  end
+
+  def test_missing_info_key_message_text
+    assert_equal ["This agent's info method is missing a required key: [:capabilities]"],
+                 validation_errors_for({ name: 'OneMissing' })
+  end
+
+  def test_missing_info_keys_message_text
+    assert_equal ["This agent's info method is missing some required keys: [:name, :capabilities]"],
+                 validation_errors_for({})
   end
 end

@@ -65,4 +65,21 @@ class TestMessageProcessing < Minitest::Test
     assert_equal "controller", reply[:header][:to_uuid]
     assert_equal({ error: "Unknown control action: restart" }, reply[:data])
   end
+
+  def test_send_response_leaves_the_callers_hash_unchanged
+    publisher = RecordingPublisher.new
+    agent = build_agent(
+      Class.new(Agent99::Base),
+      { header: { type: "request", from_uuid: "requester", to_uuid: "agent-1" } }
+    )
+    agent.instance_variable_set(:@message_client, publisher)
+    response = { status: "ok" }.freeze
+
+    agent.send(:send_response, response)
+
+    assert_equal({ status: "ok" }, response)
+    reply = publisher.published.first
+    assert_equal "ok", reply[:status]
+    assert_equal "requester", reply[:header][:to_uuid]
+  end
 end
