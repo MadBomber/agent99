@@ -9,8 +9,8 @@ Agent99 supports both AMQP and NATS messaging systems, allowing you to choose th
 #### AMQP (RabbitMQ)
 The AMQP implementation uses RabbitMQ as the message broker and provides:
 
-- **Durability**: Messages can persist across broker restarts
-- **Queue TTL**: Queues automatically expire after 60 seconds of inactivity
+- **No durability**: agent queues are not durable and messages are not persistent, so a broker restart loses both
+- **Queue expiry**: an agent's queue is deleted after 60 seconds without a consumer (RabbitMQ `x-expires`), so queues left by agents that died without cleaning up do not pile up
 - **Automatic Reconnection**: Handles connection drops gracefully
 - **Default Configuration**:
   ```ruby
@@ -101,7 +101,7 @@ Both implementations support these core operations:
    - NATS: Implicit subject-based routing
 
 2. **Message Persistence**:
-   - AMQP: Supports persistent messages and queues
+   - AMQP: Agent99 declares non-durable queues and publishes non-persistent messages
    - NATS: Ephemeral messaging by default
 
 3. **Error Handling**:

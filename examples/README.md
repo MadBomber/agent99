@@ -146,7 +146,7 @@ For the best experience, install these optional dependencies:
 
 ```bash
 # For message broker (recommended)
-brew install rabbitmq-server
+brew install rabbitmq
 
 # For enhanced chief agent output
 brew install boxes

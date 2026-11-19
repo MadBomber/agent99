@@ -1,18 +1,89 @@
 # frozen_string_literal: true
 
 require "test_helper"
+require "stringio"
 
 class TestRegistryClient < Minitest::Test
   def test_initialize_with_defaults
-    client = Agent99::RegistryClient.new(logger: @logger)
-    assert_equal 'http://localhost:4567', client.instance_variable_get(:@base_url)
+    http_client = Agent99::RegistryClient.new(logger: @logger).instance_variable_get(:@http_client)
+
+    assert_equal ['localhost', 4567], [http_client.address, http_client.port]
   end
 
   def test_initialize_with_custom_url
-    custom_url = "http://test-registry:8080"
-    client = Agent99::RegistryClient.new(base_url: custom_url, logger: @logger)
-    assert_equal custom_url, client.instance_variable_get(:@base_url)
+    http_client = Agent99::RegistryClient.new(base_url: 'http://test-registry:8080', logger: @logger).instance_variable_get(:@http_client)
+
+    assert_equal ['test-registry', 8080], [http_client.address, http_client.port]
   end
+
+
+  def test_base_url_path_prefixes_requests
+    seen_path = nil
+    @registry_server.server.mount_proc('/registry') do |req, res|
+      seen_path = req.path
+      res.status = 201
+      res.body = { uuid: 'prefixed-id' }.to_json
+    end
+    client = Agent99::RegistryClient.new(base_url: "#{registry_url}/registry/", logger: @logger)
+
+    assert_equal 'prefixed-id', client.register(info: { name: 'TestAgent' })
+    assert_equal '/registry/register', seen_path
+  end
+
+
+  def test_non_json_error_response_logs_http_status
+    @registry_server.server.mount_proc('/broken') do |_req, res|
+      res.status = 500
+      res['Content-Type'] = 'text/html'
+      res.body = '<h1>Internal Server Error</h1>'
+    end
+    log = StringIO.new
+    client = Agent99::RegistryClient.new(base_url: "#{registry_url}/broken", logger: Logger.new(log, level: :debug))
+
+    assert_nil client.register(info: { name: 'TestAgent' })
+    assert_includes log.string, 'Registry returned 500 Internal Server Error'
+    assert_includes log.string, 'Error response body: <h1>Internal Server Error</h1>'
+    refute_includes log.string, 'JSON parsing error'
+  end
+
+
+  def test_error_detail
+    client = Agent99::RegistryClient.new(logger: @logger)
+
+    assert_equal ': boom', client.send(:error_detail, '{"error":"boom"}')
+    ['<h1>oops</h1>', '', nil, '{}', '{"error":null}', '{"error":" "}', '[1]', '"text"'].each do |body|
+      assert_equal '', client.send(:error_detail, body), "body: #{body.inspect}"
+    end
+  end
+
+
+  def test_json_error_response_logs_http_status_and_error
+    log = StringIO.new
+    client = Agent99::RegistryClient.new(base_url: "#{registry_url}/missing", logger: Logger.new(log, level: :debug))
+
+    assert_nil client.discover(capability: 'math')
+    assert_includes log.string, 'Registry returned 404 Not Found: Not found: /missing/discover'
+  end
+
+
+  def test_error_response_without_reason_phrase
+    log = StringIO.new
+    client = Agent99::RegistryClient.new(logger: Logger.new(log))
+    response = Net::HTTPServiceUnavailable.new('1.1', '503', '')
+    response.instance_variable_set(:@read, true)
+    response.body = '{"error":"down"}'
+
+    assert_nil client.send(:handle_response, response)
+    assert_includes log.string, "Registry returned 503: down\n"
+  end
+
+
+  def test_base_url_scheme_configures_client
+    client = Agent99::RegistryClient.new(base_url: 'https://registry.example', logger: @logger)
+
+    assert_predicate client.instance_variable_get(:@http_client), :use_ssl?
+  end
+
 
   def test_register_agent
     client = Agent99::RegistryClient.new(base_url: registry_url, logger: @logger)

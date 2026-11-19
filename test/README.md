@@ -38,26 +38,26 @@ This comprehensive test suite for Agent99 uses Minitest and follows a real-imple
 
 ### All Tests
 ```bash
-ruby -Ilib -Itest -e "Dir.glob('test/**/*_test.rb') { |f| require f }"
+bundle exec rake test
 ```
 
 ### Specific Test Categories
 ```bash
 # Unit tests only
-ruby -Ilib -Itest -e "Dir.glob('test/agent99/*_test.rb') { |f| require f }"
+bundle exec rake test_unit
 
 # Integration tests only  
-ruby -Ilib -Itest -e "Dir.glob('test/integration/*_test.rb') { |f| require f }"
+bundle exec rake test_integration
 
 # System tests only
-ruby -Ilib -Itest -e "Dir.glob('test/system/*_test.rb') { |f| require f }"
+bundle exec rake test_system
 ```
 
 ### Individual Test Files
 ```bash
-ruby -Ilib test/agent99/test_base.rb
-ruby -Ilib test/integration/test_agent_communication.rb
-ruby -Ilib test/system/test_full_workflows.rb
+bundle exec ruby -Ilib -Itest test/agent99/test_base.rb
+bundle exec ruby -Ilib -Itest test/integration/test_agent_communication.rb
+bundle exec ruby -Ilib -Itest test/system/test_full_workflows.rb
 ```
 
 ## Test Philosophy

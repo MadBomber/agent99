@@ -1,14 +1,13 @@
 # ./lib/agent99.rb
 
-require 'debug_me'
-include DebugMe
-
 require 'json'
 require 'simple_json_schema_builder'
 require 'securerandom'
 
 module Agent99; end  # Establish a namespace
 
+require_relative 'agent99/version'
+require_relative 'agent99/header_schema'
 require_relative 'agent99/base'
 
 module Agent99

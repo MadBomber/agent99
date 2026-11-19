@@ -25,7 +25,7 @@ module Agent99::AgentDiscovery
   def discover_agent(capability:, how_many: 1, all: false)
     result = @registry_client.discover(capability:)
 
-    if result.empty?
+    if result.nil? || result.empty?
       logger.error "No agents found for capability: #{capability}"
       raise "No agents available"
     end

@@ -180,7 +180,7 @@ class Agent99Demo
     begin
       system("which rabbitmq-server > /dev/null 2>&1")
       unless $?.success?
-        puts "⚠️  RabbitMQ not found. Install with: brew install rabbitmq-server"
+        puts "⚠️  RabbitMQ not found. Install with: brew install rabbitmq"
         puts "   Continuing anyway - agents will use fallback message client"
       end
     rescue
@@ -345,7 +345,7 @@ class Agent99Demo
   
   def generate_demo_agent_code(class_name, capabilities)
     <<~RUBY
-      require_relative '../lib/agent99'
+      require_relative '../../lib/agent99'
       
       class #{class_name} < Agent99::Base
         def info

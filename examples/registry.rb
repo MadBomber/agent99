@@ -1,9 +1,6 @@
 #!/usr/bin/env ruby
 # examples/registry.rb
 
-require 'debug_me'
-include DebugMe
-
 require 'sinatra'
 require 'json'
 require 'securerandom'
@@ -26,9 +23,7 @@ end
 
 # Endpoint to register an agent
 post '/register' do
-  request.body.rewind
   request_data  = JSON.parse(request.body.read, symbolize_names: true)
-  agent_name    = request_data[:name]
   agent_uuid    = SecureRandom.uuid
   
   # Ensure capabilities are lowercase
@@ -75,9 +70,4 @@ end
 get '/' do
   content_type :json
   AGENT_REGISTRY.to_json
-end
-
-# Start the Sinatra server
-if __FILE__ == $PROGRAM_NAME
-  Sinatra::Application.run!
 end

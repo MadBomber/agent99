@@ -19,14 +19,14 @@
         <br/><br/>
         <h3>Key Features</h3>
         <ul>
-            <li><strong>🌐 <a href="#agent-discovery">Agent Discovery</a></strong> - Find agents by capabilities</li>
-            <li><strong>📡 <a href="#flexible-communication">Peer-to-Peer Messaging</a></strong> - AMQP & NATS support</li>
+            <li><strong>🌐 <a href="docs/framework-components/agent-discovery.md">Agent Discovery</a></strong> - Find agents by capabilities</li>
+            <li><strong>📡 <a href="docs/framework-components/messaging-system.md">Peer-to-Peer Messaging</a></strong> - AMQP & NATS support</li>
             <li><strong>🔄 <a href="#message-processing">Message Processing</a></strong> - Requests, responses & control</li>
             <li><strong>📋 <a href="#registry-integration">Registry Integration</a></strong> - Centralized agent registry</li>
-            <li><strong>⚡ <a href="#control-actions">Control Actions</a></strong> - Pause, resume, update agents</li>
-            <li><strong>🔧 <a href="#agent-lifecycle-management">Lifecycle Management</a></strong> - Easy setup & teardown</li>
-            <li><strong>🚀 <a href="#multi-agent-processing">Multi-Agent Processing</a></strong> - Thread isolation support</li>
-            <li><strong>📊 <a href="#error-handling-and-logging">Error Handling & Logging</a></strong> - Built-in management</li>
+            <li><strong>⚡ <a href="docs/advanced-topics/control-actions.md">Control Actions</a></strong> - Pause, resume, update agents</li>
+            <li><strong>🔧 <a href="#agent-lifecycle">Lifecycle Management</a></strong> - Easy setup & teardown</li>
+            <li><strong>🚀 <a href="docs/advanced-topics/multi-agent-processing.md">Multi-Agent Processing</a></strong> - Thread isolation support</li>
+            <li><strong>📊 <a href="docs/agent-development/error-handling-and-logging.md">Error Handling & Logging</a></strong> - Built-in management</li>
         </ul>
       </td>
     </tr>
@@ -144,7 +144,7 @@ class GreeterAgent < Agent99::Base
     }
   end
 
-  def process_request(payload)
+  def receive_request
     name = payload.dig(:name)
     send_response(result: "Hello, #{name}!")
   end
@@ -178,7 +178,7 @@ Configure Agent99 through environment variables:
 - `RABBITMQ_USER`: Username (default: `guest`)
 - `RABBITMQ_PASS`: Password (default: `guest`)
 
-📚 **Complete configuration guide**: [Configuration Documentation](docs/configuration/)
+📚 **Complete configuration guide**: [Configuration Documentation](docs/operations/configuration.md)
 
 ## Agent Lifecycle
 
@@ -228,9 +228,7 @@ The registry supports both HTTP REST API and direct client integration.
 Explore real-world implementations:
 
 - **🚀 [Demo Runner](examples/run_demo.rb)**: Complete working system
-- **👋 [Greeter Agent](examples/greeter_agent.rb)**: Simple request-response
-- **🔄 [Multi-Agent System](examples/multi_agent/)**: Coordinated agents
-- **📊 [Monitoring Dashboard](examples/dashboard/)**: Agent status monitoring
+- **👋 [Maxwell Agent 86](examples/maxwell_agent86.rb)** and **[Maxwell Request](examples/maxwell_request.rb)**: Simple request-response
 
 💡 **All examples**: [Examples Directory](docs/examples/)
 
@@ -263,7 +261,7 @@ Bug reports and pull requests are welcome on GitHub at https://github.com/MadBom
 - **🔗 Interoperability**: Full Agent2Agent protocol compliance
 - **☁️ Cloud-native**: Kubernetes operators and cloud integrations
 
-⚠️ **Breaking changes**: [Migration Guide v0.0.4](docs/breaking_change_v0.0.4.md)
+⚠️ **Breaking changes**: [Migration Guide v0.0.4](docs/operations/breaking-changes.md)
 
 
 ## License

@@ -38,7 +38,7 @@ class Agent99::Base
   MESSAGE_TYPES = %w[request response control]
 
   attr_reader :id, :capabilities, :name
-  attr_reader :payload, :header, :queue
+  attr_reader :payload, :queue
   attr_reader :logger
   attr_reader :agents
   
@@ -52,12 +52,6 @@ class Agent99::Base
     logger.error "#{message}: #{error.message}"
     logger.debug error.backtrace.join("\n")
   end
-
-
-  # the final rescue block
-  rescue StandardError => e
-    handle_error("Unhandled error in Agent99::Base", e)
-    exit(2)
 end
 
 

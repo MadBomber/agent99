@@ -23,33 +23,53 @@ module Agent99::AgentLifecycle
     validate_info_keys
 
     @registry_client.logger = logger
-    register(info)
+    register(info_with_defaults)
+
+    if id.nil?
+      logger.error "Agent #{name} could not register with the registry; shutting down"
+      exit(1)
+    end
 
     @queue = message_client.setup(agent_id: id, logger:)
 
-    init if respond_to?(:init)
-  
     setup_signal_handlers
+
+    init if respond_to?(:init, true)
   end
 
 
   def validate_info_keys
-    required_keys = [:name, :capabilities]
-    if respond_to? :info
-      missing_keys = required_keys - info.keys
-      unless missing_keys.empty?
-        logger.error <<~MESSAGE
-          This agent's info method is missing 
-          #{1 == missing_keys.size ? 'a required key' : 'some required keys'}: 
-          #{missing_keys}
-        MESSAGE
-        .split("\n").join
-        exit(1)
-      end
-    else
+    unless respond_to?(:info, true)
       logger.error "An agent must implement the info method"
       exit(1)
     end
+
+    required_keys = [:name, :capabilities]
+    info_keys     = info_with_defaults.keys
+
+    string_keys = required_keys.map(&:to_s) & info_keys
+    unless string_keys.empty?
+      logger.error "This agent's info method must use Symbol keys, not Strings: #{string_keys}"
+      exit(1)
+    end
+
+    missing_keys = required_keys - info_keys
+    unless missing_keys.empty?
+      wording = missing_keys.size == 1 ? 'a required key' : 'some required keys'
+      logger.error "This agent's info method is missing #{wording}: #{missing_keys}"
+      exit(1)
+    end
+  end
+
+
+  # The agent's info Hash with defaults filled in: name defaults to the
+  # agent's class name.
+  #
+  # @return [Hash]
+  #
+  def info_with_defaults
+    defaults = self.class.name ? { name: self.class.name } : {}
+    defaults.merge(info)
   end
 
 
@@ -59,7 +79,7 @@ module Agent99::AgentLifecycle
   #
   def register(agent_info)
     @id = registry_client.register(info: agent_info)
-    logger.info "Registered Agent #{name} with ID: #{id}"
+    logger.info "Registered Agent #{name} with ID: #{id}" if id
   rescue StandardError => e
     handle_error("Error during registration", e)
   end

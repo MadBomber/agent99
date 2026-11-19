@@ -19,7 +19,9 @@ class Agent99::AmqpMessageClient
   }
 
 
-  QUEUE_TTL = 60_000 # 60 seconds TTL
+  # Queue expiry: RabbitMQ deletes an agent's queue after 60 seconds with no
+  # consumer, e.g. when the agent died without running fini.
+  QUEUE_TTL = 60_000
   @instance = nil
 
   class << self
@@ -41,6 +43,7 @@ class Agent99::AmqpMessageClient
   end
 
   def setup(agent_id:, logger:)
+    @logger = logger
     queue = create_queue(agent_id)
     
     logger.info "Created queue for agent_id: #{agent_id}"
@@ -51,7 +54,7 @@ class Agent99::AmqpMessageClient
 
   def create_queue(agent_id)
     queue_name = "#{agent_id}"
-    @channel.queue(queue_name, expires: QUEUE_TTL)
+    @channel.queue(queue_name, arguments: { "x-expires" => QUEUE_TTL })
   end
 
   def listen_for_messages(

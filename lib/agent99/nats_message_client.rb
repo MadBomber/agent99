@@ -16,8 +16,8 @@ class Agent99::NatsMessageClient
   attr_accessor :logger, :nats
 
   def initialize(logger: Logger.new($stdout))
-    @nats = create_nats_connection
     @logger = logger
+    @nats = create_nats_connection
   end
 
   def setup(agent_id:, logger:)
@@ -71,7 +71,7 @@ class Agent99::NatsMessageClient
       logger.error "Failed to convert payload to JSON: #{e.message}"
       { success: false, error: "JSON conversion error: #{e.message}" }
     
-    rescue NATS::IO::TimeoutError => e
+    rescue NATS::IO::Timeout => e
       logger.error "Failed to publish message: #{e.message}"
       { success: false, error: "Publishing error: #{e.message}" }
     
@@ -93,8 +93,8 @@ class Agent99::NatsMessageClient
   
   def create_nats_connection
     NATS.connect
-  rescue NATS::IO::ConnectError => e
-    logger.error "Failed to connect to NATS: #{e.message}"
+  rescue StandardError => e
+    logger.error "Failed to connect to NATS: #{e.class}: #{e.message}"
     raise "NATS Connection Error: #{e.message}. Please check your NATS server and try again."
   end
 end

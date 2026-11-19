@@ -1,4 +1,4 @@
-# experiments/agents/header_schema.rb
+# lib/agent99/header_schema.rb
 
 require 'simple_json_schema_builder'
 
@@ -13,8 +13,3 @@ class Agent99::HeaderSchema < SimpleJsonSchemaBuilder::Base
     integer :timestamp,   required: true, examples: [Agent99::Timestamp.new.to_i]
   end
 end
-
-__END__
-
-    string :type, required: true, enum: %w[request response control]
-

@@ -93,23 +93,27 @@ Cleans up agent's message queue/topic.
 
 ## Registry Client Interface
 
-To implement a custom registry client, create a class that implements these methods:
+To use a custom registry client, pass an instance as `registry_client:` to your agent's `new`. `Agent99::Base` calls these methods on it:
 
 ### Required Methods
 
-#### `initialize(base_url: ENV.fetch('REGISTRY_BASE_URL', 'http://localhost:4567'), logger: Logger.new($stdout))`
-Sets up the registry connection.
+#### `logger=(logger)`
+Receives the agent's logger when the agent starts.
 
-#### `register(name:, capabilities:)`
-Registers an agent with the registry.
-- Returns: UUID string for the agent
+#### `register(info:)`
+Registers the agent; `info` is the agent's `info` Hash.
+- Returns: UUID string for the agent, or nil (the agent then exits)
+
+#### `discover(capability:)`
+Finds registered agents with a capability.
+- Returns: Array of agent information hashes, or nil
 
 #### `withdraw(id)`
-Removes an agent from the registry.
+Removes the agent from the registry. Called from `fini`.
 
-## Base Class Public Methods
+## Base Class Methods
 
-The `Agent99::Base` class provides these public methods:
+`Agent99::Base` provides `run` publicly, plus private helpers available to subclasses:
 
 #### `run`
 Starts the agent's message processing loop.

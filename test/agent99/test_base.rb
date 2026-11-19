@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "test_helper"
+require "open3"
 
 class TestBase < Minitest::Test
   def test_agent_creation_and_basic_properties
@@ -33,37 +34,78 @@ class TestBase < Minitest::Test
     assert_equal %w[request response control], Agent99::Base::MESSAGE_TYPES
   end
 
-  def test_agent_responds_to_lifecycle_methods
-    agent = create_test_agent(name: "LifecycleAgent", capabilities: ["test"])
-    
-    assert_respond_to agent, :register
-    assert_respond_to agent, :withdraw
-    assert_respond_to agent, :fini
+
+  def test_get_keeps_explicit_false_nil_and_zero_from_the_request
+    klass = Class.new(Agent99::Base) do
+      const_set(:REQUEST_SCHEMA, {
+        properties: {
+          loud:  { examples: [true] },
+          count: { examples: [3] },
+          note:  { examples: ["hi"] }
+        }
+      })
+    end
+    agent = klass.allocate
+    agent.instance_variable_set(:@payload, { loud: false, count: 0, note: nil })
+
+    assert_equal false, agent.send(:get, :loud)
+    assert_equal 0, agent.send(:get, :count)
+    assert_nil agent.send(:get, :note)
+
+    agent.instance_variable_set(:@payload, {})
+    assert_equal true, agent.send(:get, :loud)
   end
 
-  def test_agent_responds_to_message_methods
-    agent = create_test_agent(name: "MessageAgent", capabilities: ["test"])
-    
-    assert_respond_to agent, :receive_request
-    assert_respond_to agent, :receive_response
-    assert_respond_to agent, :receive_control
-    assert_respond_to agent, :send_request
-    assert_respond_to agent, :send_response
+
+  # These check the real Agent99 code, not the TestInfrastructure::TestAgent
+  # double, which adds public methods Base does not have. Each assertion
+  # fails naming what is missing. The message hooks are pinned as
+  # private because that is how Base defines them today.
+
+  def test_base_public_lifecycle_and_run_methods
+    assert_empty %i[register withdraw fini run] - Agent99::Base.public_instance_methods
   end
 
-  def test_agent_responds_to_discovery_methods
-    agent = create_test_agent(name: "DiscoveryAgent", capabilities: ["test"])
-    
-    assert_respond_to agent, :discover_agents
-    assert_respond_to agent, :get_all_agents
+
+  def test_base_private_message_methods
+    expected = %i[receive_request receive_response receive_control send_response send_control_response]
+    assert_empty expected - Agent99::Base.private_instance_methods
   end
 
-  def test_agent_responds_to_header_methods
-    agent = create_test_agent(name: "HeaderAgent", capabilities: ["test"])
-    
-    assert_respond_to agent, :create_header
-    assert_respond_to agent, :validate_header
+
+  def test_base_private_discovery_method
+    assert_empty %i[discover_agent] - Agent99::Base.private_instance_methods
   end
+
+
+  # Also check the module that defines the header helpers, so a reader
+  # added on Base cannot shadow them unnoticed.
+  def test_base_public_header_methods
+    expected = %i[header to_uuid from_uuid event_uuid timestamp type return_address]
+    assert_empty expected - Agent99::Base.public_instance_methods
+    assert_empty expected - Agent99::HeaderManagement.public_instance_methods(false)
+  end
+
+
+  def test_header_helpers_read_the_current_message
+    klass = Class.new(Agent99::Base) do
+      attr_reader :seen
+
+      def receive_request = (@seen ||= []) << [:request, from_uuid]
+      def receive_response = (@seen ||= []) << [:response, from_uuid]
+      def receive_control = (@seen ||= []) << [:control, from_uuid]
+    end
+    agent = klass.allocate
+
+    agent.send(:process_response, { header: { from_uuid: "carol", type: "response" } })
+    agent.send(:process_request,  { header: { from_uuid: "alice", type: "request" } })
+    agent.send(:process_response, { header: { from_uuid: "bob",   type: "response" } })
+    agent.send(:process_control,  { header: { from_uuid: "dave",  type: "control" }, action: "status" })
+
+    assert_equal [[:response, "carol"], [:request, "alice"], [:response, "bob"], [:control, "dave"]], agent.seen
+    assert_equal({ from_uuid: "dave", type: "control" }, agent.header)
+  end
+
 
   def test_error_handling_method
     agent = create_test_agent(name: "ErrorAgent", capabilities: ["test"])
@@ -131,13 +173,13 @@ class TestBase < Minitest::Test
     agent.message_client = original_message_client
   end
 
-  def test_rescue_clause_in_class
-    # The Base class has a rescue clause at the class level
-    # This test verifies that the class can be loaded without issues
-    
-    assert_kind_of Class, Agent99::Base
-    assert Agent99::Base.ancestors.include?(Agent99::AgentLifecycle)
-    assert Agent99::Base.ancestors.include?(Agent99::MessageProcessing)
+  def test_base_source_compiles_without_warnings
+    base_rb = File.expand_path("../../lib/agent99/base.rb", __dir__)
+
+    _stdout, stderr, status = Open3.capture3({ "RUBYOPT" => nil }, RbConfig.ruby, "-wc", base_rb)
+
+    assert status.success?, stderr
+    refute_match(/^#{Regexp.escape(base_rb)}:\d+: warning:/, stderr)
   end
 
   def test_agent_info_method_requirement

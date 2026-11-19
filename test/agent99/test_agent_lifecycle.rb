@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 require "test_helper"
+require "open3"
+require "rbconfig"
 
 class TestAgentLifecycle < Minitest::Test
   def test_agent_initialization_and_registration
@@ -188,25 +190,188 @@ class TestAgentLifecycle < Minitest::Test
       logger: @logger
     )
     
-    error_handled = false
-    
-    agent_class = Class.new(TestInfrastructure::TestAgent) do
-      def handle_error(message, error)
-        @error_handled = true
-        super
-      end
+    # Registration fails, so the agent logs it and exits instead of running
+    # with a nil id and a queue nobody can address.
+    assert_raises(SystemExit) do
+      TestInfrastructure::TestAgent.new(
+        name: "FailingAgent",
+        capabilities: ["test"],
+        registry_client: failing_registry,
+        message_client: @message_client,
+        logger: @logger
+      )
     end
-    
-    # This will attempt to register and should handle the error gracefully
-    agent = agent_class.new(
-      name: "FailingAgent",
-      capabilities: ["test"],
-      registry_client: failing_registry,
-      message_client: @message_client,
-      logger: @logger
-    )
-    
-    # Agent should still be created but without a valid ID
-    assert_nil agent.id
+    assert_empty @message_client.queues
+  end
+
+  # Stands in for RegistryClient; registration always succeeds.
+  class StubRegistry
+    attr_accessor :logger
+
+    def register(info:) = 'agent-1'
+    def withdraw(_id) = nil
+  end
+
+  # Stands in for a message client; no broker.
+  class StubMessenger
+    def setup(agent_id:, logger:) = agent_id
+    def delete_queue(_name) = nil
+  end
+
+  def build_stubbed_agent(klass)
+    klass.new(registry_client: StubRegistry.new,
+              message_client: StubMessenger.new,
+              logger: @logger)
+  rescue SystemExit => e
+    flunk "agent exited during startup (status #{e.status})"
+  end
+
+  def test_private_info_is_found_at_startup
+    klass = Class.new(Agent99::Base) do
+      private
+
+      def info = { name: 'PrivateInfoAgent', capabilities: ['test'] }
+    end
+
+    agent = build_stubbed_agent(klass)
+
+    assert_equal 'agent-1', agent.id
+  end
+
+  def test_private_init_is_called_at_startup
+    klass = Class.new(Agent99::Base) do
+      attr_reader :init_ran
+
+      def info = { name: 'PrivateInitAgent', capabilities: ['test'] }
+
+      private
+
+      def init = @init_ran = true
+    end
+
+    agent = build_stubbed_agent(klass)
+
+    assert agent.init_ran
+  end
+
+  def test_string_info_keys_are_not_reported_missing
+    klass = Class.new(Agent99::Base) do
+      def info = { 'name' => 'StringKeyAgent', 'capabilities' => ['test'] }
+    end
+    agent = klass.allocate
+    messages = []
+    logger = Logger.new(nil)
+    logger.define_singleton_method(:error) { |message| messages << message }
+    agent.instance_variable_set(:@logger, logger)
+
+    assert_raises(SystemExit) { agent.send(:validate_info_keys) }
+    refute_match(/missing/, messages.join)
+    assert_match(/Symbol/, messages.join)
+  end
+
+  # Records the info it is asked to register; registration always succeeds.
+  class RecordingRegistry
+    attr_accessor :logger
+    attr_reader :registered_info
+
+    def register(info:)
+      @registered_info = info
+      'agent-1'
+    end
+
+    def withdraw(_id) = nil
+  end
+
+  class NamelessAgent < Agent99::Base
+    def info = { capabilities: ['test'] }
+  end
+
+  def test_info_name_defaults_to_class_name
+    registry = RecordingRegistry.new
+    begin
+      NamelessAgent.new(registry_client: registry,
+                        message_client: StubMessenger.new,
+                        logger: @logger)
+    rescue SystemExit => e
+      flunk "agent without info[:name] exited during startup (status #{e.status})"
+    end
+
+    assert_equal NamelessAgent.name, registry.registered_info[:name]
+    assert_equal ['test'], registry.registered_info[:capabilities]
+  end
+
+  def test_info_name_given_by_the_agent_is_kept
+    agent = NamelessAgent.allocate
+    agent.define_singleton_method(:info) { { name: 'Custom', capabilities: ['test'] } }
+
+    assert_equal 'Custom', agent.send(:info_with_defaults)[:name]
+  end
+
+  # Starts an agent in a child process with stub clients; its init runs the
+  # given code. Returns the child's output and status.
+  def run_agent_whose_init(init_body)
+    script = <<~RUBY
+      require 'agent99'
+
+      class StubRegistry
+        attr_accessor :logger
+
+        def register(info:) = 'agent-1'
+        def withdraw(id) = $stdout.puts("withdraw \#{id}")
+      end
+
+      class StubMessenger
+        def setup(agent_id:, logger:) = agent_id
+        def delete_queue(name) = $stdout.puts("delete_queue \#{name}")
+      end
+
+      class InitAgent < Agent99::Base
+        def info = { capabilities: ['test'] }
+        def init = #{init_body}
+      end
+
+      InitAgent.new(registry_client: StubRegistry.new,
+                    message_client: StubMessenger.new,
+                    logger: Logger.new(nil))
+    RUBY
+    Open3.capture2e(RbConfig.ruby, "-I#{File.expand_path('../../lib', __dir__)}", "-e", script)
+  end
+
+  def test_agent_is_withdrawn_when_init_exits
+    output, status = run_agent_whose_init("exit(1)")
+
+    refute status.success?
+    assert_includes output, "withdraw agent-1"
+    assert_includes output, "delete_queue agent-1"
+  end
+
+  def test_agent_is_withdrawn_when_init_raises
+    output, status = run_agent_whose_init("raise('boom')")
+
+    refute status.success?
+    assert_includes output, "withdraw agent-1"
+    assert_includes output, "delete_queue agent-1"
+  end
+
+  def validation_errors_for(info_hash)
+    agent = Class.new(Agent99::Base).allocate
+    agent.define_singleton_method(:info) { info_hash }
+    messages = []
+    logger = Logger.new(nil)
+    logger.define_singleton_method(:error) { |message| messages << message }
+    agent.instance_variable_set(:@logger, logger)
+
+    assert_raises(SystemExit) { agent.send(:validate_info_keys) }
+    messages
+  end
+
+  def test_missing_info_key_message_text
+    assert_equal ["This agent's info method is missing a required key: [:capabilities]"],
+                 validation_errors_for({ name: 'OneMissing' })
+  end
+
+  def test_missing_info_keys_message_text
+    assert_equal ["This agent's info method is missing some required keys: [:name, :capabilities]"],
+                 validation_errors_for({})
   end
 end

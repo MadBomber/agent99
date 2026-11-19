@@ -63,7 +63,7 @@ class CalculatorAgent < Agent99::Base
     }
   end
 
-  def process_request(payload)
+  def receive_request
     logger.info "Received calculation request: #{payload}"
     
     # Extract and validate inputs
@@ -256,14 +256,14 @@ Expected output:
 
 ## Step 5: Explore the Registry
 
-While everything is running, visit http://localhost:4567/agents in your browser to see registered agents, or use curl:
+While everything is running, visit http://localhost:4567/ in your browser to see registered agents, or use curl:
 
 ```bash
 # List all agents
-curl http://localhost:4567/agents | jq
+curl http://localhost:4567/ | jq
 
 # Find calculator agents
-curl http://localhost:4567/agents/discover/calculator | jq
+curl "http://localhost:4567/discover?capability=calculator" | jq
 ```
 
 ## Key Concepts Demonstrated

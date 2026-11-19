@@ -1,4 +1,4 @@
-# experiments/agents/agent99/registry_client.rb
+# lib/agent99/registry_client.rb
 
 require 'json'
 require 'net/http'
@@ -11,16 +11,16 @@ class Agent99::RegistryClient
       base_url: ENV.fetch('AGENT99_REGISTRY_URL', 'http://localhost:4567'),
       logger:   Logger.new($stdout)
     )
-    @base_url     = base_url
     @logger       = logger
     uri = URI.parse(base_url)
+    @base_path    = uri.path.to_s.chomp('/')
     @http_client  = Net::HTTP.new(uri.host, uri.port)
+    @http_client.use_ssl = (uri.scheme == 'https')
   end
 
   def register(info:)
-    payload = info
-    request = create_request(:post, "/register", payload)
-    @id     = send_request(request)
+    request = create_request(:post, "/register", info)
+    send_request(request)
   end
 
   def withdraw(id)
@@ -39,15 +39,15 @@ class Agent99::RegistryClient
 
 
   def fetch_all_agents
-    request   = create_request(:get, "/")
-    response  = send_request(request)
+    request = create_request(:get, "/")
+    send_request(request)
   end
 
   ################################################
   private
 
   def create_request(method, path, body = nil)
-    request       = Object.const_get("Net::HTTP::#{method.capitalize}").new(path, { "Content-Type" => "application/json" })
+    request       = Object.const_get("Net::HTTP::#{method.capitalize}").new(@base_path + path, { "Content-Type" => "application/json" })
     request.body  = body.to_json if body
     request
   end
@@ -78,8 +78,20 @@ class Agent99::RegistryClient
       logger.info "Action completed successfully."
       nil
     else
-      logger.error "Error: #{JSON.parse(response.body, symbolize_names: true)[:error]}"
+      status = "#{response.code} #{response.message}".rstrip
+      logger.error "Registry returned #{status}#{error_detail(response.body)}"
+      logger.debug "Error response body: #{response.body}"
       nil
     end
+  end
+
+  # ": <error>" when an error body is a JSON object with an :error key, else "".
+  def error_detail(body)
+    case JSON.parse(body.to_s, symbolize_names: true)
+    in { error: } unless error.to_s.strip.empty? then ": #{error}"
+    else ""
+    end
+  rescue JSON::ParserError
+    ""
   end
 end

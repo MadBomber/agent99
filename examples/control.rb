@@ -30,6 +30,8 @@ class Control < Agent99::Base
 
   def send_control_message(message:, payload: {})
     @agents.each do |agent|
+      next if agent[:uuid] == @id # a shutdown would end this process
+
       response = @message_client.publish(
         header: {
           to_uuid: agent[:uuid],
@@ -82,7 +84,11 @@ class Control < Agent99::Base
   end
 
   def receive_response
-    if payload[:action] == 'response' && payload[:data][:type] == 'status'
+    # Only status replies carry a Hash; pause/resume/shutdown/update_config
+    # acknowledgements send a String.
+    data = payload[:data]
+
+    if payload[:action] == 'response' && data.is_a?(Hash) && data[:type] == 'status'
       agent_name = payload[:header][:from_uuid]
       @statuses[agent_name] = payload[:data]
       logger.info "Received status from #{agent_name}: #{payload[:data]}"
@@ -124,7 +130,7 @@ if __FILE__ == $PROGRAM_NAME
       when 3
         control.stop_all
       when 4
-        statuses = control.get_all_status
+        control.get_all_status
         sleep 2 # Give time for responses to arrive
         puts JSON.pretty_generate(control.statuses)
       when 5
@@ -138,8 +144,7 @@ if __FILE__ == $PROGRAM_NAME
   rescue Interrupt
     puts "\nShutting down..."
   ensure
-    dispatcher_thread.exit
-    control.fini
+    dispatcher_thread.exit # the framework's at_exit hook runs control.fini
   end
 end
 
